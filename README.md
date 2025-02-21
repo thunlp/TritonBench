@@ -39,7 +39,7 @@ We also provide the output results from all major models used in the paper.
     1_exe_acc.py --folder root/of/multiple/folders/or/folder --GPUs [0,1,2,3]
     ```
 4. **Efficiency**: 
-    - Finally, run `2_efficiency.py`. 李尚展补全（注意argparse传参替换掉lijianling路径）
+    - Finally, run `2_efficiency.py`. todo..
 
 ### TritonBench-T
 For **TritonBench-T**, there is no code similarity evaluation. Only call accuracy, execution accuracy, and speedup are assessed. The process is similar:
@@ -51,6 +51,6 @@ For **TritonBench-T**, there is no code similarity evaluation. Only call accurac
     ```bash
     1_exe_acc.py --folder root/of/multiple/folders/or/folder --GPUs [0,1,2,3]
     ```
-3. Run `2_efficiency.py` 李尚展补全（注意argparse传参替换掉lijianling路径）
+3. Run `2_efficiency.py` todo..
 
 **Note**: Ensure that accuracy and efficiency evaluations are performed sequentially.
