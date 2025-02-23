@@ -1,47 +1,61 @@
-import os, json
+import os
+import json
+import argparse
 
-gen_fold = "/home/lijianling/TritonLLM-g/triton_bench_build/EVAL1/Tbench_perf/"
-load_json = lambda path: json.loads(open(path, 'r', encoding='utf-8').read())
-avg = lambda mss: print(round(sum(mss) / len(mss), 2))
+ref_folder = "../../performance_metrics/perf_T/golden_results"
 
 
-def single_speedup(msRef, msGen):
-    assert len(msRef) == len(msGen) != 0, ""
-    scores = [round(msRef[i] / msGen[i], 4) for i in range(len(msRef))]
-    maxx, minn = max(scores), min(scores)
-    if maxx > 10:
-        scores.remove(maxx)
-        print(f"maxx: {maxx}")
-    elif minn < 0.1:
-        scores.remove(minn)
-        print(f"minn: {minn}")
+def calculate(path_gen, path_ref):
+    get_ms = lambda data: [item["ms"] for item in data]
+    avg = lambda mss: round(sum(mss[0]) / sum(mss[1]), 4)
 
-    assert len(scores) > 0, ""
-    return round(sum(scores) / len(scores), 4)
+    data_gen = json.loads(open(path_gen, 'r', encoding='utf-8').read())
+    data_ref_ = json.loads(open(path_ref, 'r', encoding='utf-8').read())
+    if len(data_gen) == len(data_ref_):
+        data_ref = data_ref_
+    else:
+        data_ref = [data for data in data_ref_ if data['input_size'] in [item['input_size'] for item in data_gen]]
+    assert len(data_gen) == len(data_ref), ""
+    
+    ms_ref, ms_gen = get_ms(data_ref), get_ms(data_gen)
+    ms = avg((ms_ref, ms_gen))
 
-def all_speedup(ref_fold):
-    files = [f for f in os.listdir(ref_fold) if f.endswith(".json")]
-    speeds = []
+    # if efficiency >= 100 or ms >= 10:
+    if ms >= 10 or ms <= 0.1:
+        assert False, f"{path_gen.split('/')[-1]} test failed!"
+    return ms
+
+def statis(gen_folder):
+    avg = lambda listt: round(sum(listt) / len(listt), 2)
+    files = [f for f in os.listdir(gen_folder) if f.endswith(".json")]
+    spdups, effcys = [], []
+    print("===="*40)
     for f in files:
-        path_ref = os.path.join(ref_fold, f)
-        path_gen = os.path.join(gen_fold, f)
+        path_gen = os.path.join(gen_folder, f)
+        path_ref = os.path.join(ref_folder, f)
+        data_gen_ = json.loads(open(path_gen, 'r', encoding='utf-8').read())
+        if len(data_gen_) == 0:
+            continue
+        
+        try:
+            ms = calculate(path_gen, path_ref)
+            print(f"{f}: {ms}")
+            spdups.append(ms)
+        except:
+            print(f"{f} failed")
 
-        msRef = load_json(path_ref)
-        msGen = load_json(path_gen)
+    print(spdups)
+    print(f"\n{gen_folder.split('/')[-1]}")
+    print(f"speed up: {avg(spdups)}")
+    print("===="*40)
 
-        speed = single_speedup(msRef, msGen)
-        speeds.append(speed)
-    avg(speeds)
-    print(ref_fold.split("/")[-1])
-    return 
+def arg_parser():
+    parser = argparse.ArgumentParser(description='Efficiency statistics')
+    parser.add_argument('--gen_folder', type=str, required=True, help='The generated folder path')
+    return parser.parse_args()
+
 
 if __name__ == "__main__":
-    root = "/home/lijianling/TritonLLM-g/triton_bench_build/EVAL1/torch_perf/"
-
-    for fold in os.listdir(root):
-        ref_fold = os.path.join(root, fold)
-        if not os.path.isdir(ref_fold):
-            continue
-        print("--"*20)
-        all_speedup(ref_fold)
-        
+    args = arg_parser()
+    gen_folder = args.gen_folder
+    statis(gen_folder)

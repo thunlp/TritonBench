@@ -1,0 +1,2 @@
+/home/lishangzhan/triton/torch_performance/GPU_efficiency/output_DeepSeek-R1/fused_repeat_interleave_log_softmax.py:64: UserWarning: Implicit dimension choice for log_softmax has been deprecated. Change the call to include dim=X as an argument.
+  output = F.log_softmax(repeated_input, dim=dim, dtype=dtype)
