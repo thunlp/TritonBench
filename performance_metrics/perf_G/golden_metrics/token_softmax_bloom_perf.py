@@ -1,0 +1,56 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from TritonBench_v1.token_softmax_bloom import token_softmax_fwd
+from performance_utils import Performance_Metrics, do_bench_config
+
+import torch
+import triton
+import triton.language as tl
+
+class performance_metrics(Performance_Metrics):
+    def __init__(self, dtype=None, is_backward=False, **kwargs):
+        super().__init__('token_softmax_bloom', dtype=dtype, is_backward=is_backward, **kwargs)
+        
+    def get_input_tensors(self):
+        self.input_tensors = []
+        for i in range(2, 16):  # Example range, adjust as needed
+            batch_size = 2 ** i
+            head_num = 12  # Example head number, adjust as needed
+            max_seq_len = 512  # Example max sequence length, adjust as needed
+
+            Logics = torch.rand((head_num, batch_size * max_seq_len), dtype=torch.float32)
+            B_Start_Loc = torch.arange(0, batch_size * max_seq_len, max_seq_len, dtype=torch.int32)
+            B_Seqlen = torch.full((batch_size,), max_seq_len, dtype=torch.int32)
+            Prob_Out = torch.empty_like(Logics)
+
+            self.input_tensors.append((Logics, B_Start_Loc, B_Seqlen, Prob_Out, max_seq_len))
+
+    def to_cuda(self, input_tensor):
+        Logics, B_Start_Loc, B_Seqlen, Prob_Out, max_seq_len = input_tensor
+        return (Logics.cuda(), B_Start_Loc.cuda(), B_Seqlen.cuda(), Prob_Out.cuda(), max_seq_len)
+
+    def call_op(self, input_tensor):
+        Logics, B_Start_Loc, B_Seqlen, Prob_Out, max_seq_len = input_tensor
+        token_softmax_fwd(Logics, B_Start_Loc, B_Seqlen, Prob_Out, max_seq_len)
+        return Prob_Out
+
+    def get_gbps(self, input_tensor, runtime):
+        Logics, B_Start_Loc, B_Seqlen, Prob_Out, max_seq_len = input_tensor
+        total_bytes = (Logics.numel() + B_Start_Loc.numel() + B_Seqlen.numel() + Prob_Out.numel()) * Logics.element_size()
+        GBPS = total_bytes / (runtime / 1000) / 1e9
+        return GBPS
+    
+    def get_tflops(self, input_tensor, runtime):
+        Logics, B_Start_Loc, B_Seqlen, Prob_Out, max_seq_len = input_tensor
+        FLOPS = 2 * Logics.numel()  # Assuming 2 operations per element (exp and division)
+        TFLOPS = FLOPS / (runtime / 1000) / 1e12
+        return TFLOPS
+
+if __name__ == '__main__':
+    op_perf = performance_metrics()
+    op_perf.get_input_tensors()
+    op_perf.get_do_bench_config(warmup=100, rep=1000)
+    op_perf.run_benchmark()

@@ -1,7 +1,8 @@
 import os
 import json
+import argparse
 
-ref_folder = "/home/lijianling/TritonLLM-g/triton_bench_build/EVAL0/gold_perf/"
+ref_folder = "../../performance_metrics/perf_G/golden_results"
 
 
 def calculate(path_gen, path_ref):
@@ -52,12 +53,20 @@ def statis(gen_folder):
     print(f"efficiency: {avg(effcys)}")
     print("===="*40)
 
+def arg_parser():
+    parser = argparse.ArgumentParser(description='Efficiency statistics')
+    parser.add_argument('--gen_folder', type=str, required=True, help='The generated folder path')
+    return parser.parse_args()
+
 
 if __name__ == "__main__":
-    root = "/home/lijianling/TritonLLM-g/triton_bench_build/EVAL0/gene_perf/"
-    for gen_folder in os.listdir(root):
-    # for gen_folder in ["results_modified_output_claude-3-5-sonnet-20240620_comp",]:
-        statis(root + gen_folder)
+    args = arg_parser()
+    gen_folder = args.gen_folder
+    statis(gen_folder)
+    # root = "/home/lijianling/TritonLLM-g/triton_bench_build/EVAL0/gene_perf/"
+    # for gen_folder in os.listdir(root):
+    # # for gen_folder in ["results_modified_output_claude-3-5-sonnet-20240620_comp",]:
+    #     statis(root + gen_folder)
 
     # gen_folder = "/home/lijianling/TritonLLM-g/triton_bench_build/EVAL0/gene_perf/results_modified_output_o1-2024-12-17_comp/"    
     # statis(gen_folder)
