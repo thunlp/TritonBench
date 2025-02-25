@@ -1,0 +1,3 @@
+# Performance metrics and reports
+
+We refer to the official Triton tutorial: [Triton Official Tutorial](https://triton-lang.org/main/getting-started/tutorials/index.html), and provide scripts for evaluating the performance of each reference operator (./golden_metrics) as well as corresponding performance reports (./golden_results). The performance reports include the runtime (ms), bandwidth (GB/s), and floating-point operations (TFLOPS) for the operator when running on tensors of different input sizes.
