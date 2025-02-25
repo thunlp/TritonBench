@@ -39,7 +39,17 @@ We also provide the output results from all major models used in the paper.
     1_exe_acc.py --folder root/of/multiple/folders/or/folder --GPUs [0,1,2,3]
     ```
 4. **Efficiency**: 
-    - Finally, run `2_efficiency.py`. todo..
+    - First run the correctly executable operators and get the performance:
+    ```bash
+    cd performance_metrics/perf_G
+    python run_bench/write_file.py --input_folder_path /folder/of/pyfiles --results_path /folder/of/output/results
+    python run_bench/multiprocess_gpu_run.py
+    ```
+    - Finally, run `2_efficiency.py` to evaluate the performance:
+    ```bash
+    cd EVAL/eval_G
+    python 2_efficiency.py --gen_folder /folder/of/output/results
+    ```
 
 ### TritonBench-T
 For **TritonBench-T**, there is no code similarity evaluation. Only call accuracy, execution accuracy, and speedup are assessed. The process is similar:
@@ -51,6 +61,21 @@ For **TritonBench-T**, there is no code similarity evaluation. Only call accurac
     ```bash
     1_exe_acc.py --folder root/of/multiple/folders/or/folder --GPUs [0,1,2,3]
     ```
-3. Run `2_efficiency.py` todo..
+3. Get the performance and evaluate
+    - First run the correctly executable operators and get the performance:
+    ```bash
+    cd performance_metrics/perf_T
+    python run_bench/write_file.py --input_folder_path /folder/of/pyfiles --results_path /folder/of/output/results
+    python run_bench/multiprocess_gpu_run.py
+    ```
+    - Finally, run `2_efficiency.py` to evaluate the performance:
+    ```bash
+    cd EVAL/eval_T
+    python 2_efficiency.py --gen_folder /folder/of/output/results
+    ```
 
 **Note**: Ensure that accuracy and efficiency evaluations are performed sequentially.
+
+## 📩 Contact Us
+If you have any questions, feel free to reach out to us at:  
+**✉️ Email:** [qshi9510@gmail.com]

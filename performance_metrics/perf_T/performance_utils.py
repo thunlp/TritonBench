@@ -29,8 +29,8 @@ class Performance_Metrics:
             is_backward=False,
             **kwargs
     ):
-        self.op_name = op_name # 算子名称
-        self.dtype = dtype # 算子输入类型
+        self.op_name = op_name
+        self.dtype = dtype
         if is_backward:
             self.op_name += 'backward'
         self.kwargs = kwargs
@@ -38,27 +38,15 @@ class Performance_Metrics:
         self.input_tensors = []
         self.do_bench_config = do_bench_config()
 
-    """
-    获取测试算子性能所需输入张量
-    """
     def get_input_tensors(self):
         raise NotImplementedError("You must implement this method to get input tensors")
 
-    """
-    将输入张量转移到cuda
-    """
     def to_cuda(self, input_tensor):
         raise NotImplementedError("You must implement this method to get input tensors")
     
-    """
-    调用算子
-    """
     def call_op(self, input_tensor):
         raise NotImplementedError("You must implement this method to call the op")
 
-    """
-    获取能够使算子运行时间稳定下来的设置
-    """
     def get_do_bench_config(self, warmup=None, rep=None):
         if warmup != None and rep != None:
             self.do_bench_config = do_bench_config(
@@ -67,21 +55,19 @@ class Performance_Metrics:
             )
             return
 
-        if self.input_tensors == []: # 必须提供输入输出
+        if self.input_tensors == []:
             raise NotImplementedError("You must implement this method to get input_tensors")
         
         previous_ms = None
-        epsilon = 1e-4  # 容忍度，判断ms是否稳定
-        stable_count = 0  # 记录稳定的次数
-        max_stable_count = 3  # 允许的稳定次数，超过则认为 ms 已经稳定
+        epsilon = 1e-4
+        stable_count = 0
+        max_stable_count = 3
         input_tensor = self.to_cuda(self.input_tensors[-1])
 
         for t in range(1, 11):
-            # 设置 warmup 和 rep 参数
             warmup = 100 * t
             rep = 1000 * t
             
-            # 进行基准测试
             ms, min_ms, max_ms = triton.testing.do_bench(
                 lambda: self.call_op(input_tensor),
                 warmup=warmup,
@@ -92,18 +78,14 @@ class Performance_Metrics:
 
             print("warmup time:", warmup, "rep time:", rep, "runtime:", ms)
 
-            # 如果有前一个 ms 值，检查是否稳定
             if previous_ms is not None:
-                # 计算相对变化
                 relative_change = abs(ms - previous_ms) / abs(previous_ms) if previous_ms != 0 else float('inf')
 
-                # 判断相对变化是否小于 epsilon
                 if relative_change < epsilon:
                     stable_count += 1
                 else:
                     stable_count = 0
-            
-            # 如果连续稳定达到 max_stable_count 次，认为 ms 稳定
+
             if stable_count >= max_stable_count:
                 print(f"MS stabilized with warmup={warmup} and rep={rep}")
                 self.do_bench_config = do_bench_config(
@@ -112,16 +94,11 @@ class Performance_Metrics:
                 )
                 return
 
-            # 更新 previous_ms 为当前 ms
             previous_ms = ms
         
-        # 如果没有找到稳定的 ms，返回默认配置
         print("MS did not stabilize. Returning default config.")
         raise NotImplementedError("You must implement this method to make the runtime stable")
 
-    """
-    获取算子运行一次的绝对时间
-    """
     def get_runtime(self, op: Callable):
         ms, min_ms, max_ms = triton.testing.do_bench(
             op,
@@ -132,21 +109,12 @@ class Performance_Metrics:
         )
         return ms
     
-    """
-    获取算子运行一次的GBPS
-    """
     def get_gbps(self, input_tensor, runtime):
         raise NotImplementedError("You must implement this method to get the method to calculate GBPS")
 
-    """
-    获取算子运行一次的TFLOPS
-    """
     def get_tflops(self, input_tensor, runtime):
         raise NotImplementedError("You must implement this method to get the method to calculate TFLOPS")
 
-    """
-    对所有的输入，测试运行时的算子性能
-    """
     def run_benchmark(self):
         results = []
         for input_tensor_ in self.input_tensors:
