@@ -17,7 +17,7 @@ class performance_metrics(Performance_Metrics):
         
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(12, 28):  # 测试不同规模：2^12到2^28
+        for i in range(12, 28):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=self.dtype or torch.float32)
             self.input_tensors.append(input_tensor)
@@ -26,16 +26,14 @@ class performance_metrics(Performance_Metrics):
         return input_tensor.cuda()
         
     def call_op(self, input_tensor):
-        return gelu_min(input_tensor)  # 默认测试None维度的全局最小值
+        return gelu_min(input_tensor)
 
     def get_gbps(self, input_tensor, runtime):
-        # 总数据量 = 输入张量 + 中间结果 + 读取中间结果求最小值
         total_bytes = 4 * input_tensor.numel() * input_tensor.element_size()
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # GELU每个元素约6次浮点运算，min约1次比较，共7次
         flops_per_element = 7  
         total_flops = flops_per_element * input_tensor.numel()
         TFLOPS = total_flops / (runtime / 1000) / 1e12

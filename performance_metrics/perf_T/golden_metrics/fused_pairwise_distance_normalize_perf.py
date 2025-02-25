@@ -17,7 +17,7 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(6, 14):  # 生成不同规模的输入：N从2^8到2^18，D=128
+        for i in range(6, 14):
             N = 2 ** i
             D = 128
             x1 = torch.randn(N, D, dtype=self.dtype or torch.float32)
@@ -34,20 +34,18 @@ class performance_metrics(Performance_Metrics):
     
     def get_gbps(self, input_tensor, runtime):
         x1, x2 = input_tensor
-        # 输入数据量 = x1 + x2，输出数据量 = N*N
         input_bytes = (x1.numel() + x2.numel()) * x1.element_size()
         output_bytes = (x1.size(0) * x2.size(0)) * x1.element_size()
         total_bytes = input_bytes * 11 + output_bytes
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
         x1, x2 = input_tensor
         N, D = x1.size(0), x1.size(1)
         M = x2.size(0)
-        # 计算主要FLOPs：3*N*M*D (减法、平方、累加)
         flops = 3 * N * M * D
-        TFLOPS = flops / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
 
 

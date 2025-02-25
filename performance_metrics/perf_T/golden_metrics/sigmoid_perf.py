@@ -30,12 +30,11 @@ class performance_metrics(Performance_Metrics):
         return sigmoid(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        total_bytes = input_tensor.numel() * input_tensor.element_size() * 2  # 输入和输出各占一份
+        total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # Sigmoid计算包含：取反、指数、加1、倒数共4次操作
         FLOPS = 4 * input_tensor.numel()  
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS

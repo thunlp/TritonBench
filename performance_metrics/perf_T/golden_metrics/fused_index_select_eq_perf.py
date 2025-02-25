@@ -17,21 +17,17 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(12, 24):  # 调整范围以覆盖典型测试场景
-            # 生成输入张量（保持其他维度固定为128）
+        for i in range(12, 24):
             input_size = 2 ** i
             input_shape = (input_size, 128)
             input_tensor = torch.randn(input_shape, dtype=self.dtype or torch.float32)
             
-            # 生成随机索引（约为输入尺寸的1/8）
             dim = 0
             index_length = max(1, input_size // 8)
             index = torch.randint(0, input_size, (index_length,), dtype=torch.long)
             
-            # 固定对比值为0.0
             other = 0.0
             
-            # 预计算选中元素数量
             selected = torch.index_select(input_tensor, dim, index)
             selected_numel = selected.numel()
             
@@ -53,15 +49,13 @@ class performance_metrics(Performance_Metrics):
     
     def get_gbps(self, input_tuple, runtime):
         input_tensor, _, _, _, selected_numel = input_tuple
-        # 计算数据量：选中元素读取 + 布尔结果写入
         input_bytes = selected_numel * input_tensor.element_size()
-        output_bytes = selected_numel * 1  # bool类型占1字节
+        output_bytes = selected_numel * 1
         total_bytes = input_bytes * 3 + output_bytes
         return total_bytes / (runtime / 1000) / 1e9
     
     def get_tflops(self, input_tuple, runtime):
         _, _, _, _, selected_numel = input_tuple
-        # 每个元素执行一次比较操作（视为1 FLOP）
         return selected_numel / (runtime / 1000) / 1e12
 
 

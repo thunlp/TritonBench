@@ -4,7 +4,7 @@ import json
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from TorchBench_v1.relu_sqrt import relu_sqrt  # 正确引入算子
+from TorchBench_v1.relu_sqrt import relu_sqrt
 from performance_utils import Performance_Metrics, do_bench_config
 
 import torch
@@ -16,33 +16,26 @@ class performance_metrics(Performance_Metrics):
         super().__init__('relu_sqrt', dtype=dtype, is_backward=is_backward, **kwargs)
 
     def get_input_tensors(self):
-        """生成不同尺寸的CPU张量（默认float32）"""
         self.input_tensors = []
-        for i in range(12, 28):  # 2^12 到 2^27 的不同尺寸
+        for i in range(12, 28):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=torch.float32)
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
-        """转移张量到CUDA设备"""
         return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        """调用算子实现（默认非inplace模式）"""
         return relu_sqrt(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        """计算内存带宽（GB/s）"""
-        # 总数据量 = 输入(读) + 输出(写) = 2 * numel * element_size
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 4
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 毫秒转秒，字节转GB
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        """计算计算吞吐量（TFLOPS）"""
-        # 每个元素执行2次浮点操作（ReLU和sqrt）
         flops = input_tensor.numel() * 2
-        TFLOPS = flops / (runtime / 1000) / 1e12  # 毫秒转秒，FLOPS转TFLOPS
+        TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
     
     def run_benchmark(self):

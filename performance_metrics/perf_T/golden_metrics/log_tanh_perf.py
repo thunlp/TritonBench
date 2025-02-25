@@ -4,7 +4,7 @@ import json
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from TorchBench_v1.log_tanh import log_tanh  # 正确引入log_tanh函数
+from TorchBench_v1.log_tanh import log_tanh
 from performance_utils import Performance_Metrics, do_bench_config
 
 import torch
@@ -19,26 +19,23 @@ class performance_metrics(Performance_Metrics):
         self.input_tensors = []
         for i in range(12, 28):
             size = 2 ** i
-            # 生成正数张量，避免log(0)或负数
             input_tensor = torch.rand(size, dtype=torch.float32) + 1e-6
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
-        return input_tensor.cuda()  # 转移到CUDA设备
+        return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        return log_tanh(input_tensor)  # 调用log_tanh算子
+        return log_tanh(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 输入和输出各一个张量，总字节数为2倍
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 4
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 每个元素执行log和tanh两次操作
         FLOPS = input_tensor.numel() * 2
-        TFLOPS = FLOPS / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
     
     def run_benchmark(self):

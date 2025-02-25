@@ -20,9 +20,8 @@ class performance_metrics(Performance_Metrics):
         in_channels = 3
         out_channels = 64
         kernel_size = 3
-        # 生成不同尺寸的输入，保证卷积和池化后的尺寸为整数
-        for s in range(5, 14):  # s为池化后的尺寸，对应输入H=2*s+2
-            H = W = 2 ** s + 2  # 保证H和W相同
+        for s in range(5, 14):
+            H = W = 2 ** s + 2
             input_tensor = torch.randn(1, in_channels, H, W, dtype=self.dtype or torch.float32)
             weight = torch.randn(out_channels, in_channels, kernel_size, kernel_size, dtype=self.dtype or torch.float32)
             bias = torch.randn(out_channels, dtype=self.dtype or torch.float32)
@@ -49,13 +48,12 @@ class performance_metrics(Performance_Metrics):
         element_size = input_tensor.element_size()
         H = input_tensor.size(2)
         W = input_tensor.size(3)
-        s = (H - 2) // 2  # 池化后的尺寸
+        s = (H - 2) // 2
         
-        # 计算各部分的字节数
         input_bytes = input_tensor.numel() * element_size
         weight_bytes = weight.numel() * element_size
         bias_bytes = bias.numel() * element_size if bias is not None else 0
-        output_numel = 64 * s * s  # 输出通道数为64
+        output_numel = 64 * s * s
         output_bytes = output_numel * element_size
         
         total_bytes = input_bytes * 3 + weight_bytes + bias_bytes + output_bytes * 3
@@ -69,16 +67,13 @@ class performance_metrics(Performance_Metrics):
         conv_output_H = H - 2
         conv_output_W = W - 2
         
-        # 卷积部分FLOPs
         conv_output_elements = 64 * conv_output_H * conv_output_W
-        conv_flops = 2 * 3 * 3 * 3 * conv_output_elements + conv_output_elements  # 乘加操作+bias
+        conv_flops = 2 * 3 * 3 * 3 * conv_output_elements + conv_output_elements
         
-        # 池化部分FLOPs
         s = conv_output_H // 2
         pool_output_elements = 64 * s * s
-        pool_flops = 3 * pool_output_elements  # 每个窗口3次比较
+        pool_flops = 3 * pool_output_elements
         
-        # ReLU部分FLOPs
         relu_flops = pool_output_elements
         
         total_flops = conv_flops + pool_flops + relu_flops

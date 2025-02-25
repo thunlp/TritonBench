@@ -4,7 +4,7 @@ import json
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from TorchBench_v1.sqrt_tanh import sqrt_tanh  # 正确引入算子
+from TorchBench_v1.sqrt_tanh import sqrt_tanh
 from performance_utils import Performance_Metrics, do_bench_config
 
 import torch
@@ -17,27 +17,25 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(12, 28):  # 从2^12到2^27的不同size
+        for i in range(12, 28):
             size = 2 ** i
-            input_tensor = torch.rand(size, dtype=self.dtype).abs()  # 根据dtype生成张量
+            input_tensor = torch.rand(size, dtype=self.dtype).abs()
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
-        return input_tensor.cuda()  # 转移到CUDA
+        return input_tensor.cuda()
 
     def call_op(self, input_tensor):
-        return sqrt_tanh(input_tensor)  # 调用算子
+        return sqrt_tanh(input_tensor)
 
     def get_gbps(self, input_tensor, runtime):
-        # 输入输出总数据量 = 输入元素数*元素大小 + 输出元素数*元素大小
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 4
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 单位转换
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
 
     def get_tflops(self, input_tensor, runtime):
-        # 每个元素执行sqrt和tanh两次操作
         flops = 2 * input_tensor.numel()
-        TFLOPS = flops / (runtime / 1000) / 1e12  # 单位转换
+        TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
     
     def run_benchmark(self):

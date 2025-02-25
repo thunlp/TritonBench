@@ -17,7 +17,6 @@ class performance_metrics(Performance_Metrics):
         
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成四维张量，形状为(2^i, 2^i, 2^i, 2^i)，i从3到7
         for i in range(3, 8):
             print(i)
             dim_size = 2 ** i
@@ -29,17 +28,14 @@ class performance_metrics(Performance_Metrics):
         return input_tensor.cuda()
         
     def call_op(self, input_tensor):
-        # 使用逆序维度排列调用permute_copy
         return permute_copy(input_tensor, dims=[3, 2, 1, 0])
     
     def get_gbps(self, input_tensor, runtime):
-        # 总字节数 = 输入和输出张量的字节总和
         total_bytes = 2 * input_tensor.numel() * input_tensor.element_size()
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 假设每个元素进行一次操作（内存拷贝无实际FLOPs，此处保持与示例一致）
         FLOPS = input_tensor.numel()
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS

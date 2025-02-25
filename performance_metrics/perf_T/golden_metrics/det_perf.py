@@ -17,8 +17,7 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同尺寸的方阵 (n x n)
-        for exp in range(4, 14):  # n从16到4096 (2^4到2^12)
+        for exp in range(4, 14):
             n = 2 ** exp
             input_tensor = torch.randn((n, n), dtype=self.dtype or torch.float32)
             self.input_tensors.append(input_tensor)
@@ -30,19 +29,15 @@ class performance_metrics(Performance_Metrics):
         return det(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 总数据量 = 输入矩阵 + 输出标量
         input_bytes = input_tensor.numel() * input_tensor.element_size()
-        output_bytes = 1 * input_tensor.element_size()  # 输出为标量
+        output_bytes = 1 * input_tensor.element_size()
         total_bytes = input_bytes + output_bytes
-        # 转换为GB/s (1e9 bytes = 1GB)
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
         n = input_tensor.shape[0]
-        # 假设基于LU分解的复杂度 (2/3)*n^3 次浮点运算
         flops = (2/3) * (n ** 3)
-        # 转换为TFLOPS (1e12 FLOPS = 1 TFLOP)
         TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
 

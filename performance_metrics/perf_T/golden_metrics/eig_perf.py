@@ -4,7 +4,7 @@ import json
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from TorchBench_v1.eig import eig  # 正确引入特征值分解算子
+from TorchBench_v1.eig import eig
 from performance_utils import Performance_Metrics, do_bench_config
 
 import torch
@@ -17,42 +17,34 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同尺寸的方阵 (2^6 到 2^10)
         for i in range(6, 11):
             n = 2 ** i
-            input_tensor = torch.rand(n, n, dtype=self.dtype)  # 实数方阵
+            input_tensor = torch.rand(n, n, dtype=self.dtype)
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
-        return input_tensor.cuda()  # 张量迁移到GPU
+        return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        return eig(input_tensor)  # 调用特征值分解
+        return eig(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        """ 计算内存吞吐量 (GB/s) """
         n = input_tensor.shape[0]
         dtype = input_tensor.dtype
         
-        # 确定复数元素字节大小
         complex_element_size = 8 if dtype == torch.float32 else 16
         
-        # 输入矩阵的字节数
         input_bytes = input_tensor.numel() * input_tensor.element_size()
-        # 输出特征值字节数 (n个复数)
         eigenvalues_bytes = n * complex_element_size
-        # 输出特征向量字节数 (n*n复数)
         eigenvectors_bytes = n * n * complex_element_size
         
         total_bytes = input_bytes + eigenvalues_bytes + eigenvectors_bytes
-        return total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        return total_bytes / (runtime / 1000) / 1e9
 
     def get_tflops(self, input_tensor, runtime):
-        """ 估算浮点运算量 (TFLOPS) """
         n = input_tensor.shape[0]
-        # 假设特征值分解需要约25n³次浮点运算
         flops_estimate = 25 * (n ** 3)
-        return flops_estimate / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        return flops_estimate / (runtime / 1000) / 1e12
 
     def run_benchmark(self):
         results = []

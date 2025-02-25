@@ -14,7 +14,7 @@ import triton.language as tl
 class performance_metrics(Performance_Metrics):
     def __init__(self, dtype=None, is_backward=False, **kwargs):
         super().__init__('scaled_add_dot', dtype=dtype, is_backward=is_backward, **kwargs)
-        self.alpha = 1.0  # 可根据需要调整alpha的值
+        self.alpha = 1.0
 
     def get_input_tensors(self):
         self.input_tensors = []

@@ -37,7 +37,6 @@ class performance_metrics(Performance_Metrics):
         input_tensor, other_tensor = input_tensor_tuple
         element_size = input_tensor.element_size()
         num_elements = input_tensor.numel()
-        # 总数据量 = input + other + output (均为相同shape)
         total_bytes = (num_elements + num_elements + num_elements) * element_size * 2
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
@@ -46,11 +45,10 @@ class performance_metrics(Performance_Metrics):
         input_tensor, other_tensor = input_tensor_tuple
         num_elements = input_tensor.numel()
         
-        # 根据近似方法估算操作次数
         if self.approximate == 'tanh':
-            ops_per_element = 11  # 假设tanh近似需要更多操作
+            ops_per_element = 11
         else:
-            ops_per_element = 6   # 默认情况估算操作次数
+            ops_per_element = 6
         
         total_flops = num_elements * ops_per_element
         TFLOPS = total_flops / (runtime / 1000) / 1e12

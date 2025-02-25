@@ -14,13 +14,12 @@ import triton.language as tl
 class performance_metrics(Performance_Metrics):
     def __init__(self, dtype=None, is_backward=False, **kwargs):
         super().__init__('fused_repeat_interleave_log_softmax', dtype=dtype, is_backward=is_backward, **kwargs)
-        self.repeats = 2  # 固定重复次数
-        self.dim = 0      # 固定操作维度
+        self.repeats = 2
+        self.dim = 0
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的1D输入张量（防止显存溢出）
-        for i in range(12, 24):  # 调整范围到2^12 ~ 2^23
+        for i in range(12, 24):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=torch.float32)
             self.input_tensors.append(input_tensor)
@@ -29,23 +28,20 @@ class performance_metrics(Performance_Metrics):
         return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        # 调用算子并传入固定参数
         return fused_repeat_interleave_log_softmax(input_tensor, 
                                                  repeats=self.repeats, 
                                                  dim=self.dim)
     
     def get_gbps(self, input_tensor, runtime):
-        # 计算总数据量（包含中间张量）
         element_size = input_tensor.element_size()
         input_numel = input_tensor.numel()
         total_bytes = input_numel * element_size * (1 + 3 * self.repeats)
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换毫秒到秒
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 仅计算log_softmax的浮点运算量
         flops = 3 * input_tensor.numel() * self.repeats  # 3 FLOPs per element
-        TFLOPS = flops / (runtime / 1000) / 1e12  # 转换毫秒到秒
+        TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
     
     def run_benchmark(self):

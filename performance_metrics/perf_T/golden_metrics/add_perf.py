@@ -33,7 +33,7 @@ class performance_metrics(Performance_Metrics):
         input_tensor, other_tensor = input_tuple
         num_elements = input_tensor.numel()
         element_size = input_tensor.element_size()
-        total_bytes = 3 * num_elements * element_size  # 输入*2 + 输出*1
+        total_bytes = 3 * num_elements * element_size
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     

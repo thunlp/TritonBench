@@ -19,7 +19,7 @@ class performance_metrics(Performance_Metrics):
         self.input_tensors = []
         for i in range(2, 33):
             n = 128 * i
-            m = n  # 保证A@B后能进行C@C.T运算
+            m = n
             A = torch.rand(n, m, dtype=torch.float16)
             B = torch.rand(m, n, dtype=torch.float16)
             C = torch.rand(n, n, dtype=torch.float16)
@@ -40,22 +40,20 @@ class performance_metrics(Performance_Metrics):
 
     def get_gbps(self, input_tuple, runtime):
         A, B, C, alpha, beta = input_tuple
-        element_size = A.element_size()  # 所有张量dtype一致
-        # 总数据量 = (A + B + C读 + C写)
+        element_size = A.element_size()
         total_bytes = (A.numel() + B.numel() + 2 * C.numel()) * element_size
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # runtime单位ms转秒
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
 
     def get_tflops(self, input_tuple, runtime):
         A, B, C, alpha, beta = input_tuple
         n, m = A.shape[0], A.shape[1]
-        # 计算各阶段FLOPS
-        flops_AB = 2 * n * m * n   # 第一次矩阵乘法
-        flops_add1 = 3 * n * n     # 第一次线性组合
-        flops_CCt = 2 * n ** 3     # 第二次矩阵乘法
-        flops_add2 = 3 * n * n     # 第二次线性组合
+        flops_AB = 2 * n * m * n
+        flops_add1 = 3 * n * n
+        flops_CCt = 2 * n ** 3
+        flops_add2 = 3 * n * n
         total_flops = flops_AB + flops_add1 + flops_CCt + flops_add2
-        TFLOPS = total_flops / (runtime / 1000) / 1e12  # 转为TFLOPS
+        TFLOPS = total_flops / (runtime / 1000) / 1e12
         return TFLOPS
 
 

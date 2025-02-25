@@ -21,8 +21,7 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的复数张量（一维）
-        for i in range(12, 24):  # 调整范围以避免内存溢出
+        for i in range(12, 24):
             size = 2 ** i
             input_tensor = torch.randn(size, dtype=torch.complex64)
             self.input_tensors.append(input_tensor)
@@ -31,26 +30,22 @@ class performance_metrics(Performance_Metrics):
         return input_tensor.cuda()
 
     def call_op(self, input_tensor):
-        # 调用fftn并传递存储的参数
         return fftn(input_tensor, s=self.s, dim=self.dim, norm=self.norm)
 
     def get_gbps(self, input_tensor, runtime):
-        # 计算输入输出总数据量（考虑复数类型）
         input_element_size = input_tensor.element_size()
         num_elements = input_tensor.numel()
         
-        # 根据输入类型确定输出类型大小
         if input_tensor.is_complex():
-            output_element_size = input_element_size  # 复数输出
+            output_element_size = input_element_size
         else:
-            output_element_size = torch.tensor([], dtype=torch.complex64).element_size()  # 实转复输出
+            output_element_size = torch.tensor([], dtype=torch.complex64).element_size()
         
         total_bytes = num_elements * (input_element_size + output_element_size)
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
 
     def get_tflops(self, input_tensor, runtime):
-        # 基于FFT的5NlogN浮点运算估算
         N = input_tensor.numel()
         if N == 0:
             return 0.0

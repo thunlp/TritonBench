@@ -17,35 +17,27 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的输入张量，范围从2^12到2^27
         for i in range(12, 28):
             size = 2 ** i
-            # 使用设定的dtype（默认为float32）
             input_tensor = torch.rand(size, dtype=self.dtype or torch.float32)
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
-        # 将输入张量转移到CUDA设备
         return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        # 调用cos_signbit算子并返回结果
         return cos_signbit(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 计算总数据传输量（输入+两个输出）
         input_es = input_tensor.element_size()
-        cos_es = input_es  # cos输出与输入类型相同
-        signbit_es = 1     # signbit输出为bool（1字节）
+        cos_es = input_es
+        signbit_es = 1
         total_bytes = input_tensor.numel() * (input_es + cos_es + cos_es + signbit_es)
-        # 转换为GB/s
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 假设每个元素计算cos需要1次浮点操作
         flops = input_tensor.numel()
-        # 转换为TFLOPS
         TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
     

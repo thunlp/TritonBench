@@ -17,28 +17,25 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(12, 28):  # 不同规模的数据: 2^12 到 2^27
+        for i in range(12, 28):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=self.dtype)
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
-        return input_tensor.cuda()  # 迁移到GPU
+        return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        # 调用融合算子，默认参数: p=0.5, training=True, inplace=False, lambd=0.5
         return fused_hardshrink_dropout(input_tensor, p=0.5, training=True, inplace=False, lambd=0.5)
 
     def get_gbps(self, input_tensor, runtime):
-        # 计算内存带宽: (输入+输出)数据量 / 时间
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 4
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 单位转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 计算计算吞吐量: 每个元素2次浮点操作（Dropout乘法 + Hardshrink绝对值）
-        flops = input_tensor.numel() * 2  # 训练模式下每个元素2次操作
-        TFLOPS = flops / (runtime / 1000) / 1e12  # 单位转换为TFLOPS
+        flops = input_tensor.numel() * 2
+        TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
 
     def run_benchmark(self):

@@ -4,7 +4,7 @@ import json
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from TorchBench_v1.exp_sqrt import exp_sqrt  # 正确引入算子
+from TorchBench_v1.exp_sqrt import exp_sqrt
 from performance_utils import Performance_Metrics, do_bench_config
 
 import torch
@@ -17,28 +17,25 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的输入张量（从2^12到2^27元素）
         for i in range(12, 28):
             size = 2 ** i
-            input_tensor = torch.rand(size, dtype=torch.float32)  # 使用float32类型
+            input_tensor = torch.rand(size, dtype=torch.float32)
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
-        return input_tensor.cuda()  # 简单的CUDA转移
+        return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        return exp_sqrt(input_tensor)  # 直接调用算子
+        return exp_sqrt(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 内存带宽计算：输入和输出各占一个tensor
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 2 * 2
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 计算量：每个元素执行exp和sqrt两个操作（2 FLOPS/element）
         total_flops = input_tensor.numel() * 2
-        TFLOPS = total_flops / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        TFLOPS = total_flops / (runtime / 1000) / 1e12
         return TFLOPS
     
     def run_benchmark(self):

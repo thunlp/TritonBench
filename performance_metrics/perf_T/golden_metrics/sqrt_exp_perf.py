@@ -19,7 +19,7 @@ class performance_metrics(Performance_Metrics):
         self.input_tensors = []
         for i in range(12, 28):
             size = 2 ** i
-            input_tensor = torch.rand(size, dtype=self.dtype)  # 生成非负随机数
+            input_tensor = torch.rand(size, dtype=self.dtype)
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
@@ -30,12 +30,12 @@ class performance_metrics(Performance_Metrics):
 
     def get_gbps(self, input_tensor, runtime):
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 4
-        gbps = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        gbps = total_bytes / (runtime / 1000) / 1e9
         return gbps
 
     def get_tflops(self, input_tensor, runtime):
-        flops = 2 * input_tensor.numel()  # 每个元素执行sqrt和exp两次操作
-        tflops = flops / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        flops = 2 * input_tensor.numel()
+        tflops = flops / (runtime / 1000) / 1e12
         return tflops
     
     def run_benchmark(self):

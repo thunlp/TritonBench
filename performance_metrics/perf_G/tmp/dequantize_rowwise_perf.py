@@ -5,7 +5,7 @@ import torch
 import triton
 import triton.language as tl
 
-sys.path.append('/home/lishangzhan/triton/bench_performance/GPU_efficiencies/output_o1-2024-12-17_comp_rag_')
+sys.path.append('/home/lishangzhan/triton/bench_performance/GPU_efficiencies/output_DeepSeek-R1_comp_')
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 # Correctly import the operator

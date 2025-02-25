@@ -19,7 +19,6 @@ class performance_metrics(Performance_Metrics):
         self.input_tensors = []
         for i in range(12, 28):
             size = 2 ** i
-            # 生成非负张量以避免sqrt错误
             input_tensor = torch.rand(size, dtype=self.dtype).abs()
             self.input_tensors.append(input_tensor)
     
@@ -30,7 +29,6 @@ class performance_metrics(Performance_Metrics):
         return rad2deg_sqrt(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 总数据量：输入 + 两个输出（每个与输入大小相同）
         num_elements = input_tensor.numel()
         element_size = input_tensor.element_size()
         total_bytes = num_elements * element_size * 4
@@ -38,7 +36,6 @@ class performance_metrics(Performance_Metrics):
         return gbps
     
     def get_tflops(self, input_tensor, runtime):
-        # 每个元素执行两次操作（rad2deg和sqrt各一次）
         flops = input_tensor.numel() * 2
         tflops = flops / (runtime / 1000) / 1e12
         return tflops

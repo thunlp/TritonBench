@@ -18,37 +18,32 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的线性层模型，测试量化性能
-        for i in range(4, 12):  # 可根据需要调整范围
+        for i in range(4, 12):
             size = 2 ** i
-            model = nn.Linear(size, size)  # 输入输出维度均为size的线性层
+            model = nn.Linear(size, size)
             self.input_tensors.append(model)
 
     def to_cuda(self, model):
-        # 动态量化通常在CPU执行，无需移动至CUDA
         return model
 
     def call_op(self, model):
-        # 对模型中的Linear层进行动态量化
-        qconfig_spec = {nn.Linear}  # 指定量化所有Linear层
+        qconfig_spec = {nn.Linear}
         return dynamic_custom(model, qconfig_spec=qconfig_spec)
 
     def get_gbps(self, model, runtime):
-        # 计算数据传输量：读取原权重 + 写入量化后数据
         weight = model.weight
         M, N = weight.shape
-        bytes_read = weight.numel() * weight.element_size()  # 原始数据量（float32）
-        bytes_written = weight.numel() * 1 + M * 4  # 量化权重(int8) + 缩放因子(float32)
+        bytes_read = weight.numel() * weight.element_size()
+        bytes_written = weight.numel() * 1 + M * 4
         total_bytes = bytes_read + bytes_written
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
 
     def get_tflops(self, model, runtime):
-        # 估算浮点操作：每个权重元素3次操作（减、除、取整）
         weight = model.weight
         M, N = weight.shape
         FLOPS = 3 * M * N 
-        TFLOPS = FLOPS / (runtime / 1000) / 1e12  # 转换为TFLOPs
+        TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
     
     def run_benchmark(self):

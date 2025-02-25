@@ -17,11 +17,10 @@ class performance_metrics(Performance_Metrics):
         
     def get_input_tensors(self):
         self.input_tensors = []
-        N = 16  # 批量大小
-        C = 64  # 通道数（需为num_groups的整数倍）
-        num_groups = 8  # 分组数
+        N = 16
+        C = 64
+        num_groups = 8
         
-        # 生成不同空间维度的输入（H, W从2^6到2^13）
         for i in range(6, 14):
             H = 128
             W = 2 ** i
@@ -32,38 +31,34 @@ class performance_metrics(Performance_Metrics):
             self.input_tensors.append((input1, input2, weight, bias, num_groups))
     
     def to_cuda(self, input_tuple):
-        # 将每个张量参数移动到CUDA
         input1, input2, weight, bias, num_groups = input_tuple
         return (
             input1.cuda(),
             input2.cuda(),
             weight.cuda(),
             bias.cuda(),
-            num_groups,  # 整数不需要移动
+            num_groups,
         )
         
     def call_op(self, input_tuple):
-        # 解包元组参数并调用算子
         input1, input2, weight, bias, num_groups = input_tuple
         return fused_add_mul_groupnorm(
             input1, input2, weight, bias, num_groups
         )
     
     def get_gbps(self, input_tuple, runtime):
-        # 计算总数据访问量 (input1 + input2 + output)
         input1, input2, _, _, _ = input_tuple
         element_size = input1.element_size()
         numel = input1.numel()
         total_bytes = numel * element_size * 7
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tuple, runtime):
-        # 计算总浮点运算量 (加法1 + 乘法1 + 归一化8) * numel
         input1, _, _, _, _ = input_tuple
         numel = input1.numel()
-        flops = 10 * numel  # 每个元素10次浮点运算
-        TFLOPS = flops / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        flops = 10 * numel
+        TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
 
 if __name__ == '__main__':

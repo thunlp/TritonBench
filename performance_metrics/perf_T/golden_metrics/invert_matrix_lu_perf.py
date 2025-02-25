@@ -17,10 +17,8 @@ class performance_metrics(Performance_Metrics):
         
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同尺寸的方阵（n从2^6到2^12）
         for i in range(6, 12):
             n = 2 ** i
-            # 生成随机可逆矩阵：随机矩阵 + 单位矩阵确保非奇异
             A = torch.rand((n, n), dtype=self.dtype) + torch.eye(n, dtype=self.dtype) * 1e-3
             self.input_tensors.append(A)
     
@@ -33,16 +31,14 @@ class performance_metrics(Performance_Metrics):
     def get_gbps(self, input_tensor, runtime):
         n = input_tensor.size(0)
         element_size = input_tensor.element_size()
-        # 总数据传输量：输入和输出各n^2个元素
         total_bytes = 2 * n * n * element_size
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
         n = input_tensor.size(0)
-        # 计算总FLOPS（假设为8/3 * n^3，基于LU分解和解方程步骤）
         flops = (8.0 / 3.0) * n ** 3
-        TFLOPS = flops / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
     
     def run_benchmark(self):

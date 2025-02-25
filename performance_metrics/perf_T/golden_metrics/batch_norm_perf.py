@@ -17,16 +17,15 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同尺寸的四维输入张量（N, C, H, W）
         for k in range(5, 13):
             print(k)
             H = 128 * k
             W = 128
-            C = 32  # 通道数
-            N = 32  # 批大小
+            C = 32
+            N = 32
             input_tensor = torch.randn(N, C, H, W, dtype=torch.float16)
             running_mean = torch.randn(C)
-            running_var = torch.abs(torch.randn(C)) + 1e-5  # 确保方差为正
+            running_var = torch.abs(torch.randn(C)) + 1e-5
             weight = torch.randn(C)
             bias = torch.randn(C)
             self.input_tensors.append((input_tensor, running_mean, running_var, weight, bias))
@@ -43,19 +42,17 @@ class performance_metrics(Performance_Metrics):
 
     def call_op(self, input_tuple):
         input_tensor, running_mean, running_var, weight, bias = input_tuple
-        # 使用eval模式（training=False）
         return batch_norm(input_tensor, running_mean, running_var, weight, bias, 
                           training=False, momentum=0.1, eps=1e-5)
 
     def get_gbps(self, input_tuple, runtime):
         input_tensor = input_tuple[0]
-        total_bytes = input_tensor.numel() * input_tensor.element_size() * 2  # 输入+输出
+        total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
 
     def get_tflops(self, input_tuple, runtime):
         input_tensor = input_tuple[0]
-        # 每个元素进行4次浮点操作：(x-mean)/std*gamma + beta
         flops = input_tensor.numel() * 4
         TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS

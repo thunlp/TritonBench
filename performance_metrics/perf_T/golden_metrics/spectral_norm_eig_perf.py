@@ -17,8 +17,7 @@ class performance_metrics(Performance_Metrics):
         
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的方阵，如16x16, 32x32, ..., 512x512
-        for i in range(2, 8):  # 可根据需要调整i的范围
+        for i in range(2, 8):
             n = 2 ** i
             input_tensor = torch.rand(n, n, dtype=self.dtype or torch.float32)
             self.input_tensors.append(input_tensor)
@@ -30,22 +29,20 @@ class performance_metrics(Performance_Metrics):
         return spectral_norm_eig(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 输入和输出的总字节数
         n = input_tensor.shape[-1]
-        batch_numel = input_tensor.numel() // (n * n)  # 批处理维度的大小
+        batch_numel = input_tensor.numel() // (n * n)
         input_bytes = input_tensor.numel() * input_tensor.element_size()
-        output_bytes = batch_numel * input_tensor.element_size()  # 输出为每个矩阵的谱范数
+        output_bytes = batch_numel * input_tensor.element_size()
         total_bytes = input_bytes + output_bytes
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 假设特征值分解的浮点运算量为 ~ (8/3) * n^3 次，每个矩阵
         n = input_tensor.shape[-1]
-        batch_numel = input_tensor.numel() // (n * n)  # 批处理维度的大小
-        flops_per_matrix = (8/3) * n ** 3  # 根据算法复杂度估算
+        batch_numel = input_tensor.numel() // (n * n)
+        flops_per_matrix = (8/3) * n ** 3
         total_flops = batch_numel * flops_per_matrix
-        TFLOPS = total_flops / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        TFLOPS = total_flops / (runtime / 1000) / 1e12
         return TFLOPS
 
     def run_benchmark(self):

@@ -31,13 +31,13 @@ class performance_metrics(Performance_Metrics):
     def get_gbps(self, input_tensor, runtime):
         numel = input_tensor.numel()
         element_size = input_tensor.element_size()
-        total_bytes = 3 * numel * element_size  # 输入读取 + 中间结果写入 + 中间结果读取
+        total_bytes = 3 * numel * element_size
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
         numel = input_tensor.numel()
-        flops = 2 * numel  # exp操作(numel) + sum和除法(numel)
+        flops = 2 * numel
         TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
     

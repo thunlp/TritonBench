@@ -14,13 +14,12 @@ import triton.language as tl
 class performance_metrics(Performance_Metrics):
     def __init__(self, dtype=None, is_backward=False, dim=0, **kwargs):
         super().__init__('mean', dtype=dtype, is_backward=is_backward, **kwargs)
-        self.dim = dim  # 可配置的dim参数
+        self.dim = dim
 
     def get_input_tensors(self):
         self.input_tensors = []
         for i in range(12, 28):
             size = 2 ** i
-            # 生成一维张量，测试dim=0的情况
             input_tensor = torch.rand(size, dtype=self.dtype or torch.float32)
             self.input_tensors.append(input_tensor)
 
@@ -31,16 +30,14 @@ class performance_metrics(Performance_Metrics):
         return mean(input_tensor, dim=self.dim)
 
     def get_gbps(self, input_tensor, runtime):
-        # 计算输入和输出的总字节数
         input_numel = input_tensor.numel()
-        output_numel = 1  # 一维张量在dim=0时输出为标量
+        output_numel = 1
         total_bytes = (input_numel + output_numel) * input_tensor.element_size()
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
 
     def get_tflops(self, input_tensor, runtime):
-        # 每个元素需要一次加法和一次除法，近似为2*N次操作
-        FLOPS = input_tensor.numel() * 2  # 更精确的FLOPS计算
+        FLOPS = input_tensor.numel() * 2
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
     

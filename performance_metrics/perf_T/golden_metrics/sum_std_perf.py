@@ -17,8 +17,6 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的一维张量（类似abs示例）
-        # 范围从2^12到2^24避免显存不足
         for i in range(12, 25):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=torch.float32)
@@ -28,26 +26,19 @@ class performance_metrics(Performance_Metrics):
         return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        # 调用时指定dim=None（全量求和）
         return sum_std(input_tensor, dim=None)
     
     def get_gbps(self, input_tensor, runtime):
-        # 输入输出总数据量（输入+标量输出）
         input_bytes = input_tensor.numel() * input_tensor.element_size()
-        output_bytes = 1 * input_tensor.element_size()  # 标量输出
+        output_bytes = 1 * input_tensor.element_size()
         total_bytes = input_bytes + output_bytes
         
-        # 转换为GB/s（注意runtime单位是毫秒）
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 近似计算FLOPS：
-        # 1. sum操作需要numel次访存（每个元素参与计算）
-        # 2. std计算中均值、方差等操作量级远小于sum，故近似忽略
         FLOPS = input_tensor.numel()  
         
-        # 转换为TFLOPS（注意runtime单位是毫秒）
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
     

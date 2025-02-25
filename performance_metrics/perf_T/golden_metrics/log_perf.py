@@ -19,7 +19,6 @@ class performance_metrics(Performance_Metrics):
         self.input_tensors = []
         for i in range(12, 28):
             size = 2 ** i
-            # 生成正数输入避免log(0)，使用float32类型
             input_tensor = torch.rand(size, dtype=torch.float32) + 1e-6
             self.input_tensors.append(input_tensor)
 
@@ -27,23 +26,17 @@ class performance_metrics(Performance_Metrics):
         return input_tensor.cuda()
         
     def call_op(self, input_tensor):
-        # 使用预分配输出张量来避免内存分配开销
         out = torch.empty_like(input_tensor)
         return log(input_tensor, out=out)
     
     def get_gbps(self, input_tensor, runtime):
-        # 计算总数据量（输入+输出）
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
-        # 转换为GB/s（runtime单位是毫秒）
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 假设每个元素需要20次浮点运算（典型超越函数估算值）
-        # 可根据实际情况调整该系数
         FLOPS_PER_ELEMENT = 20
         total_flops = input_tensor.numel() * FLOPS_PER_ELEMENT
-        # 转换为TFLOPS
         TFLOPS = total_flops / (runtime / 1000) / 1e12
         return TFLOPS
 

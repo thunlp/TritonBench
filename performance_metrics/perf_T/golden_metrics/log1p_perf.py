@@ -29,12 +29,12 @@ class performance_metrics(Performance_Metrics):
         return log1p(input_tensor)
 
     def get_gbps(self, input_tensor, runtime):
-        total_bytes = input_tensor.numel() * input_tensor.element_size() * 2  # 输入和输出
+        total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        FLOPS = input_tensor.numel()  # 假设每个元素1次浮点操作
+        FLOPS = input_tensor.numel()
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
     

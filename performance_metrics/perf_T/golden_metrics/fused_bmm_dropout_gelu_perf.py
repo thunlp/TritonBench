@@ -17,7 +17,6 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同尺寸的输入对：B=32，N=M=P=2^7至2^10
         for exp in range(2, 20):
             B = 32
             N, M, P = 128 * exp, 128 * exp, 128 * exp
@@ -37,7 +36,7 @@ class performance_metrics(Performance_Metrics):
         input1, input2 = input_tensor
         B, N, M = input1.shape
         B2, M2, P = input2.shape
-        assert B == B2 and M == M2, "输入形状不匹配"
+        assert B == B2 and M == M2, "Input size not match"
         element_size = input1.element_size()
         total_bytes = (input1.numel() + input2.numel() + B * N * P + B * N * P * 4) * element_size
         return total_bytes / (runtime / 1000) / 1e9
@@ -46,8 +45,8 @@ class performance_metrics(Performance_Metrics):
         input1, input2 = input_tensor
         B, N, M = input1.shape
         B2, M2, P = input2.shape
-        assert B == B2 and M == M2, "输入形状不匹配"
-        flops = 2 * B * N * M * P  # 矩阵乘法计算量
+        assert B == B2 and M == M2, "Input size not match"
+        flops = 2 * B * N * M * P
         return flops / (runtime / 1000) / 1e12
 
 

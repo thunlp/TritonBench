@@ -36,18 +36,14 @@ class performance_metrics(Performance_Metrics):
         total_time_seconds = runtime / 1000.0
         M, N, K = input_tensor
         dtype_size = 2
-        # 计算每个矩阵的元素数目
         numel_a = M * K
         numel_b = K * N
         numel_c = M * N
-        # 计算总字节数（包括初始化的内存分配和转置的内存传输）
         total_bytes = (numel_a + numel_b + numel_c) * dtype_size
         
-        # 如果启用了转置，增加转置操作的内存传输开销
-        total_bytes += 2 * numel_a * dtype_size  # 读取和写入A的转置
-        total_bytes += 2 * numel_b * dtype_size  # 读取和写入B的转置
-        # 计算GB/s
-        gbps = total_bytes / (total_time_seconds * 1e9)  # 转换为GB/s
+        total_bytes += 2 * numel_a * dtype_size
+        total_bytes += 2 * numel_b * dtype_size
+        gbps = total_bytes / (total_time_seconds * 1e9)
         return gbps
     
     def get_tflops(self, input_tensor, runtime):

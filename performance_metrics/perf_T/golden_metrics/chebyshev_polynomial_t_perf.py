@@ -14,11 +14,10 @@ import triton.language as tl
 class performance_metrics(Performance_Metrics):
     def __init__(self, dtype=None, is_backward=False, n=3, **kwargs):
         super().__init__('chebyshev_polynomial_t', dtype=dtype, is_backward=is_backward, **kwargs)
-        self.n = n  # 保存多项式阶数n
+        self.n = n
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的输入张量（2^12 到 2^27 元素）
         for i in range(12, 28):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=self.dtype)
@@ -28,23 +27,20 @@ class performance_metrics(Performance_Metrics):
         return input_tensor.cuda()
 
     def call_op(self, input_tensor):
-        # 调用算子，传入input和保存的n值
         return chebyshev_polynomial_t(input_tensor, self.n)
 
     def get_gbps(self, input_tensor, runtime):
-        # 总数据量 = 输入+输出张量（各numel*element_size）
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
 
     def get_tflops(self, input_tensor, runtime):
-        # 根据递推公式计算FLOPS：3*(n-1)次运算/元素（n>=2时）
         if self.n <= 1:
-            flops_per_element = 0  # n=0/1时无计算量
+            flops_per_element = 0
         else:
             flops_per_element = 3 * (self.n - 1)
         total_flops = input_tensor.numel() * flops_per_element
-        TFLOPS = total_flops / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        TFLOPS = total_flops / (runtime / 1000) / 1e12
         return TFLOPS
     
     def run_benchmark(self):

@@ -17,7 +17,6 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的方阵对用于矩阵乘法
         for i in range(2, 33):
             size = 128 * i
             a = torch.rand((size, size), dtype=torch.float32)
@@ -25,31 +24,27 @@ class performance_metrics(Performance_Metrics):
             self.input_tensors.append((a, b))
 
     def to_cuda(self, input_tensor):
-        # 将输入张量元组转移到CUDA
         a, b = input_tensor
         return (a.cuda(), b.cuda())
     
     def call_op(self, input_tensor):
-        # 在autocast上下文中执行矩阵乘法
         a, b = input_tensor
         with autocast('cuda'):
             return torch.mm(a, b)
     
     def get_gbps(self, input_tensor, runtime):
-        # 计算总数据传输量（输入输出均为float32）
         a, b = input_tensor
         size = a.size(0)
-        element_size = a.element_size()  # float32为4字节
+        element_size = a.element_size()
         input_bytes = (a.numel() + b.numel()) * element_size
         output_bytes = size * size * element_size
         total_bytes = input_bytes + output_bytes
         return total_bytes / (runtime / 1000) / 1e9
     
     def get_tflops(self, input_tensor, runtime):
-        # 计算矩阵乘法的理论FLOPS
         a, b = input_tensor
         size = a.size(0)
-        flops = 2 * size ** 3  # 乘加操作算作2次浮点运算
+        flops = 2 * size ** 3
         return flops / (runtime / 1000) / 1e12
 
 

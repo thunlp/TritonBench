@@ -22,9 +22,8 @@ class performance_metrics(Performance_Metrics):
         self.input_tensors = []
         for i in range(2, 15):
             n = 2 ** i
-            # 生成随机对称矩阵
             A = torch.rand((n, n), dtype=self.dtype)
-            A = (A + A.T) / 2  # 确保矩阵对称
+            A = (A + A.T) / 2
             x = torch.rand(n, dtype=self.dtype)
             self.input_tensors.append((A, x))
 
@@ -38,20 +37,16 @@ class performance_metrics(Performance_Metrics):
     
     def get_gbps(self, input_tensor, runtime):
         A, x = input_tensor
-        # 计算总数据量（输入矩阵+向量+输出标量）
         input_bytes = (A.numel() + x.numel()) * A.element_size()
-        output_bytes = torch.tensor(0.0, dtype=A.dtype).element_size()  # 标量输出
+        output_bytes = torch.tensor(0.0, dtype=A.dtype).element_size()
         total_bytes = input_bytes + output_bytes
-        # 计算GBPS（考虑单位转换）
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
         A, x = input_tensor
         n = A.size(0)
-        # 主要计算量来自矩阵向量乘法（2n² FLOPS）
         flops = 2 * n ** 2
-        # 转换为TFLOPS（考虑单位转换）
         TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
 

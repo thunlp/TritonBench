@@ -20,7 +20,6 @@ class performance_metrics(Performance_Metrics):
         for i in range(4, 16):
             print(i)
             size = 2 ** i
-            # 输入张量形状为 (1, size, 1, 1)
             input_tensor = torch.randn(16, size, 8, 128, dtype=self.dtype)
             running_mean = torch.zeros(size, dtype=self.dtype)
             running_var = torch.ones(size, dtype=self.dtype)
@@ -45,20 +44,19 @@ class performance_metrics(Performance_Metrics):
             running_var, 
             weight, 
             bias, 
-            training=False,  # 确保不更新running stats
+            training=False,
             momentum=0.1, 
             eps=1e-5
         )
     
     def get_gbps(self, input_tuple, runtime):
         input_tensor, running_mean, running_var, weight, bias = input_tuple
-        # 计算各张量字节数
         bytes_input = input_tensor.numel() * input_tensor.element_size()
         bytes_running_mean = running_mean.numel() * running_mean.element_size()
         bytes_running_var = running_var.numel() * running_var.element_size()
         bytes_weight = weight.numel() * weight.element_size()
         bytes_bias = bias.numel() * bias.element_size()
-        bytes_output = input_tensor.numel() * input_tensor.element_size()  # 输出与输入同形
+        bytes_output = input_tensor.numel() * input_tensor.element_size()
         
         total_bytes = (bytes_input + bytes_running_mean + bytes_running_var +
                        bytes_weight + bytes_bias + bytes_output)
@@ -67,7 +65,6 @@ class performance_metrics(Performance_Metrics):
     
     def get_tflops(self, input_tuple, runtime):
         input_tensor = input_tuple[0]
-        # 计算总浮点运算次数（BN:6C次，SiLU:4C次）
         total_flops = 10 * input_tensor.numel()
         TFLOPS = total_flops / (runtime / 1000) / 1e12
         return TFLOPS

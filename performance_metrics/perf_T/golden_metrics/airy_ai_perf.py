@@ -17,9 +17,9 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(12, 28):  # 从2^12到2^27的不同数据规模
+        for i in range(12, 28):
             size = 2 ** i
-            input_tensor = torch.randn(size, dtype=self.dtype)  # 生成包含正负值的随机数据
+            input_tensor = torch.randn(size, dtype=self.dtype)
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
@@ -29,17 +29,14 @@ class performance_metrics(Performance_Metrics):
         return airy_ai(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 总数据量 = 输入张量大小 + 输出张量大小
-        total_bytes = input_tensor.numel() * input_tensor.element_size() * 2  # 2次内存访问（读+写）
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 假设每个元素需要50次浮点运算（根据Airy函数的计算复杂度估算）
-        # 实际值需要根据具体实现调整
         FLOPS_PER_ELEMENT = 50  
         total_flops = input_tensor.numel() * FLOPS_PER_ELEMENT
-        TFLOPS = total_flops / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        TFLOPS = total_flops / (runtime / 1000) / 1e12
         return TFLOPS
     
     def run_benchmark(self):

@@ -17,7 +17,6 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同尺寸的方阵测试用例 (n = m)
         for i in range(6, 16):
             n = m = 2 ** i
             A = torch.rand(n, m, dtype=torch.float16)
@@ -31,13 +30,11 @@ class performance_metrics(Performance_Metrics):
     
     def call_op(self, input_tensors):
         A, x, y = input_tensors
-        # 使用固定参数 alpha=1.0, beta=1.0
         return matrix_vector_dot(A, x, y, alpha=1.0, beta=1.0)
     
     def get_gbps(self, input_tensors, runtime):
         A, x, y = input_tensors
-        element_size = A.element_size()  # 获取数据类型大小
-        # 总数据量 = A读取 + x两次读取 + y三次访问（读+写+读）
+        element_size = A.element_size()
         total_bytes = (A.numel() + 2*x.numel() + 3*y.numel()) * element_size
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
@@ -45,7 +42,6 @@ class performance_metrics(Performance_Metrics):
     def get_tflops(self, input_tensors, runtime):
         A, x, y = input_tensors
         n, m = A.shape
-        # FLOPS = 矩阵乘(2nm) + alpha乘(n) + beta乘(n) + 加法(n) + 点积(2n-1)
         total_flops = 2*n*m + 3*n + (2*n - 1)
         TFLOPS = total_flops / (runtime / 1000) / 1e12
         return TFLOPS

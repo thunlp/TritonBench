@@ -17,11 +17,10 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同规模的输入矩阵，保证m >= n
-        for i in range(4, 13):  # n从16到4096
+        for i in range(4, 13):
             n = 2 ** i
-            m = 2 * n       # 保证m >= n
-            k = 10          # 固定rhs维度
+            m = 2 * n
+            k = 10
             A = torch.rand((m, n), dtype=self.dtype)
             b = torch.rand((m, k), dtype=self.dtype)
             self.input_tensors.append((A, b))
@@ -40,8 +39,6 @@ class performance_metrics(Performance_Metrics):
         k = b.shape[1]
         element_size = A.element_size()
         
-        # 输入数据量: A(m,n) + b(m,k)
-        # 输出数据量: x(n,k)
         total_bytes = (A.numel() + b.numel() + n*k) * element_size
         return total_bytes / (runtime / 1000) / 1e9
     
@@ -50,13 +47,10 @@ class performance_metrics(Performance_Metrics):
         m, n = A.shape
         k = b.shape[1]
         
-        # QR分解FLOPS: 2*m*n² - 2/3*n³
         flops_qr = 2 * m * n**2 - (2/3) * n**3
         
-        # 矩阵乘法FLOPS: Q^T@b (m*n @ m*k -> n*k)
         flops_matmul = 2 * m * n * k
         
-        # 解三角方程FLOPS: n²*k
         flops_solve = n**2 * k
         
         total_flops = flops_qr + flops_matmul + flops_solve

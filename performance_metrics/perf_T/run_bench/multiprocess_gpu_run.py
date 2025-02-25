@@ -4,23 +4,19 @@ from multiprocessing import Pool, Lock, Value
 from tqdm import tqdm
 import signal
 
-# 配置参数
-script_dir = "./tmp"  # 你想运行的 Python 文件所在的目录
-log_dir = "./logs"  # 日志目录
-gpu_count = 8  # GPU 数量
+script_dir = "./tmp"
+log_dir = "./logs"
+gpu_count = 8
 timeout = 600
 
-# 获取所有 Python 文件（严格按顺序）
 scripts = sorted([f for f in os.listdir(script_dir) if f.endswith(".py")])
-scripts = [os.path.join(script_dir, script) for script in scripts]  # 转换为完整路径
-total_scripts = len(scripts)  # 总任务数
+scripts = [os.path.join(script_dir, script) for script in scripts]
+total_scripts = len(scripts)
 
-# 进度条计数器
 progress = Value('i', 0)
 progress_lock = Lock()
 
 def run_script(args):
-    """运行单个 Python 脚本，并记录日志，同时更新进度条"""
     gpu_id, script = args
 
     script_name = os.path.basename(script)
@@ -33,30 +29,24 @@ def run_script(args):
     with open(log_file, "w") as log, open(err_file, "w") as err:
         process = subprocess.Popen(cmd, shell=True, stdout=log, stderr=err)
         try:
-            # 设置超时限制，超过三分钟终止进程
             process.wait(timeout=timeout)
         except subprocess.TimeoutExpired:
-            # 超时后终止该进程
             # process.kill()
-            os.killpg(os.getpgid(process.pid), signal.SIGKILL)  # 终止整个进程组
-            tqdm.write(f"⏱️ 超时，已终止 {script_name} (超过 {timeout} 秒)")
+            os.killpg(os.getpgid(process.pid), signal.SIGKILL)
+            tqdm.write(f"⏱️ timeout，killed {script_name} ( {timeout} s)")
 
-    # 更新进度条
     with progress_lock:
         progress.value += 1
-        tqdm.write(f"✅ 完成 {progress.value}/{total_scripts}: {script_name}")
+        tqdm.write(f"✅ finished {progress.value}/{total_scripts}: {script_name}")
 
-# 创建日志文件夹
 os.makedirs(log_dir, exist_ok=True)
 
-# 显示进度条
 if __name__ == "__main__":
-    with Pool(processes=gpu_count) as pool, tqdm(total=total_scripts, desc="任务进度", ncols=80) as pbar:
-        # 按顺序分配 GPU
+    with Pool(processes=gpu_count) as pool, tqdm(total=total_scripts, desc="Process", ncols=80) as pbar:
         args_list = [(i % gpu_count, scripts[i]) for i in range(total_scripts)]
         
-        for _ in pool.imap(run_script, args_list):  # 严格按照脚本列表顺序执行
-            pbar.update(1)  # 每完成一个任务，更新进度条
+        for _ in pool.imap(run_script, args_list):
+            pbar.update(1)
 
         pool.close()
-        pool.join()  # 等待所有任务完成
+        pool.join()

@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/lishangzhan/TritonBench/performance_metrics/perf_T/./tmp/batch_norm_perf.py", line 67, in <module>
+    op_perf.get_input_tensors()
+  File "/home/lishangzhan/TritonBench/performance_metrics/perf_T/./tmp/batch_norm_perf.py", line 28, in get_input_tensors
+    input_tensor = torch.randn(N, C, H, W, dtype=torch.float16)
+KeyboardInterrupt

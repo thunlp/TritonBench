@@ -17,22 +17,15 @@ class performance_metrics(Performance_Metrics):
         self.dim = dim
         self.correction = correction
         self.keepdim = keepdim
-        self.output_sizes = []  # 存储每个输入对应的输出元素数
+        self.output_sizes = []
 
     def get_input_tensors(self):
         self.input_tensors = []
         self.output_sizes = []
-        # 生成不同大小的输入张量（从2^12到2^27）
         for i in range(12, 28):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=self.dtype or torch.float32)
             self.input_tensors.append(input_tensor)
-            # 预计算输出大小用于GBPS计算
-            # with torch.no_grad():
-            #     output = std(input_tensor, dim=self.dim, 
-            #                 correction=self.correction, 
-            #                 keepdim=self.keepdim)
-            #     self.output_sizes.append(output.numel())
 
     def to_cuda(self, input_tensor):
         return input_tensor.cuda()
@@ -47,12 +40,11 @@ class performance_metrics(Performance_Metrics):
         output_size = std(input_tensor, dim=self.dim, correction=self.correction, keepdim=self.keepdim).numel()
         element_size = input_tensor.element_size()
         total_bytes = (input_tensor.numel() + output_size) * element_size
-        return total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        return total_bytes / (runtime / 1000) / 1e9
     
     def get_tflops(self, input_tensor, runtime):
-        # 计算浮点操作量（3次操作/元素：均值+方差+开方）
         flops = 3 * input_tensor.numel()
-        return flops / (runtime / 1000) / 1e12  # 转换为TFLOP/s
+        return flops / (runtime / 1000) / 1e12
     
     def run_benchmark(self):
         results = []

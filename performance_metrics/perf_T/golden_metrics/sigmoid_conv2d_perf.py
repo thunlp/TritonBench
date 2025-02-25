@@ -21,7 +21,6 @@ class performance_metrics(Performance_Metrics):
         in_channels = 64
         out_channels = 128
         kernel_size = 3
-        # 生成不同输入尺寸：32x32, 64x64, 128x128, 256x256
         for i in range(4, 11):
             hw = 2 ** i
             input_tensor = torch.randn(batch_size, in_channels, hw, hw, dtype=self.dtype)
@@ -35,7 +34,6 @@ class performance_metrics(Performance_Metrics):
     
     def call_op(self, input_tuple):
         input_tensor, weight, bias = input_tuple
-        # 固定参数：stride=1, padding=0, dilation=1, groups=1
         return sigmoid_conv2d(input_tensor, weight, bias, stride=1, padding=0)
     
     def get_gbps(self, input_tuple, runtime):
@@ -44,18 +42,16 @@ class performance_metrics(Performance_Metrics):
         N, C, H_in, W_in = input_tensor.shape
         O, _, K, _ = weight.shape
         
-        # 计算输出尺寸
         H_out = H_in - K + 1
         W_out = W_in - K + 1
         
-        # 计算数据量（单位：字节）
         input_bytes = input_tensor.numel() * element_size
         weight_bytes = weight.numel() * element_size
         bias_bytes = bias.numel() * element_size if bias is not None else 0
         output_bytes = N * O * H_out * W_out * element_size
         
         total_bytes = input_bytes + weight_bytes + bias_bytes + output_bytes * 3
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tuple, runtime):
@@ -63,19 +59,15 @@ class performance_metrics(Performance_Metrics):
         N, C, H_in, W_in = input_tensor.shape
         O, _, K, _ = weight.shape
         
-        # 计算输出尺寸
         H_out = H_in - K + 1
         W_out = W_in - K + 1
         
-        # 卷积FLOPs（乘加算2次操作）
         conv_flops = 2 * N * O * H_out * W_out * C * K * K
-        # 偏置FLOPs
         bias_flops = N * O * H_out * W_out if bias is not None else 0
-        # Sigmoid FLOPs（假设每个元素3次操作）
         sigmoid_flops = 3 * N * O * H_out * W_out
         
         total_flops = conv_flops + bias_flops + sigmoid_flops
-        TFLOPS = total_flops / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        TFLOPS = total_flops / (runtime / 1000) / 1e12
         return TFLOPS
 
 

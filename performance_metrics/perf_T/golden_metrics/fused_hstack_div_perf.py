@@ -19,18 +19,15 @@ class performance_metrics(Performance_Metrics):
         self.input_tensors = []
         for i in range(12, 28):
             num_elements = 2 ** i
-            # 生成两个一维张量，每个包含num_elements元素
             tensor1 = torch.rand(num_elements, dtype=self.dtype)
             tensor2 = torch.rand(num_elements, dtype=self.dtype)
             tensors = [tensor1, tensor2]
-            divisor = 2.0  # 使用标量作为除数
+            divisor = 2.0
             self.input_tensors.append((tensors, divisor))
     
     def to_cuda(self, input_case):
         tensors, divisor = input_case
-        # 转移张量列表中的每个张量到CUDA
         cuda_tensors = [t.cuda() for t in tensors]
-        # 如果divisor是张量，也需转移到CUDA
         if isinstance(divisor, torch.Tensor):
             cuda_divisor = divisor.cuda()
         else:
@@ -43,18 +40,15 @@ class performance_metrics(Performance_Metrics):
 
     def get_gbps(self, input_case, runtime):
         tensors, divisor = input_case
-        # 计算输入总元素数和输出元素数
         input_elements = sum(t.numel() for t in tensors)
         output_elements = torch.hstack(tensors).numel()
         element_size = tensors[0].element_size()
-        # 总字节数 = (输入 + 输出) * 元素大小
         total_bytes = (input_elements + output_elements * 3) * element_size
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_case, runtime):
         tensors, divisor = input_case
-        # 每个输出元素对应一次除法操作
         output_elements = torch.hstack(tensors).numel()
         TFLOPS = output_elements / (runtime / 1000) / 1e12
         return TFLOPS

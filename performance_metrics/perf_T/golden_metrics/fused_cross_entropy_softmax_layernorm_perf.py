@@ -17,9 +17,9 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(8, 20):  # 可调整范围控制显存使用
+        for i in range(8, 20):
             batch_size = 2 ** i
-            vocab_size = 1024  # 固定词汇表大小
+            vocab_size = 1024
             logits = torch.randn(batch_size, vocab_size, dtype=torch.float32)
             targets = torch.randint(0, vocab_size, (batch_size,), dtype=torch.int64)
             normalized_shape = vocab_size
@@ -35,17 +35,15 @@ class performance_metrics(Performance_Metrics):
     
     def get_gbps(self, input_tensor, runtime):
         logits, _, _ = input_tensor
-        # 输入: logits (n) | 输出: probabilities (n) + output (n)
         total_bytes = logits.numel() * logits.element_size() * 6
         return total_bytes / (runtime / 1000) / 1e9
     
     def get_tflops(self, input_tensor, runtime):
         logits, _, _ = input_tensor
-        # 计算FLOPs（简化估算）:
         # softmax: 2n (exp + sum)
         # cross_entropy: n (log_softmax) + n (gather)
         # layer_norm: 3n (mean + var + norm)
-        total_flops = logits.numel() * 6  # 总操作数约6n
+        total_flops = logits.numel() * 6
         return total_flops / (runtime / 1000) / 1e12
 
 if __name__ == '__main__':

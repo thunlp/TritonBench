@@ -17,12 +17,9 @@ class performance_metrics(Performance_Metrics):
         
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同规模的测试用例（n从2^4到2^11）
         for i in range(4, 12):
             n = 2 ** i
-            # 生成可逆矩阵A（对角线增强确保非奇异）
             A = torch.randn(n, n, dtype=self.dtype) + n * torch.eye(n, dtype=self.dtype)
-            # 生成右侧矩阵B（这里假设为单列向量）
             B = torch.randn(n, 1, dtype=self.dtype)
             self.input_tensors.append((A, B))
     
@@ -36,19 +33,17 @@ class performance_metrics(Performance_Metrics):
 
     def get_gbps(self, input_tensor, runtime):
         A, B = input_tensor
-        X_shape = B.shape  # 解X的形状与B相同
-        # 总数据量 = 输入A大小 + 输入B大小 + 输出X大小
+        X_shape = B.shape
         total_bytes = (A.numel() + B.numel() + X_shape[0]*X_shape[1]) * A.element_size()
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
         A, B = input_tensor
         n = A.shape[0]
         k = B.shape[1] if len(B.shape) > 1 else 1
-        # 理论FLOPS估算：LU分解(2/3n³) + 解方程(2n²k)
         flops = (2/3) * (n**3) + 2 * (n**2) * k
-        TFLOPS = flops / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
 
 

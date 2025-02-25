@@ -17,7 +17,7 @@ class performance_metrics(Performance_Metrics):
         
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(12, 28):  # 测试不同大小的输入
+        for i in range(12, 28):
             size = 2 ** i
             dtype = self.dtype if self.dtype is not None else torch.float32
             input_tensor = torch.rand(size, dtype=dtype)
@@ -28,21 +28,20 @@ class performance_metrics(Performance_Metrics):
         return input_tensor
         
     def call_op(self, input_tensor):
-        values, indices = max(input_tensor, dim=0)  # 沿dim=0取最大值
-        return (values, indices)  # 前向测试返回元组
+        values, indices = max(input_tensor, dim=0)
+        return (values, indices)
     
     def get_gbps(self, input_tensor, runtime):
-        # 总数据量 = 输入数据 + 输出values数据 + 输出indices数据
         input_bytes = input_tensor.numel() * input_tensor.element_size()
-        values_bytes = 1 * input_tensor.element_size()  # values为标量
-        indices_bytes = 1 * 8  # indices为int64类型，占8字节
+        values_bytes = 1 * input_tensor.element_size()
+        indices_bytes = 1 * 8
         total_bytes = input_bytes + values_bytes + indices_bytes
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        flops = input_tensor.numel()  # 假设每个元素参与一次比较操作
-        TFLOPS = flops / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        flops = input_tensor.numel()
+        TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
     
     def run_benchmark(self):

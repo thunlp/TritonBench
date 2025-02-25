@@ -17,15 +17,11 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同规模的测试用例（n从16到1024）
-        # n_list = [16, 32, 64, 128, 256, 512, 1024]
-        k = 1  # 假设右侧向量维度为1
+        k = 1
         for i in range(2, 10):
             n = 2 ** i
-            # 生成对称正定矩阵
             A = torch.rand(n, n, dtype=torch.float32)
-            A = A @ A.T + n * torch.eye(n, dtype=torch.float32)  # 确保正定
-            # 生成右侧向量
+            A = A @ A.T + n * torch.eye(n, dtype=torch.float32)
             b = torch.rand(n, k, dtype=torch.float32)
             self.input_tensors.append((A, b))
 
@@ -39,19 +35,16 @@ class performance_metrics(Performance_Metrics):
     
     def get_gbps(self, input_tensor, runtime):
         A, b = input_tensor
-        # 总数据量 = 输入(A + b) + 输出(x) = (n² + nk) + nk = n² + 2nk
-        element_size = A.element_size()  # 假设所有张量类型一致
+        element_size = A.element_size()
         total_bytes = (4 * A.numel() + 4 * b.numel()) * element_size
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # runtime单位ms转s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
         A, b = input_tensor
         n, k = A.shape[0], b.shape[1]
-        # Cholesky分解FLOPS: n³/3
-        # 前向+反向替换FLOPS: 2*k*n²
         total_flops = (n**3)/3 + 2*k*(n**2)
-        TFLOPS = total_flops / (runtime / 1000) / 1e12  # 转TFLOPS
+        TFLOPS = total_flops / (runtime / 1000) / 1e12
         return TFLOPS
 
 

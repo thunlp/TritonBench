@@ -17,7 +17,6 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的输入张量对（input和other）
         for i in range(12, 28):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=self.dtype)
@@ -25,27 +24,22 @@ class performance_metrics(Performance_Metrics):
             self.input_tensors.append((input_tensor, other_tensor))
 
     def to_cuda(self, input_tensor_pair):
-        # 将CPU张量转移到CUDA
         input_tensor, other_tensor = input_tensor_pair
         return (input_tensor.cuda(), other_tensor.cuda())
 
     def call_op(self, input_tensor_pair):
-        # 调用sub算子，alpha固定为1
         input, other = input_tensor_pair
         return sub(input, other, alpha=1)
 
     def get_gbps(self, input_tensor_pair, runtime):
-        # 计算GBPS：总数据量（输入+输出） / 时间
         input, other = input_tensor_pair
-        # 总字节数 = input读 + other读 + output写
         total_bytes = (input.numel() + other.numel() + input.numel()) * input.element_size()
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
 
     def get_tflops(self, input_tensor_pair, runtime):
-        # 计算TFLOPS：每个元素一次减法操作
         input, _ = input_tensor_pair
-        FLOPS = input.numel()  # 每个元素1次FLOP
+        FLOPS = input.numel()
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
 

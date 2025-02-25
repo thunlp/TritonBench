@@ -38,19 +38,15 @@ class performance_metrics(Performance_Metrics):
     def get_gbps(self, input_tensor, runtime):
         a, int_b, b_scale, b_zero_point, group_size = input_tensor
         
-        # 计算输入矩阵 a, b 和输出矩阵的字节数
-        data_size_a = a.numel() * a.element_size()  # a 的字节数
-        data_size_b = int_b.numel() * int_b.element_size()  # int_b 的字节数
-        data_size_out = a.shape[0] * int_b.shape[1] * 2  # 输出矩阵是 float16 类型，每个元素 2 字节
+        data_size_a = a.numel() * a.element_size()
+        data_size_b = int_b.numel() * int_b.element_size()
+        data_size_out = a.shape[0] * int_b.shape[1] * 2
         
-        # 计算总的数据传输量（字节数）
         total_data_bytes = data_size_a + data_size_b + data_size_out
         
-        # 将字节转换为 GB
         total_data_gb = total_data_bytes / 1e9
         
-        # 计算 GBPS
-        runtime_seconds = runtime / 1000  # runtime 单位为毫秒，转换为秒
+        runtime_seconds = runtime / 1000
         gbps = total_data_gb / runtime_seconds
         return gbps
     

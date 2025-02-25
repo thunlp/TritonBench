@@ -24,8 +24,8 @@ class performance_metrics(Performance_Metrics):
         for i in range(12, 28):
             size = 2 ** i
             param = torch.rand(size, dtype=self.dtype, requires_grad=True)
-            param.grad = torch.rand_like(param)  # 预先生成梯度
-            self.input_tensors.append([param])    # 参数列表作为输入
+            param.grad = torch.rand_like(param)
+            self.input_tensors.append([param])
 
     def to_cuda(self, input_params):
         for param in input_params:
@@ -46,7 +46,6 @@ class performance_metrics(Performance_Metrics):
         total_bytes = 0
         for param in input_params:
             numel = param.numel()
-            # 内存访问: 读(param+grad+m+v) + 写(param+m+v)
             total_bytes += numel * (4*4 + 3*4)  # 28 bytes/element
         return total_bytes / (runtime / 1000) / 1e9
 
@@ -54,7 +53,6 @@ class performance_metrics(Performance_Metrics):
         total_flops = 0
         for param in input_params:
             numel = param.numel()
-            # 估算每个参数元素的浮点操作次数（约10次）
             total_flops += numel * 10
         return total_flops / (runtime / 1000) / 1e12
 

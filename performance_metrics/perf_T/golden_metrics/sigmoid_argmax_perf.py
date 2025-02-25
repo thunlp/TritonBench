@@ -17,9 +17,8 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(12, 29):  # 测试从2^12到2^28的不同规模
+        for i in range(12, 29):
             size = 2 ** i
-            # 生成二维张量模拟典型使用场景
             rows = 2 ** (i // 2)
             cols = size // rows
             assert rows * cols == size, f"Dimension error: {rows}*{cols} != {size}"
@@ -30,18 +29,15 @@ class performance_metrics(Performance_Metrics):
         return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        # 典型使用场景：沿着最后一个维度做argmax
         return sigmoid_argmax(input_tensor, dim=-1, keepdim=False)
     
     def get_gbps(self, input_tensor, runtime):
-        # 计算总数据吞吐量：输入+中间结果（sigmoid输出）+中间结果读取
         N = input_tensor.numel()
         element_size = input_tensor.element_size()
-        total_bytes = 3 * N * element_size  # 输入读 + 中间写 + 中间读
+        total_bytes = 3 * N * element_size
         return total_bytes / (runtime / 1000) / 1e9
     
     def get_tflops(self, input_tensor, runtime):
-        # 每个元素的sigmoid操作需要3次浮点运算（exp/加法/倒数）
         N = input_tensor.numel()
         return (3 * N) / (runtime / 1000) / 1e12
     

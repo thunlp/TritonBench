@@ -19,7 +19,6 @@ class performance_metrics(Performance_Metrics):
         self.input_tensors = []
         for i in range(12, 28):
             size = 2 ** i
-            # 生成正数输入避免sqrt出现NaN
             input_tensor = torch.rand(size, dtype=self.dtype or torch.float32).abs() + 1e-6
             self.input_tensors.append(input_tensor)
     
@@ -35,7 +34,6 @@ class performance_metrics(Performance_Metrics):
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 每个元素执行erfc和sqrt两次运算
         FLOPS = input_tensor.numel() * 2
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS

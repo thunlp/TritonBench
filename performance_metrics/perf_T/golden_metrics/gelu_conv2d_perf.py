@@ -20,7 +20,7 @@ class performance_metrics(Performance_Metrics):
         in_channels = 16
         out_channels = 32
         kernel_size = 3
-        for i in range(12, 26):  # 调整i的范围以生成不同大小的输入
+        for i in range(12, 26):
             size = 2 ** i
             h = int((size / (1 * in_channels)) ** 0.5)
             while h * h * 1 * in_channels > size and h > 0:

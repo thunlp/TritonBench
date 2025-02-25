@@ -43,20 +43,17 @@ class performance_metrics(Performance_Metrics):
 
     def get_gbps(self, input_tensor, runtime):
         A, B, scales1, C, BLOCK_CONIFG = input_tensor
-        # 获取矩阵尺寸
         M, K = A.shape
         K, N = B.shape
         total_bytes = (
-            A.numel() * A.element_size() +  # A 的字节数
-            B.numel() * B.element_size() +  # B 的字节数
-            scales1.numel() * scales1.element_size() +  # scales1 的字节数
-            C.numel() * C.element_size()  # C 的字节数
+            A.numel() * A.element_size() +
+            B.numel() * B.element_size() +
+            scales1.numel() * scales1.element_size() +
+            C.numel() * C.element_size()
         )
-        # 将运行时间从毫秒转换为秒
         runtime_seconds = runtime / 1000.0
 
-        # 计算 GBPS (单位为 GB/s)
-        gbps = total_bytes / runtime_seconds / (1024 ** 3)  # 以 GB/s 为单位
+        gbps = total_bytes / runtime_seconds / (1024 ** 3)
         return gbps
     
     def get_tflops(self, input_tensor, runtime):

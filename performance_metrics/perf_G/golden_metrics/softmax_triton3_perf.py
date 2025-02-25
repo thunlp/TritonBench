@@ -40,13 +40,13 @@ class performance_metrics(Performance_Metrics):
         x = input_tensor
         n_cols = x.shape[1]
         M = x.shape[0]
-        # 计算每行的 FLOPs
+
         flops_per_row = 4 * n_cols - 1
-        # 计算总 FLOPs
+
         total_flops = M * flops_per_row
-        # 计算运行时间（秒）
+
         runtime_second = runtime / 1000.0
-        # 计算 TFLOPS
+
         tflops = total_flops / (runtime_second * 1e12)
         
         return tflops
@@ -80,7 +80,3 @@ if __name__ == '__main__':
     op_perf.get_input_tensors()
     op_perf.get_do_bench_config(warmup=100, rep=1000)
     op_perf.run_benchmark()
-
-# TODO:检查算子命名是否正确
-# TODO:检查算子性能情况
-# TODO:记录结果并报告

@@ -29,16 +29,14 @@ class performance_metrics(Performance_Metrics):
         return pseudoinverse_svd(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 总数据量 = 输入矩阵 + 输出矩阵
         m, n = input_tensor.shape[-2], input_tensor.shape[-1]
         total_bytes = (m*n + n*m) * input_tensor.element_size()
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # FLOPs 估算: 假设主要来自 SVD 分解 (24n³ for 方阵)
-        n = input_tensor.shape[-1]  # 输入为方阵
-        flops = 24 * (n ** 3)      # 系数基于典型 SVD 实现估算
+        n = input_tensor.shape[-1]
+        flops = 24 * (n ** 3)
         TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
     

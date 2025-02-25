@@ -17,8 +17,7 @@ class performance_metrics(Performance_Metrics):
         
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同尺寸的方阵（从16x16到8192x8192）
-        for exp in range(4, 14):  # 2^4=16 到 2^13=8192
+        for exp in range(4, 14):
             n = 2 ** exp
             input_tensor = torch.randn((n, n), dtype=self.dtype)
             self.input_tensors.append(input_tensor)
@@ -30,18 +29,16 @@ class performance_metrics(Performance_Metrics):
         return determinant_via_qr(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 计算总数据量（输入矩阵+输出标量）
         n = input_tensor.size(0)
         element_size = input_tensor.element_size()
         input_bytes = n * n * element_size
-        output_bytes = 1 * element_size  # 标量输出
+        output_bytes = 1 * element_size
         total_bytes = input_bytes + output_bytes
         return total_bytes / (runtime / 1000) / 1e9  # GB/s
     
     def get_tflops(self, input_tensor, runtime):
-        # 假设主要计算量来源于QR分解（复杂度O(n^3)）
         n = input_tensor.size(0)
-        flops = 2 * (n ** 3)  # 假设每个元素需要2次浮点运算
+        flops = 2 * (n ** 3)
         return flops / (runtime / 1000) / 1e12  # TFLOPS
     def run_benchmark(self):
         results = []

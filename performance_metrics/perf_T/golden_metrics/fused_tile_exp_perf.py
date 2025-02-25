@@ -21,7 +21,7 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(12, 28):  # 调整范围根据需要
+        for i in range(12, 28):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=self.dtype)
             self.input_tensors.append(input_tensor)
@@ -39,7 +39,7 @@ class performance_metrics(Performance_Metrics):
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        flops = input_tensor.numel() * self.prod_dims  # 每个输出元素一次exp操作，假设1 FLOP
+        flops = input_tensor.numel() * self.prod_dims
         TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
 

@@ -26,10 +26,9 @@ class performance_metrics(Performance_Metrics):
         return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        return svd(input_tensor)  # 使用默认full_matrices=True
+        return svd(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 处理不同维度输入（支持batch维度）
         if len(input_tensor.shape) == 2:
             batch, m, n = 1, *input_tensor.shape
         else:
@@ -38,17 +37,14 @@ class performance_metrics(Performance_Metrics):
         element_size = input_tensor.element_size()
         k = min(m, n)
         
-        # 输入数据量
         input_bytes = batch * m * n * element_size
         
-        # 输出数据量（U: m*m, S: k, Vh: n*n）
         output_bytes = batch * (m*m + n*n + k) * element_size
         
         total_bytes = input_bytes + output_bytes
-        return total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        return total_bytes / (runtime / 1000) / 1e9
 
     def get_tflops(self, input_tensor, runtime):
-        # 处理不同维度输入（支持batch维度）
         if len(input_tensor.shape) == 2:
             batch, m, n = 1, *input_tensor.shape
         else:
@@ -56,14 +52,13 @@ class performance_metrics(Performance_Metrics):
         
         k = min(m, n)
         
-        # SVD计算量近似公式（来源：LAPACK文档）
         if m >= n:
             flops_per_matrix = 4 * m * n**2 - (4/3) * n**3
         else:
             flops_per_matrix = 4 * n * m**2 - (4/3) * m**3
         
         total_flops = batch * flops_per_matrix
-        return total_flops / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        return total_flops / (runtime / 1000) / 1e12
 
     def run_benchmark(self):
         results = []

@@ -17,8 +17,8 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        H_in = 256  # 固定输入尺寸
-        for i in range(5, 11):  # 测试不同输出尺寸：32x32 到 1024x1024
+        H_in = 256
+        for i in range(5, 11):
             H_out = 2 ** i
             size = (1, 3, H_out, H_out)
             input_tensor = torch.randn(1, 3, H_in, H_in, dtype=self.dtype)
@@ -45,21 +45,10 @@ class performance_metrics(Performance_Metrics):
     def get_tflops(self, input_tuple, runtime):
         _, _, size = input_tuple
         N, C, H_out, W_out = size
-        # 仿射变换计算量 (每个网格点 10 FLOP)
         affine_flops = N * H_out * W_out * 10
-        # 网格采样计算量 (每个输出元素 7 FLOP)
         grid_sample_flops = N * C * H_out * W_out * 7
         total_flops = affine_flops + grid_sample_flops
         return total_flops / (runtime / 1000) / 1e12
-
-# 测试 float32 性能
-pm = performance_metrics(dtype=torch.float32)
-pm.run_benchmark()
-
-# 测试 float16 性能 
-pm_fp16 = performance_metrics(dtype=torch.float16)
-pm_fp16.run_benchmark()
-
 
 if __name__ == '__main__':
     op_perf = performance_metrics()

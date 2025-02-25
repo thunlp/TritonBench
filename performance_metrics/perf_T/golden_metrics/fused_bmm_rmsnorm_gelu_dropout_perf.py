@@ -17,7 +17,6 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 不同规模的测试用例 (batch_size, M, N, K)
         for exp in range(2, 20):
             B = 32
             N, M, P = 128 * exp, 128 * exp, 128 * exp
@@ -36,12 +35,11 @@ class performance_metrics(Performance_Metrics):
             input1, input2, 
             normalized_shape=normalized_shape,
             dropout_p=0.1,
-            training=True  # 确保Dropout生效
+            training=True
         )
     
     def get_gbps(self, input_tuple, runtime):
         input1, input2, _ = input_tuple
-        # 计算总数据传输量: input1 + input2 + output
         output_shape = (input1.shape[0], input1.shape[1], input2.shape[2])
         total_bytes = (input1.numel() + input2.numel() + output_shape[0]*output_shape[1]*output_shape[2]) * input1.element_size() + output_shape[0]*output_shape[1]*output_shape[2] * input1.element_size() * 6
         GBPS = total_bytes / (runtime / 1000) / 1e9
@@ -52,11 +50,7 @@ class performance_metrics(Performance_Metrics):
         B, M, N = input1.shape
         _, _, K = input2.shape
         
-        # 主要计算来自BMM操作
         bmm_flops = 2 * B * M * N * K
-        # RMSNorm近似计算量 (2*B*M*K)
-        # GELU近似计算量 (4*B*M*K)
-        # Dropout近似计算量 (B*M*K)
         total_flops = bmm_flops + 7 * B * M * K
         
         TFLOPS = total_flops / (runtime / 1000) / 1e12

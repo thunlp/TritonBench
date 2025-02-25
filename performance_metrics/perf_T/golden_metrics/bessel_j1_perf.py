@@ -17,28 +17,24 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(12, 28):  # 从2^12到2^27的不同大小
+        for i in range(12, 28):
             size = 2 ** i
-            input_tensor = torch.rand(size, dtype=torch.float32)  # 根据初始化时的dtype生成张量
+            input_tensor = torch.rand(size, dtype=torch.float32)
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
-        return input_tensor.cuda()  # 将CPU张量转移到CUDA
+        return input_tensor.cuda()
 
     def call_op(self, input_tensor):
-        return bessel_j1(input_tensor)  # 调用Bessel J1函数
+        return bessel_j1(input_tensor)
 
     def get_gbps(self, input_tensor, runtime):
-        # 计算总数据量：输入+输出，单位字节
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
-        # 转换为GB/s (runtime单位毫秒需要转秒)
         return total_bytes / (runtime / 1000) / 1e9
 
     def get_tflops(self, input_tensor, runtime):
-        # 假设每个元素需要100次浮点运算（根据Bessel函数特性估算）
         flops_per_element = 100
         total_flops = input_tensor.numel() * flops_per_element
-        # 转换为TFLOPS
         return total_flops / (runtime / 1000) / 1e12
     
     def run_benchmark(self):

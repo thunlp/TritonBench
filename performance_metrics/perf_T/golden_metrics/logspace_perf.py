@@ -17,17 +17,14 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同steps大小的测试用例 (2^12 到 2^28)
         for i in range(12, 28):
             steps = 2 ** i
             self.input_tensors.append(steps)
 
     def to_cuda(self, input_steps):
-        # 参数为标量无需转移，直接返回
         return input_steps
 
     def call_op(self, steps):
-        # 调用logspace生成指定steps的张量
         return logspace(
             start=0.0, 
             end=10.0, 
@@ -37,16 +34,14 @@ class performance_metrics(Performance_Metrics):
         )
 
     def get_gbps(self, steps, runtime):
-        # 计算GBPS：输出张量总字节数 / 时间
         element_size = torch.tensor([], dtype=self.dtype).element_size()
-        total_bytes = steps * element_size  # 输出张量大小
-        gbps = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        total_bytes = steps * element_size
+        gbps = total_bytes / (runtime / 1000) / 1e9
         return gbps
 
     def get_tflops(self, steps, runtime):
-        # 假设每个元素需一次指数运算（实际计算量可能更高）
-        flops = steps  # 总操作数
-        tflops = flops / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        flops = steps
+        tflops = flops / (runtime / 1000) / 1e12
         return tflops
     
     def run_benchmark(self):

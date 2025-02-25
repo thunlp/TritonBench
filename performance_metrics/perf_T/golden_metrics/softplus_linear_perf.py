@@ -19,7 +19,7 @@ class performance_metrics(Performance_Metrics):
         self.input_tensors = []
         for i in range(4, 16):
             in_features = 2 ** i
-            out_features = 2 ** i  # 保持输入输出维度相同
+            out_features = 2 ** i
             input_tensor = torch.randn(1, in_features, dtype=self.dtype)  # batch_size=1
             weight = torch.randn(out_features, in_features, dtype=self.dtype)
             bias = torch.randn(out_features, dtype=self.dtype)
@@ -42,7 +42,6 @@ class performance_metrics(Performance_Metrics):
         batch_size, in_features = input_tensor.shape
         out_features = weight.shape[0]
         
-        # 计算总传输字节数
         input_bytes = input_tensor.numel() * element_size
         weight_bytes = weight.numel() * element_size
         bias_bytes = bias.numel() * element_size if bias is not None else 0
@@ -56,10 +55,8 @@ class performance_metrics(Performance_Metrics):
         batch_size, in_features = input_tensor.shape
         out_features = weight.shape[0]
         
-        # 线性层FLOPS（矩阵乘法 + 偏置）
         matrix_mult_flops = 2 * in_features * out_features
         bias_flops = out_features if bias is not None else 0
-        # Softplus FLOPS（假设每个元素6次操作）
         softplus_flops = 6 * out_features
         total_flops = matrix_mult_flops + bias_flops + softplus_flops
         TFLOPS = total_flops / (runtime / 1000) / 1e12

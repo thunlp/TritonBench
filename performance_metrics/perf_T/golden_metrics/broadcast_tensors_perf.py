@@ -17,7 +17,7 @@ class performance_metrics(Performance_Metrics):
         
     def get_input_tensors(self):
         self.input_tensors = []
-        for exp in range(10, 24):  # 控制规模避免内存溢出
+        for exp in range(10, 24):
             size = 2 ** exp
             x = torch.rand((1, size), dtype=torch.float32)
             y = torch.rand((size, 1), dtype=torch.float32)
@@ -35,7 +35,6 @@ class performance_metrics(Performance_Metrics):
         return 0
     
     def get_tflops(self, input_tensor, runtime):
-        # 广播操作无浮点运算，TFLOPS为0
         return 0.0
 
 

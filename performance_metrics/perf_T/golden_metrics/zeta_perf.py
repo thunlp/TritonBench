@@ -17,10 +17,10 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(12, 28):  # 从4K到128M元素
+        for i in range(12, 28):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=self.dtype)
-            other_tensor = torch.rand(size, dtype=self.dtype) + 1.0  # q必须>0
+            other_tensor = torch.rand(size, dtype=self.dtype) + 1.0
             self.input_tensors.append((input_tensor, other_tensor))
 
     def to_cuda(self, input_tuple):
@@ -35,12 +35,12 @@ class performance_metrics(Performance_Metrics):
         input_tensor, other_tensor = input_tuple
         numel = input_tensor.numel()
         element_size = input_tensor.element_size()
-        total_bytes = 3 * numel * element_size  # 输入*2 + 输出*1（输入占两倍）
+        total_bytes = 3 * numel * element_size
         return total_bytes / (runtime / 1000) / 1e9
 
     def get_tflops(self, input_tuple, runtime):
         input_tensor, _ = input_tuple
-        flops = input_tensor.numel() * 10  # 假设每个元素需要10次浮点运算
+        flops = input_tensor.numel() * 10
         return flops / (runtime / 1000) / 1e12
 
 

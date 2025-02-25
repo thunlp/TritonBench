@@ -21,7 +21,7 @@ class performance_metrics(Performance_Metrics):
             hw = 2 ** i
             x1 = torch.randn(16, 3, hw, hw, dtype=torch.float32)
             x2 = torch.randn(16, 3, hw, hw, dtype=torch.float32)
-            output_size = (hw // 2, hw // 2)  # 池化到原尺寸的一半
+            output_size = (hw // 2, hw // 2)
             self.input_tensors.append((x1, x2, output_size))
     
     def to_cuda(self, input_tuple):
@@ -34,33 +34,26 @@ class performance_metrics(Performance_Metrics):
     
     def get_gbps(self, input_tuple, runtime):
         x1, x2, output_size = input_tuple
-        # 计算输入和输出的总字节数
         x1_bytes = x1.numel() * x1.element_size()
         x2_bytes = x2.numel() * x2.element_size()
         B = x1.size(0)
-        dist_bytes = B * x1.element_size()  # 输出尺寸为(B,)
+        dist_bytes = B * x1.element_size()
         total_bytes = x1_bytes + x2_bytes + dist_bytes + x1_bytes / 4 * 6
-        # 转换为GB/s
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tuple, runtime):
         x1, x2, output_size = input_tuple
         B, C, H, W = x1.shape
-        # 解析池化后的尺寸
         if isinstance(output_size, int):
             H_prime, W_prime = output_size, output_size
         else:
             H_prime, W_prime = output_size
         
-        # 计算池化操作的FLOPs（两次池化）
         pool_flops = 2 * B * C * (H * W + H_prime * W_prime)
-        # 计算差值的FLOPs
         diff_flops = B * C * H_prime * W_prime
-        # 计算范数的FLOPs（平方、求和、开根）
         norm_flops = B * 2 * C * H_prime * W_prime
         total_flops = pool_flops + diff_flops + norm_flops
-        # 转换为TFLOPS
         TFLOPS = total_flops / (runtime / 1000) / 1e12
         return TFLOPS
 

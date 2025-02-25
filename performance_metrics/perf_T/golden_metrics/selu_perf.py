@@ -17,7 +17,7 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(12, 28):  # 从2^12到2^27的不同大小
+        for i in range(12, 28):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=torch.float32)
             self.input_tensors.append(input_tensor)
@@ -29,16 +29,13 @@ class performance_metrics(Performance_Metrics):
         return selu(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 输入输出总数据量: input(numel*4B) + output(numel*4B)
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 7
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 注意单位转换: ms转s，B转GB
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 每个元素需要7次浮点运算:
-        # max(1) + exp(1) + sub(1) + mul(alpha)(1) + min(1) + add(1) + mul(scale)(1)
         FLOPS = 7 * input_tensor.numel()
-        TFLOPS = FLOPS / (runtime / 1000) / 1e12  # 转TFLOPS
+        TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
     
     def run_benchmark(self):

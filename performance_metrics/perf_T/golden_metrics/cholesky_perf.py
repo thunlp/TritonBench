@@ -19,12 +19,9 @@ class performance_metrics(Performance_Metrics):
         self.input_tensors = []
         dtype = torch.float32
         
-        # 生成不同尺寸的对称正定矩阵
-        for exp in range(8, 14):  # 从256x256到8192x8192
+        for exp in range(8, 14):
             n = 2 ** exp
-            # 生成随机下三角矩阵
             L = torch.randn(n, n, dtype=dtype)
-            # 构造对称正定矩阵
             A = L @ L.T + torch.eye(n, dtype=dtype) * 1e-6
             self.input_tensors.append(A)
 
@@ -35,12 +32,10 @@ class performance_metrics(Performance_Metrics):
         return cholesky(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 计算总数据量：输入+输出矩阵
         total_bytes = 2 * input_tensor.numel() * input_tensor.element_size()
         return total_bytes / (runtime / 1000) / 1e9
     
     def get_tflops(self, input_tensor, runtime):
-        # 计算FLOPs：(n³/3) 其中n为矩阵维度
         *batch_dims, n, _ = input_tensor.shape
         batch_size = torch.tensor(batch_dims).prod().item() if batch_dims else 1
         flops = batch_size * (n ** 3) / 3

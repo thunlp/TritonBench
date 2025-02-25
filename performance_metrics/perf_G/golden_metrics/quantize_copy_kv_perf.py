@@ -3,7 +3,6 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# 正确引入算子
 from TritonBench_v1.quantize_copy_kv import destindex_copy_quantize_kv
 from performance_utils import Performance_Metrics, do_bench_config
 

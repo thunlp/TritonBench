@@ -17,7 +17,6 @@ class performance_metrics(Performance_Metrics):
         
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的二维张量，形状为(1024, 2^i)，i从12到24
         for i in range(4, 20):
             size = 2 ** i
             input_tensor = torch.randn(1024, size, dtype=torch.float32)
@@ -27,19 +26,16 @@ class performance_metrics(Performance_Metrics):
         return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        # 调用softmax，dim=1（对每行进行softmax），并传入dtype参数
         return softmax(input_tensor, dim=1, dtype=self.dtype)
     
     def get_gbps(self, input_tensor, runtime):
-        # 总字节数 = 输入和输出张量的字节数之和（两者形状相同）
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 计算总FLOPS：每个元素经历exp、求和、除法，共3次操作
         FLOPS = 3 * input_tensor.numel()
-        TFLOPS = FLOPS / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
     
     def run_benchmark(self):

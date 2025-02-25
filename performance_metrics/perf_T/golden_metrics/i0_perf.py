@@ -17,7 +17,6 @@ class performance_metrics(Performance_Metrics):
         
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成从 2^12 到 2^27 不同大小的张量（约4KB到128MB）
         for i in range(12, 28):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=self.dtype or torch.float32)
@@ -30,17 +29,12 @@ class performance_metrics(Performance_Metrics):
         return i0(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 内存访问量 = 输入张量 + 输出张量（各元素大小相同）
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
-        # 转换为 GB/s（runtime单位为毫秒，需要转秒）
         return total_bytes / (runtime / 1000) / 1e9
     
     def get_tflops(self, input_tensor, runtime):
-        # 假设每个元素计算需要约10次浮点运算（根据贝塞尔函数计算复杂度估算）
-        # 具体数值可根据实际算法调整
         flops_per_element = 10
         total_flops = input_tensor.numel() * flops_per_element
-        # 转换为 TFLOP/s
         return total_flops / (runtime / 1000) / 1e12
     
     def run_benchmark(self):

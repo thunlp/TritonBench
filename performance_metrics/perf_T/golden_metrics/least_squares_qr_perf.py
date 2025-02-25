@@ -17,10 +17,9 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同尺寸的输入矩阵，确保m > n
-        for i in range(2, 11):  # 调整i的范围以避免内存不足
+        for i in range(2, 11):
             m = 2 ** i
-            n = 2 ** (i - 2)  # n = m / 4
+            n = 2 ** (i - 2)
             A = torch.randn(m, n, dtype=self.dtype)
             b = torch.randn(m, 1, dtype=self.dtype)
             self.input_tensors.append((A, b))
@@ -36,9 +35,8 @@ class performance_metrics(Performance_Metrics):
     def get_gbps(self, input_tensor, runtime):
         A, b = input_tensor
         m, n = A.shape
-        # 计算总数据量：输入(A, b) + 输出x
         bytes_input = (A.numel() + b.numel()) * A.element_size()
-        bytes_output = n * A.element_size()  # x的shape=(n, 1)
+        bytes_output = n * A.element_size()
         total_bytes = bytes_input + bytes_output
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
@@ -46,11 +44,8 @@ class performance_metrics(Performance_Metrics):
     def get_tflops(self, input_tensor, runtime):
         A, b = input_tensor
         m, n = A.shape
-        # QR分解的FLOPS (近似)
         flops_qr = 2 * m * n**2 - (2/3) * n**3
-        # Q^T*b的FLOPS
         flops_qtb = 2 * m * n
-        # 解上三角方程组的FLOPS
         flops_solve = n**2
         total_flops = flops_qr + flops_qtb + flops_solve
         TFLOPS = total_flops / (runtime / 1000) / 1e12

@@ -17,7 +17,7 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(12, 24):  # 调整范围以避免内存过大
+        for i in range(12, 24):
             N = 2 ** (i // 2)
             D_in = 2 ** (i // 2)
             D_out = 2 ** (i // 2)
@@ -48,15 +48,12 @@ class performance_metrics(Performance_Metrics):
         N = input.shape[0]
         D_in = input.shape[1]
         D_out = weight1.shape[1]
-        
-        # 矩阵乘法 FLOPs
+
         flops_mm = 2 * N * D_in * D_out
         
-        # 激活函数 FLOPs (sigmoid和tanh各4次操作)
-        flops_activations = 8 * N * D_out  # 4(sigmoid) + 4(tanh)
+        flops_activations = 8 * N * D_out
         
-        # 逐元素操作 FLOPs
-        flops_elementwise = 2 * N * D_out  # 乘法(1) + 加法(1)
+        flops_elementwise = 2 * N * D_out
         
         total_flops = flops_mm + flops_activations + flops_elementwise
         TFLOPS = total_flops / (runtime / 1000) / 1e12

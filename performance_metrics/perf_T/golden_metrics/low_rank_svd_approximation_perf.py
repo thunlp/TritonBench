@@ -17,24 +17,22 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的方阵和对应的k值
-        for i in range(2, 12):  # 256x256 到 8192x8192
+        for i in range(2, 12):
             size = 128 * i
             A = torch.rand(size, size, dtype=self.dtype or torch.float32)
-            k = min(50, size)  # 固定k=50（确保不超过矩阵尺寸）
+            k = min(50, size)
             self.input_tensors.append((A, k))
 
     def to_cuda(self, input_tuple):
         A, k = input_tuple
-        return (A.cuda(), k)  # 仅转移张量到CUDA，k保持不变
+        return (A.cuda(), k)
 
     def call_op(self, input_tuple):
         A, k = input_tuple
-        return low_rank_svd_approximation(A, k)  # 调用算子
+        return low_rank_svd_approximation(A, k)
 
     def get_gbps(self, input_tuple, runtime):
         A, k = input_tuple
-        # 输入和输出各占A.numel()，总数据量翻倍
         total_bytes = A.numel() * A.element_size() * 2
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
@@ -42,9 +40,7 @@ class performance_metrics(Performance_Metrics):
     def get_tflops(self, input_tuple, runtime):
         A, k = input_tuple
         m, n = A.shape[-2], A.shape[-1]
-        # 估算SVD的FLOPs（假设为2*m*n^2）
         flops_svd = 2 * m * n**2
-        # 两次矩阵乘法的FLOPs
         flops_matmul = 2 * m * k * (k + n)
         total_flops = flops_svd + flops_matmul
         TFLOPS = total_flops / (runtime / 1000) / 1e12

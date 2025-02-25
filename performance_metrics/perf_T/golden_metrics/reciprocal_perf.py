@@ -30,12 +30,12 @@ class performance_metrics(Performance_Metrics):
         return reciprocal(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        total_bytes = input_tensor.numel() * input_tensor.element_size() * 2  # 输入和输出各占一个张量
+        total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        FLOPS = input_tensor.numel()  # 每个元素执行一次倒数运算
+        FLOPS = input_tensor.numel()
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
     

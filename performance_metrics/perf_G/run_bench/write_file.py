@@ -48,7 +48,6 @@ def write_file(input_folder_path, results_path):
                     updated_lines.append(line)
                 golden_metrics = "".join(updated_lines)
             
-            # 修改为try except的逻辑
             golden_metrics_lines = golden_metrics.split("\n")
             flag = False
             for i in range(len(golden_metrics_lines)):

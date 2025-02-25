@@ -43,7 +43,7 @@ class performance_metrics(Performance_Metrics):
     def get_tflops(self, input_tensor_tuple, runtime):
         input, other = input_tensor_tuple
         numel = input.numel()
-        FLOPS = numel * 2  # 每个元素执行一次乘法和一次ReLU
+        FLOPS = numel * 2
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
 

@@ -15,12 +15,11 @@ class performance_metrics(Performance_Metrics):
     def __init__(self, dtype=None, is_backward=False, **kwargs):
         super().__init__('lu.py', dtype=dtype, is_backward=is_backward, **kwargs)
         if dtype is None:
-            self.dtype = torch.float32  # 默认数据类型设为float32
+            self.dtype = torch.float32
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的方阵，例如从64x64到4096x4096
-        for i in range(2, 13):  # 2^6=64 到 2^12=4096
+        for i in range(2, 13):
             size = 128 * i
             input_tensor = torch.rand(size, size, dtype=self.dtype)
             self.input_tensors.append(input_tensor)
@@ -29,18 +28,14 @@ class performance_metrics(Performance_Metrics):
         return input_tensor.cuda()
 
     def call_op(self, input_tensor):
-        # 调用LU分解，启用部分选主元
         return lu(input_tensor, pivot=True)
 
     def get_gbps(self, input_tensor, runtime):
-        # 总字节数 = 输入(A) + 输出(P, L, U)
-        # 假设所有张量大小与输入相同（适用于方阵）
         total_bytes = 4 * input_tensor.numel() * input_tensor.element_size()
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
 
     def get_tflops(self, input_tensor, runtime):
-        # LU分解的浮点运算次数约为(2/3) * n^3，其中n为矩阵行数
         n = input_tensor.size(0)
         flops = (2.0 / 3) * (n ** 3)
         TFLOPS = flops / (runtime / 1000) / 1e12

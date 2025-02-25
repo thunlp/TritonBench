@@ -17,8 +17,7 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同尺寸的测试用例（从32x32到1024x1024）
-        for i in range(5, 11):  # H = 2^5=32到2^10=1024
+        for i in range(5, 11):
             H = W = 2 ** i
             batch_size = 16
             in_channels = 32
@@ -28,11 +27,9 @@ class performance_metrics(Performance_Metrics):
             padding = 1
             groups = 1
             
-            # 创建输入张量
             input_tensor = torch.randn(batch_size, in_channels, H, W, dtype=torch.float32)
             weight = torch.randn(out_channels, in_channels//groups, kH, kW, dtype=torch.float32)
             
-            # 计算输出形状并生成other张量
             H_out = (H + 2*padding - (kH - 1)) // stride
             W_out = (W + 2*padding - (kW - 1)) // stride
             other = torch.randn(batch_size, out_channels, H_out, W_out, dtype=torch.float32)
@@ -45,7 +42,6 @@ class performance_metrics(Performance_Metrics):
         
     def call_op(self, input_tuple):
         input_tensor, weight, other = input_tuple
-        # 使用与输入生成一致的卷积参数
         return conv2d_add(input_tensor, weight, other=other, 
                          stride=1, padding=1, groups=1)
 
@@ -53,7 +49,6 @@ class performance_metrics(Performance_Metrics):
         input_tensor, weight, other = input_tuple
         element_size = input_tensor.element_size()
         
-        # 计算总数据量（输入+输出）
         input_bytes = input_tensor.numel() * element_size
         weight_bytes = weight.numel() * element_size
         other_bytes = other.numel() * element_size
@@ -67,12 +62,10 @@ class performance_metrics(Performance_Metrics):
         batch, in_channels, H, W = input_tensor.shape
         out_channels, in_ch_per_group, kH, kW = weight.shape
         
-        # 卷积部分计算量
         output_elements = other.numel()
-        conv_flops_per_element = 2 * kH * kW * in_ch_per_group  # 乘加算2次操作
+        conv_flops_per_element = 2 * kH * kW * in_ch_per_group
         conv_flops = output_elements * conv_flops_per_element
         
-        # 加法部分计算量（alpha乘法和加法）
         add_flops = output_elements * 2
         
         total_flops = conv_flops + add_flops

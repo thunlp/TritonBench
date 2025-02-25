@@ -17,8 +17,7 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同尺寸的二维张量（从64x64到4096x4096）
-        for i in range(6, 11):  # 2^6=64 到 2^12=4096
+        for i in range(6, 11):
             size = 2 ** i
             input_tensor = torch.rand((size, size), dtype=self.dtype)
             self.input_tensors.append(input_tensor)
@@ -30,7 +29,6 @@ class performance_metrics(Performance_Metrics):
         return fused_svd_reconstruct(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 输入和输出各一个矩阵，每个矩阵大小相同
         total_bytes = 2 * input_tensor.numel() * input_tensor.element_size()
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
@@ -39,10 +37,8 @@ class performance_metrics(Performance_Metrics):
         m, n = input_tensor.shape
         k = min(m, n)
         
-        # SVD部分的估算FLOPs（假设为4*m*n*k）
         svd_flops = 4 * m * n * k
         
-        # 矩阵乘法部分的FLOPs
         matmul_flops = 2 * k * n * (k + m)  # 2*k^2*n + 2*m*k*n
         
         total_flops = svd_flops + matmul_flops

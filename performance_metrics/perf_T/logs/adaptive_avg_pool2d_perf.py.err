@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/home/lishangzhan/TritonBench/performance_metrics/perf_T/./tmp/adaptive_avg_pool2d_perf.py", line 66, in <module>
+    op_perf.get_input_tensors()
+  File "/home/lishangzhan/TritonBench/performance_metrics/perf_T/./tmp/adaptive_avg_pool2d_perf.py", line 25, in get_input_tensors
+    input_tensor = torch.randn(1, 3, H, W, dtype=self.dtype)
+KeyboardInterrupt

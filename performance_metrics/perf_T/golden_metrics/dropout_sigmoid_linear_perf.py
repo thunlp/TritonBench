@@ -18,8 +18,8 @@ class performance_metrics(Performance_Metrics):
     def get_input_tensors(self):
         self.input_tensors = []
         batch_size = 1024
-        out_features = 256  # 固定输出维度
-        for exp in range(8, 16):  # in_features从2^8到2^14
+        out_features = 256
+        for exp in range(8, 16):
             in_features = 2 ** exp
             input_tensor = torch.randn(batch_size, in_features, dtype=self.dtype)
             weight = torch.randn(out_features, in_features, dtype=self.dtype)
@@ -49,7 +49,7 @@ class performance_metrics(Performance_Metrics):
         output_size = M * N * element_size
         
         total_bytes = (input_size + weight_size + bias_size + output_size) * 3
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tuple, runtime):
@@ -57,13 +57,12 @@ class performance_metrics(Performance_Metrics):
         M, K = input_tensor.shape
         N, _ = weight.shape
         
-        # 计算各部分的FLOPS
-        linear_flops = 2 * M * N * K + M * N  # 矩阵乘法 + bias加法
-        sigmoid_flops = 4 * M * N              # 每个元素4次运算
-        dropout_flops = 1 * M * N              # 每个元素1次运算
+        linear_flops = 2 * M * N * K + M * N
+        sigmoid_flops = 4 * M * N
+        dropout_flops = 1 * M * N
         
         total_flops = linear_flops + sigmoid_flops + dropout_flops
-        TFLOPS = total_flops / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        TFLOPS = total_flops / (runtime / 1000) / 1e12
         return TFLOPS
 
 

@@ -14,12 +14,11 @@ import triton.language as tl
 class performance_metrics(Performance_Metrics):
     def __init__(self, dtype=None, is_backward=False, output_size=(1,1), **kwargs):
         super().__init__('sigmoid_adaptive_avg_pool2d', dtype=dtype, is_backward=is_backward, **kwargs)
-        self.output_size = output_size  # 固定output_size参数
+        self.output_size = output_size
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同尺寸的四维张量 (batch, channels, height, width)
-        for i in range(8, 18):  # 调整范围控制输入尺寸
+        for i in range(8, 18):
             batch = 2 ** (i % 4)
             channels = 2 ** (i % 4)
             h = 2 ** (i // 2)
@@ -28,13 +27,12 @@ class performance_metrics(Performance_Metrics):
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
-        return input_tensor.cuda()  # 张量迁移到CUDA
+        return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        return sigmoid_adaptive_avg_pool2d(input_tensor, self.output_size)  # 调用目标算子
+        return sigmoid_adaptive_avg_pool2d(input_tensor, self.output_size)
 
     def get_gbps(self, input_tensor, runtime):
-        # 计算内存带宽吞吐量
         input_bytes = input_tensor.numel() * input_tensor.element_size()
         output_numel = (input_tensor.size(0) * input_tensor.size(1) 
                         * self.output_size[0] * self.output_size[1])
@@ -44,14 +42,12 @@ class performance_metrics(Performance_Metrics):
         return GBPS
 
     def get_tflops(self, input_tensor, runtime):
-        # 计算理论计算吞吐量
         output_numel = (input_tensor.size(0) * input_tensor.size(1)
                        * self.output_size[0] * self.output_size[1])
         H, W = input_tensor.shape[2], input_tensor.shape[3]
-        kh = H // self.output_size[0]  # 池化窗口高度
-        kw = W // self.output_size[1]  # 池化窗口宽度
+        kh = H // self.output_size[0]
+        kw = W // self.output_size[1]
         
-        # 每个输出元素的FLOPs = 池化窗口元素数(加法) + 1(除法) + 3(sigmoid)
         flops_per_element = kh * kw + 1 + 3
         total_flops = output_numel * flops_per_element
         

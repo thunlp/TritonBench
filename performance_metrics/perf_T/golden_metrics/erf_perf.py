@@ -4,7 +4,7 @@ import json
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from TorchBench_v1.erf import erf  # 正确引入erf函数
+from TorchBench_v1.erf import erf
 from performance_utils import Performance_Metrics, do_bench_config
 
 import torch
@@ -17,31 +17,25 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的输入张量（从2^12到2^27元素）
         for i in range(12, 28):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=torch.float32)
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
-        # 将张量转移到CUDA设备
         return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        # 调用erf函数
         return erf(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 计算内存带宽（GB/s）
-        total_bytes = input_tensor.numel() * input_tensor.element_size() * 2  # 输入输出各占1份
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 计算计算吞吐量（TFLOPS）
-        # 假设每个元素需要1次浮点运算（实际erf计算更复杂，这里按标准benchmark方法简化）
-        FLOPS = input_tensor.numel()  # 操作总数
-        TFLOPS = FLOPS / (runtime / 1000) / 1e12  # 转换为TFLOPS
+        FLOPS = input_tensor.numel()
+        TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
     
     def run_benchmark(self):

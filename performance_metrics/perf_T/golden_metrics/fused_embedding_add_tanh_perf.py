@@ -17,8 +17,8 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        V = 1024  # 固定词汇表大小
-        for i in range(8, 28):  # 调整范围以生成不同规模的输入
+        V = 1024
+        for i in range(8, 28):
             B = 2 ** (i // 3)
             L = 2 ** ((i + 1) // 3)
             D = 2 ** ((i + 2) // 3)
@@ -39,19 +39,18 @@ class performance_metrics(Performance_Metrics):
         input_indices, weight, other = input_tuple
         elements_input = input_indices.numel()
         D = weight.shape[1]
-        # 计算各部分的字节数
-        bytes_input_indices = elements_input * input_indices.element_size()  # int64，8字节/元素
-        bytes_weight_accessed = elements_input * D * weight.element_size() * 4   # float32，4字节/元素
-        bytes_other = other.numel() * other.element_size()                   # float32
-        bytes_output = elements_input * D * 4                                # 输出为float32
+        bytes_input_indices = elements_input * input_indices.element_size()
+        bytes_weight_accessed = elements_input * D * weight.element_size() * 4
+        bytes_other = other.numel() * other.element_size()
+        bytes_output = elements_input * D * 4
         total_bytes = bytes_input_indices + bytes_weight_accessed + bytes_other + bytes_output
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tuple, runtime):
         input_indices, weight, other = input_tuple
         elements_output = input_indices.numel() * weight.shape[1]  # B*L*D
-        FLOPS = 2 * elements_output  # 加法+tanh各算一次操作
+        FLOPS = 2 * elements_output
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
 

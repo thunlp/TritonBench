@@ -19,16 +19,13 @@ class performance_metrics(Performance_Metrics):
         self.input_tensors = []
         for i in range(12, 28):
             size = 2 ** i
-            # 使用空张量作为占位符来传递shape信息
             input_tensor = torch.empty(size, dtype=self.dtype or torch.float32)
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
-        # 转移占位张量到CUDA以确定生成位置
         return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        # 根据占位张量的元信息生成随机张量
         return rand(
             *input_tensor.shape,
             dtype=input_tensor.dtype,
@@ -36,12 +33,10 @@ class performance_metrics(Performance_Metrics):
         )
     
     def get_gbps(self, input_tensor, runtime):
-        # 仅计算输出张量的内存吞吐量
         total_bytes = input_tensor.numel() * input_tensor.element_size()
         return total_bytes / (runtime / 1000) / 1e9
     
     def get_tflops(self, input_tensor, runtime):
-        # 假设每个元素生成需要1次浮点操作
         flops = input_tensor.numel()
         return flops / (runtime / 1000) / 1e12
     

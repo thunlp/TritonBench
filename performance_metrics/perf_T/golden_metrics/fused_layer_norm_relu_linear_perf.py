@@ -17,11 +17,10 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(8, 18):  # 调整范围控制输入规模
+        for i in range(8, 18):
             in_features = 2 ** i
             out_features = 2 ** (i - 1)
-            batch_size = 32  # 固定批量大小
-            # 生成输入张量和参数
+            batch_size = 32
             input_tensor = torch.randn(batch_size, in_features, dtype=torch.float32)
             weight = torch.randn(out_features, in_features, dtype=torch.float32)
             bias = torch.randn(out_features, dtype=torch.float32)
@@ -48,14 +47,13 @@ class performance_metrics(Performance_Metrics):
     
     def get_gbps(self, input_tuple, runtime):
         input_tensor, weight, bias, _ = input_tuple
-        # 计算所有参与张量的总字节数
         input_bytes = input_tensor.numel() * input_tensor.element_size()
         weight_bytes = weight.numel() * weight.element_size()
         bias_bytes = bias.numel() * bias.element_size() if bias is not None else 0
         output_bytes = input_tensor.shape[0] * weight.shape[0] * input_tensor.element_size()
         
         total_bytes = input_bytes + weight_bytes + bias_bytes + output_bytes * 5
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 转换为GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tuple, runtime):
@@ -63,17 +61,15 @@ class performance_metrics(Performance_Metrics):
         batch_size, in_features = input_tensor.shape
         out_features = weight.shape[0]
         
-        # 线性层FLOPs: 2*B*Out*In
         flops_linear = 2 * batch_size * out_features * in_features
         
         # ReLU FLOPs: B*Out
         flops_relu = batch_size * out_features
         
-        # LayerNorm近似FLOPs: 8*B*Out (包含均值和方差计算)
         flops_layernorm = 8 * batch_size * out_features
         
         total_flops = flops_linear + flops_relu + flops_layernorm
-        TFLOPS = total_flops / (runtime / 1000) / 1e12  # 转换为TFLOP/s
+        TFLOPS = total_flops / (runtime / 1000) / 1e12
         return TFLOPS
 
 

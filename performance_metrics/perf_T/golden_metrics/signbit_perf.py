@@ -21,7 +21,7 @@ class performance_metrics(Performance_Metrics):
         for i in range(12, 28):
             size = 2 ** i
             if dtype.is_floating_point:
-                input_tensor = torch.randn(size, dtype=dtype)  # 生成包含正负数的数据
+                input_tensor = torch.randn(size, dtype=dtype)
             else:
                 input_tensor = torch.randint(-100, 100, (size,), dtype=dtype)
             self.input_tensors.append(input_tensor)
@@ -33,15 +33,13 @@ class performance_metrics(Performance_Metrics):
         return signbit(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 输入输出总数据量（字节）
         input_bytes = input_tensor.numel() * input_tensor.element_size()
-        output_bytes = input_tensor.numel() * 1  # bool类型占1字节
+        output_bytes = input_tensor.numel() * 1
         total_bytes = input_bytes + output_bytes
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 假设每个元素一次判断操作（虽然实际是位运算）
         FLOPS = input_tensor.numel()
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS

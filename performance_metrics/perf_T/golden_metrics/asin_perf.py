@@ -4,7 +4,7 @@ import json
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from TorchBench_v1.asin import asin  # 正确引入算子
+from TorchBench_v1.asin import asin
 from performance_utils import Performance_Metrics, do_bench_config
 
 import torch
@@ -19,27 +19,22 @@ class performance_metrics(Performance_Metrics):
         self.input_tensors = []
         for i in range(12, 28):
             size = 2 ** i
-            # 生成[-1, 1]范围内的随机数，避免输出NaN
             input_tensor = (torch.rand(size, dtype=torch.float16) * 2 - 1)
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
-        return input_tensor.cuda()  # 将张量转移到CUDA
+        return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        return asin(input_tensor)  # 调用asin算子
+        return asin(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 输入输出总数据量 = 输入元素数 * 元素字节数 * 2（输入+输出）
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
-        # 转换为GB/s: (总字节 / 时间秒) / 1e9
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 逐元素操作，每个元素一次计算
         FLOPS = input_tensor.numel()
-        # 转换为TFLOP/s: (浮点操作数 / 时间秒) / 1e12
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
     

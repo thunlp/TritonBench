@@ -17,28 +17,23 @@ class performance_metrics(Performance_Metrics):
         
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的输入张量（1D）
-        for i in range(12, 28):  # 2^12 到 2^27
+        for i in range(12, 28):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=self.dtype)
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
-        # 转移张量到CUDA
         return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        # 调用ifftshift算子（默认处理所有维度）
         return ifftshift(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 计算内存带宽（输入输出各访问一次）
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # runtime单位为ms，转为秒要/1000
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 假设每个元素1次操作（实际无浮点运算，仅为兼容接口）
         FLOPS = input_tensor.numel()  
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS

@@ -17,8 +17,8 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        num_classes = 128  # 固定类别数
-        for i in range(12, 24):  # 调整i范围避免内存溢出
+        num_classes = 128
+        for i in range(12, 24):
             batch_size = 2 ** i
             input_tensor = torch.randn(batch_size, num_classes, dtype=torch.float32)
             target = torch.randint(0, num_classes, (batch_size,), dtype=torch.int64)
@@ -35,20 +35,18 @@ class performance_metrics(Performance_Metrics):
     
     def get_gbps(self, input_tensor, runtime):
         input, target = input_tensor
-        # 计算总数据量: input + target + output
-        input_bytes = input.numel() * input.element_size()  # input数据量
-        target_bytes = target.numel() * target.element_size()  # target数据量
-        output_bytes = 4  # 输出标量(float32)
+        input_bytes = input.numel() * input.element_size()
+        target_bytes = target.numel() * target.element_size()
+        output_bytes = 4
         total_bytes = 3 * input_bytes + target_bytes + output_bytes
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 单位转换
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
         input, target = input_tensor
         batch_size, num_classes = input.shape
-        # 估算FLOPS: log_softmax(3N) + cross_entropy(N)
         flops = batch_size * num_classes * 3 + batch_size
-        TFLOPS = flops / (runtime / 1000) / 1e12  # 单位转换
+        TFLOPS = flops / (runtime / 1000) / 1e12
         return TFLOPS
 
 

@@ -34,7 +34,7 @@ class performance_metrics(Performance_Metrics):
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        FLOPS = 5 * input_tensor.numel()  # 1次log + 4次操作（减法、exp、求和、除法）
+        FLOPS = 5 * input_tensor.numel()
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
     

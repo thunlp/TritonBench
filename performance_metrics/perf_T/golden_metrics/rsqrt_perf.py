@@ -17,31 +17,24 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同大小的输入张量，范围从2^12到2^27，确保为正数
         for i in range(12, 28):
             size = 2 ** i
-            input_tensor = torch.rand(size, dtype=self.dtype).abs() + 1e-6  # 避免零
+            input_tensor = torch.rand(size, dtype=self.dtype).abs() + 1e-6
             self.input_tensors.append(input_tensor)
 
     def to_cuda(self, input_tensor):
-        # 将输入张量转移到CUDA设备
         return input_tensor.cuda()
     
     def call_op(self, input_tensor):
-        # 调用rsqrt函数
         return rsqrt(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        # 计算总字节数：输入和输出各占一份
         total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
-        # 转换为GB/s
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        # 每个元素两次浮点操作（sqrt和倒数）
         FLOPS = input_tensor.numel() * 2
-        # 转换为TFLOPS
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
     

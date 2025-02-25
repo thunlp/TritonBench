@@ -19,9 +19,8 @@ class performance_metrics(Performance_Metrics):
         self.input_tensors = []
         for i in range(12, 28):
             size = 2 ** i
-            # 生成输入张量，确保other不含零
             input_tensor = torch.rand(size, dtype=self.dtype)
-            other_tensor = torch.rand(size, dtype=self.dtype).abs() + 1e-6  # 绝对值避免负数，并确保非零
+            other_tensor = torch.rand(size, dtype=self.dtype).abs() + 1e-6
             self.input_tensors.append((input_tensor, other_tensor))
     
     def to_cuda(self, input_tuple):
@@ -34,16 +33,14 @@ class performance_metrics(Performance_Metrics):
 
     def get_gbps(self, input_tuple, runtime):
         input_tensor, other_tensor = input_tuple
-        # 总数据量：输入input + 输入other + 输出 (各为numel * element_size)
         total_bytes = (input_tensor.numel() + other_tensor.numel() + input_tensor.numel()) * input_tensor.element_size()
-        GBPS = total_bytes / (runtime / 1000) / 1e9  # 将毫秒转为秒，再计算GB/s
+        GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tuple, runtime):
         input_tensor, _ = input_tuple
-        # 每个元素执行一次除法操作，总操作数为numel
         FLOPS = input_tensor.numel()
-        TFLOPS = FLOPS / (runtime / 1000) / 1e12  # 转为秒后计算TFLOPS
+        TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
 
 

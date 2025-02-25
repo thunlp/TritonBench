@@ -17,8 +17,7 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成不同尺寸的方阵：16x16 到 1024x1024
-        for exp in range(4, 11):  # 2^4=16 到 2^10=1024
+        for exp in range(4, 11):
             n = 2 ** exp
             input_tensor = torch.randn(n, n, dtype=self.dtype or torch.float32)
             self.input_tensors.append(input_tensor)
@@ -30,29 +29,22 @@ class performance_metrics(Performance_Metrics):
         return determinant_lu(input_tensor)
 
     def get_gbps(self, input_tensor, runtime):
-        # 计算总传输数据量（输入矩阵 + 输出标量）
         input_numel = input_tensor.numel()
-        # 计算输出元素数（处理批量维度）
         output_numel = 1
-        for dim in input_tensor.shape[:-2]:  # 忽略最后两个矩阵维度
+        for dim in input_tensor.shape[:-2]:
             output_numel *= dim
         total_bytes = (input_numel + output_numel) * input_tensor.element_size() * 2 * 6
-        # 转换为GB/s
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
 
     def get_tflops(self, input_tensor, runtime):
-        # 获取矩阵维度
         n = input_tensor.size(-1)
-        # 计算批量大小
         batch_dims = input_tensor.shape[:-2]
         batch_size = 1
         for dim in batch_dims:
             batch_size *= dim
-        # LU分解计算量约 (2/3)n^3 次浮点运算/矩阵
         flops_per_matrix = (2/3) * (n ** 3)
         total_flops = flops_per_matrix * batch_size
-        # 转换为TFLOPS
         TFLOPS = total_flops / (runtime / 1000) / 1e12
         return TFLOPS   
     

@@ -21,12 +21,11 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        # 生成典型计算机视觉任务中的特征图尺寸：从 8x8 到 256x256
         for size in range(4, 11):
             print(size)
             spatial_size = 2 ** size
             batch_size = 16
-            channels = 64  # 典型ResNet特征图通道数
+            channels = 64
             H = W = spatial_size
             x1 = torch.randn(batch_size, channels, H, W, dtype=self.dtype)
             x2 = torch.randn_like(x1)
@@ -48,40 +47,29 @@ class performance_metrics(Performance_Metrics):
     
     def get_gbps(self, input_tensor, runtime):
         x1, x2 = input_tensor
-        # 计算输出尺寸
         H = x1.size(2)
         W = x1.size(3)
         H_out = (H + 2*self.padding - self.kernel_size) // self.stride + 1
         W_out = (W + 2*self.padding - self.kernel_size) // self.stride + 1
         
-        # 数据量计算（包含输入输出）
         input_bytes = (x1.numel() + x2.numel()) * x1.element_size()
-        output_bytes = 1 * 1 * H_out * W_out * x1.element_size()  # 输出通道维度为1
+        output_bytes = 1 * 1 * H_out * W_out * x1.element_size()
         total_bytes = input_bytes + output_bytes
         
-        # 计算GB/s（考虑实际传输的数据量）
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
         x1, x2 = input_tensor
-        C = x1.size(1)  # 特征图通道数
+        C = x1.size(1)
         H, W = x1.size()[2:]
         
-        # 计算输出尺寸
         H_out = (H + 2*self.padding - self.kernel_size) // self.stride + 1
         W_out = (W + 2*self.padding - self.kernel_size) // self.stride + 1
         
-        # 余弦相似度计算量（每个空间位置）
-        # 点积：C次乘加（2C FLOPs）
-        # 范数计算：2*(C次乘加) = 4C FLOPs
-        # 总计算量：每个空间位置 6C FLOPs
         flops_cosine = H * W * 6 * C
         
-        # 平均池化计算量（每个输出元素）
-        # 窗口求和：kernel_size^2 - 1 次加法
-        # 除法：1 次除法
-        flops_pool = H_out * W_out * (self.kernel_size**2)  # 保守估计，实际硬件可能有优化
+        flops_pool = H_out * W_out * (self.kernel_size**2)
         
         total_flops = flops_cosine + flops_pool
         TFLOPS = total_flops / (runtime / 1000) / 1e12

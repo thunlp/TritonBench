@@ -16,13 +16,13 @@ class performance_metrics(Performance_Metrics):
         
     def get_input_tensors(self):
         self.input_tensors = []
-        for i in range(2, 18):  # 从小到大定义不同 size 的张量
-            batch_size = 16  # 批大小
-            num_heads = 8  # 假设固定头数
-            seq_len = 2 ** i  # 序列长度
-            head_dim = 32  # 假设固定头维度
-            head_dim_v = 32  # 假设固定值维度
-            block_size = 8  # 假设固定块大小
+        for i in range(2, 18):
+            batch_size = 16
+            num_heads = 8
+            seq_len = 2 ** i
+            head_dim = 32
+            head_dim_v = 32
+            block_size = 8
 
             k_states = torch.rand((batch_size, seq_len, num_heads, head_dim), dtype=torch.float16)
             v_states = torch.rand((batch_size, seq_len, num_heads, head_dim_v), dtype=torch.float16)
@@ -36,11 +36,9 @@ class performance_metrics(Performance_Metrics):
             self.input_tensors.append((k_states, v_states, k_caches, v_caches, q_start_loc, q_seq_length, kv_seq_length, block_offsets))
 
     def to_cuda(self, input_tensor):
-        # 将输入张量转移到 CUDA
         return tuple(tensor.cuda() for tensor in input_tensor)
 
     def call_op(self, input_tensor):
-        # 调用 fill_kv_cache 算子
         k_states, v_states, k_caches, v_caches, q_start_loc, q_seq_length, kv_seq_length, block_offsets = input_tensor
         fill_kv_cache(
             k_states,
@@ -53,10 +51,9 @@ class performance_metrics(Performance_Metrics):
             max_q_seq_length=k_states.size(1),
             block_offsets=block_offsets
         )
-        return k_caches, v_caches  # 返回结果
+        return k_caches, v_caches
 
     def get_gbps(self, input_tensor, runtime):
-        # 计算 GBPS
         k_states, v_states, k_caches, v_caches, _, _, _, _ = input_tensor
         total_bytes = (
             k_states.numel() * k_states.element_size() +
@@ -68,7 +65,6 @@ class performance_metrics(Performance_Metrics):
         return GBPS
 
     def get_tflops(self, input_tensor, runtime):
-        # 计算 TFLOPS
         k_states, _, _, _, _, _, _, _ = input_tensor
         batch_size, seq_len, num_heads, head_dim = k_states.size()
         FLOPS = 2 * batch_size * seq_len * num_heads * head_dim

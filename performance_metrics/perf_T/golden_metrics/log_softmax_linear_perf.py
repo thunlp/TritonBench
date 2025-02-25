@@ -17,10 +17,9 @@ class performance_metrics(Performance_Metrics):
 
     def get_input_tensors(self):
         self.input_tensors = []
-        batch_size = 32  # 固定batch_size
+        batch_size = 32
         
-        # 测试不同规模的输入特征维度
-        for i in range(4, 15):  # 调整i的范围控制测试规模
+        for i in range(4, 15):
             in_features = 2 ** i
             out_features = 2 ** i
             input_tensor = torch.randn(batch_size, in_features, dtype=torch.float32)
@@ -40,7 +39,6 @@ class performance_metrics(Performance_Metrics):
         input_tensor, weight, bias = input_tuple
         element_size = input_tensor.element_size()
         
-        # 计算各张量的数据量
         input_bytes = input_tensor.numel() * element_size
         weight_bytes = weight.numel() * element_size
         bias_bytes = bias.numel() * element_size
@@ -56,10 +54,9 @@ class performance_metrics(Performance_Metrics):
         in_fea = input_tensor.shape[1]
         out_fea = weight.shape[0]
         
-        # 计算各阶段的浮点操作
-        flops_matmul = 2 * batch * in_fea * out_fea      # 矩阵乘法
-        flops_bias = batch * out_fea                     # 偏置加法
-        flops_softmax = 3 * batch * out_fea              # log_softmax（exp、sum、log）
+        flops_matmul = 2 * batch * in_fea * out_fea
+        flops_bias = batch * out_fea
+        flops_softmax = 3 * batch * out_fea
         
         total_flops = flops_matmul + flops_bias + flops_softmax
         TFLOPS = total_flops / (runtime / 1000) / 1e12

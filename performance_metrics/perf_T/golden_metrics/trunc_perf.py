@@ -17,7 +17,7 @@ class performance_metrics(Performance_Metrics):
         
     def get_input_tensors(self):
         self.input_tensors = []
-        dtype = self.dtype or torch.float32  # 确保默认使用float32
+        dtype = self.dtype or torch.float32
         for i in range(12, 28):
             size = 2 ** i
             input_tensor = torch.rand(size, dtype=dtype)
@@ -30,12 +30,12 @@ class performance_metrics(Performance_Metrics):
         return trunc(input_tensor)
     
     def get_gbps(self, input_tensor, runtime):
-        total_bytes = input_tensor.numel() * input_tensor.element_size() * 2  # 输入和输出各占一份
+        total_bytes = input_tensor.numel() * input_tensor.element_size() * 2
         GBPS = total_bytes / (runtime / 1000) / 1e9
         return GBPS
     
     def get_tflops(self, input_tensor, runtime):
-        FLOPS = input_tensor.numel()  # 每个元素进行一次截断操作
+        FLOPS = input_tensor.numel()
         TFLOPS = FLOPS / (runtime / 1000) / 1e12
         return TFLOPS
     
