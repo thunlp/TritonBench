@@ -76,6 +76,9 @@ For **TritonBench-T**, there is no code similarity evaluation. Only call accurac
 
 **Note**: Ensure that accuracy and efficiency evaluations are performed sequentially.
 
+## Hugging face
+We have published our dataset on [Hugging Face](https://huggingface.co/collections/LiShangZ/tritonbench-67c0016bc8a8654cfd612a1a).
+
 ## 📩 Contact Us
 If you have any questions, feel free to reach out to us at:  
 **✉️ Email:** [qshi9510@gmail.com]
