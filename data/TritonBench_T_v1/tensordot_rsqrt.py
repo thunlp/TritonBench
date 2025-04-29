@@ -1,6 +1,8 @@
+from typing import Tuple, List
 import torch
 
-def tensordot_rsqrt(a: torch.Tensor, b: torch.Tensor, dims) -> torch.Tensor:
+def tensordot_rsqrt(a: torch.Tensor, b: torch.Tensor, 
+        dims: Tuple[int, Tuple[List[int], List[int]], List[List[int]]]) -> torch.Tensor:
     """
     Perform a tensor contraction between two tensors a and b over specified dimensions and apply 
     reciprocal square root to the resulting tensor.
@@ -52,3 +54,4 @@ def test_tensordot_rsqrt():
     return results
 
 test_results = test_tensordot_rsqrt()
+print(test_results)

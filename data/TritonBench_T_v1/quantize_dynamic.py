@@ -1,8 +1,13 @@
 import torch
 from torch import nn
-from torch.quantization import quantize_dynamic as torch_quantize_dynamic
+from typing import Optional, Any
+from torch.quantization import quantize_dynamic
 
-def dynamic_custom(model, qconfig_spec=None, inplace=False, mapping=None):
+def dynamic_custom(
+        model: torch.nn.Module, 
+        qconfig_spec: Optional[dict[str, Any]]=None, 
+        inplace: bool=False, 
+        mapping: Optional[dict[str, Any]]=None) -> torch.nn.Module:
     """
     Custom wrapper to convert a float model to a dynamic quantized model by replacing specified modules
     with their dynamic weight-only quantized versions.
@@ -20,7 +25,7 @@ def dynamic_custom(model, qconfig_spec=None, inplace=False, mapping=None):
         torch.nn.Module: The dynamic quantized model.
     """    
     # Use the torch.quantization.quantize_dynamic function to avoid recursion
-    quantized_model = torch_quantize_dynamic(model, qconfig_spec=qconfig_spec, inplace=inplace, mapping=mapping)
+    quantized_model = quantize_dynamic(model, qconfig_spec=qconfig_spec, inplace=inplace, mapping=mapping)
     
     return quantized_model
 
@@ -67,3 +72,4 @@ def test_quantize_dynamic():
     return results
 
 test_results = test_quantize_dynamic()
+print(test_results)

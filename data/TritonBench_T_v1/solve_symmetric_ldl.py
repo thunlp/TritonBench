@@ -1,6 +1,23 @@
-import torch
+import torch    
+from typing import Optional
+def solve_symmetric_ldl(
+        A: torch.Tensor, 
+        b: torch.Tensor, 
+        hermitian: bool=False, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
+    """
+    Solves a system of linear equations using the LDL factorization.
 
-def solve_symmetric_ldl(A, b, hermitian=False, out=None):
+    Args:
+        A (torch.Tensor): The coefficient matrix.
+        b (torch.Tensor): The right-hand side vector.
+        hermitian (bool, optional): Whether the matrix is Hermitian. Default: False.
+        out (torch.Tensor, optional): The output tensor.
+
+    Returns:
+        torch.Tensor: The solution vector.
+    """
+
     # Convert A and b to float if they are not already in the correct dtype
     A = A.to(torch.float32)  # Use float32 to ensure consistency
     b = b.to(torch.float32)  # Ensure b is also in float32
@@ -72,3 +89,4 @@ def test_solve_symmetric_ldl():
 
 test_results = test_solve_symmetric_ldl()
 
+print(test_results)

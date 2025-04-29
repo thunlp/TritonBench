@@ -41,3 +41,4 @@ def test_signbit():
     return results
 
 test_results = test_signbit()
+print(test_results)

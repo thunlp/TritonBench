@@ -41,3 +41,4 @@ def test_log1p():
     return results
 
 test_results = test_log1p()
+print(test_results)

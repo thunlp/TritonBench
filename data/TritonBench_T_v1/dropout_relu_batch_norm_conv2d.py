@@ -1,8 +1,17 @@
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 
-def dropout_relu_batch_norm_conv2d(input: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor=None, stride: int=1, padding: int=0, dilation: int=1, groups: int=1, p: float=0.5, training: bool=True, inplace: bool=False) -> torch.Tensor:
+def dropout_relu_batch_norm_conv2d(
+        input: torch.Tensor, 
+        weight: torch.Tensor, 
+        bias: torch.Tensor=None, 
+        stride: int=1, 
+        padding: int=0, 
+        dilation: int=1, 
+        groups: int=1, 
+        p: float=0.5, 
+        training: bool=True, 
+        inplace: bool=False) -> torch.Tensor:
     """
     Applies a 2D convolution followed by batch normalization, ReLU activation, and dropout.
     Sequentially applies conv2d, batch normalization for stabilizing training and reducing internal covariate shift,
@@ -57,3 +66,4 @@ def test_dropout_relu_batch_norm_conv2d():
 
 # Execute the test function
 test_results = test_dropout_relu_batch_norm_conv2d()
+print(test_results)

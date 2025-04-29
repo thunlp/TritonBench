@@ -1,21 +1,24 @@
 import torch
-import torch.nn.functional as F
+from typing import Optional
 
-
-def sub_gelu(input, other, alpha=1, approximate='none', out=None):
+def sub_gelu(input: torch.Tensor, 
+        other: torch.Tensor, 
+        alpha: float=1, 
+        approximate: str='none', 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Subtracts 'other', scaled by 'alpha', from 'input', and then applies the Gaussian Error Linear Units (GELU)
     activation function to the result.
 
     Args:
-        input (Tensor): The input tensor.
-        other (Tensor or Number): The tensor or number to subtract from input.
+        input (torch.Tensor): The input tensor.
+        other (torch.Tensor or Number): The tensor or number to subtract from input.
         alpha (Number, optional): The multiplier for other. Default is 1.
         approximate (str, optional): The approximation method for GELU. Default is 'none'.
-        out (Tensor, optional): The output tensor.
+        out (torch.Tensor, optional): The output tensor.
 
     Returns:
-        Tensor: The result of applying GELU activation after subtraction.
+        torch.Tensor: The result of applying GELU activation after subtraction.
     """
     result = input - alpha * other
     if approximate == 'tanh':
@@ -31,7 +34,6 @@ def sub_gelu(input, other, alpha=1, approximate='none', out=None):
 
 
 import torch
-import torch.nn.functional as F
 
 def test_sub_gelu():
     results = {}
@@ -55,3 +57,4 @@ def test_sub_gelu():
     return results
 
 test_results = test_sub_gelu()
+print(test_results)

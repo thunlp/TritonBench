@@ -2,16 +2,22 @@ import torch
 import torch.nn.functional as F
 
 def gelu(input: torch.Tensor, approximate: str='none') -> torch.Tensor:
+    """
+    Applies the GELU activation function.
+
+    Args:
+        input (torch.Tensor): The input tensor.
+        approximate (str, optional): The approximation method for GELU. Default is 'none'.
+
+    Returns:
+        torch.Tensor: The result of the GELU activation function.
+    """
     return F.gelu(input, approximate=approximate)
 
 ##################################################################################################################################################
 
 
 import torch
-import torch.nn.functional as F
-
-def gelu(input: torch.Tensor, approximate: str='none') -> torch.Tensor:
-    return F.gelu(input, approximate=approximate)
 
 def test_gelu():
     results = {}
@@ -35,3 +41,4 @@ def test_gelu():
     return results
 
 test_results = test_gelu()
+print(test_results)

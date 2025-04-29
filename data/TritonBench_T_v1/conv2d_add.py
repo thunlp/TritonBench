@@ -2,7 +2,17 @@ import torch
 import torch.nn.functional as F
 
 
-def conv2d_add(input, weight, bias=None, other=None, stride=1, padding=0, dilation=1, groups=1, alpha=1, out=None):
+def conv2d_add(
+        input: torch.Tensor, 
+        weight: torch.Tensor, 
+        bias: torch.Tensor = None, 
+        other: torch.Tensor = None, 
+        stride: int = 1, 
+        padding: int = 0, 
+        dilation: int = 1, 
+        groups: int = 1, 
+        alpha: float = 1, 
+        out: torch.Tensor = None) -> torch.Tensor:
     """
     Applies a 2D convolution over an input image using specified filters and an optional bias, 
     then adds another tensor or scalar to the convolution result, scaled by alpha.
@@ -61,3 +71,4 @@ def test_conv2d_add():
     return results
 
 test_results = test_conv2d_add()
+print(test_results)

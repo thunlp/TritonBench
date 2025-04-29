@@ -1,7 +1,12 @@
 import torch
-import torch.nn.functional as F
 
-def cos_avg_pool1d(input: torch.Tensor, kernel_size: int, stride: int=None, padding: int=0, ceil_mode: bool=False, count_include_pad: bool=True) -> torch.Tensor:
+def cos_avg_pool1d(
+        input: torch.Tensor, 
+        kernel_size: int, 
+        stride: int=None, 
+        padding: int=0, 
+        ceil_mode: bool=False, 
+        count_include_pad: bool=True) -> torch.Tensor:
     """
     Applies the cosine function element-wise to the input tensor, followed by 1D average pooling.
 
@@ -23,11 +28,6 @@ def cos_avg_pool1d(input: torch.Tensor, kernel_size: int, stride: int=None, padd
 
 
 import torch
-import torch.nn.functional as F
-
-def cos_avg_pool1d(input: torch.Tensor, kernel_size: int, stride: int=None, padding: int=0, ceil_mode: bool=False, count_include_pad: bool=True) -> torch.Tensor:
-    cos_input = torch.cos(input)
-    return F.avg_pool1d(cos_input, kernel_size=kernel_size, stride=stride, padding=padding, ceil_mode=ceil_mode, count_include_pad=count_include_pad)
 
 def test_cos_avg_pool1d():
     results = {}
@@ -51,3 +51,4 @@ def test_cos_avg_pool1d():
     return results
 
 test_results = test_cos_avg_pool1d()
+print(test_results)

@@ -1,17 +1,23 @@
+from typing import Optional
 import torch
 
-def sum_std(input, dim=None, keepdim=False, dtype=None, correction=1, out=None):
+def sum_std(input: torch.Tensor, 
+        dim: Optional[int]=None, 
+        keepdim: bool=False, 
+        dtype: Optional[torch.dtype]=None, 
+        correction: int=1, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Computes the sum of elements in the input tensor along the specified dimension(s),
     followed by calculating the standard deviation of the summed values.
     
     Args:
-        input (Tensor): The input tensor.
+        input (torch.Tensor): The input tensor.
         dim (int or tuple of ints, optional): The dimension(s) to reduce. If None, all dimensions are reduced.
         keepdim (bool, optional): Whether the output tensor has dim retained or not. Default is False.
         dtype (torch.dtype, optional): The desired data type of the returned tensor. Default: None.
         correction (int, optional): Difference between the sample size and sample degrees of freedom. Default is 1.
-        out (Tensor, optional): The output tensor.
+        out (torch.Tensor, optional): The output tensor.
     
     Returns:
         Tensor: A tensor containing the standard deviation of the summed values along the specified dimension(s).
@@ -53,3 +59,4 @@ def test_sum_std():
     return results
 
 test_results = test_sum_std()
+print(test_results)

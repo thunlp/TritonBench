@@ -1,7 +1,8 @@
 import torch
  
 
-def symmetric_matrix_vector_norm(A: torch.Tensor, x: torch.Tensor, alpha: float, beta: float, p: float=2.0) -> torch.Tensor:
+def symmetric_matrix_vector_norm(
+        A: torch.Tensor, x: torch.Tensor, alpha: float, beta: float, p: float=2.0) -> torch.Tensor:
     """
     Computes the matrix-vector product for a symmetric matrix `A` and a vector `x`, 
     with scaling factors `alpha` and `beta`. Then calculates the norm of the resulting vector `y`.
@@ -57,3 +58,4 @@ def test_symmetric_matrix_vector_norm():
     return results
 
 test_results = test_symmetric_matrix_vector_norm()
+print(test_results)

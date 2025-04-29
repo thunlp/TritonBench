@@ -1,8 +1,21 @@
 import torch
 import torch.nn.functional as F
-from torch import nn
+from typing import Optional
 
-def relu_batch_norm_conv2d(input, weight, bias=None, stride=1, padding=0, dilation=1, groups=1, running_mean=None, running_var=None, bn_weight=None, bn_bias=None, training=False, momentum=0.1, eps=1e-05, inplace=False):
+def relu_batch_norm_conv2d(
+        input: torch.Tensor, 
+        weight: torch.Tensor, 
+        bias: Optional[torch.Tensor]=None, 
+        stride: int=1, 
+        padding: int=0, 
+        dilation: int=1, 
+        groups: int=1, 
+        running_mean: Optional[torch.Tensor]=None, 
+        running_var: Optional[torch.Tensor]=None, 
+        bn_weight: Optional[torch.Tensor]=None, 
+        bn_bias: Optional[torch.Tensor]=None, 
+        training: bool=False, 
+        momentum: float=0.1, eps: float=1e-05, inplace: bool=False):
     """
     Applies a 2D convolution over the input tensor, followed by batch normalization 
     and then applies the ReLU activation function element-wise to the normalized result.
@@ -36,14 +49,13 @@ def relu_batch_norm_conv2d(input, weight, bias=None, stride=1, padding=0, dilati
 
 
 import torch
-import torch.nn.functional as F
-from torch import nn
-
-import torch
-from torch import nn
 
 # Define a simple test function
 def test_relu_batch_norm_conv2d():
+    test_results = {}
+
+    torch.manual_seed(42)
+
     # Define input tensor (batch_size, channels, height, width)
     input_tensor = torch.randn(4, 3, 32, 32)  # Example: 4 images, 3 channels, 32x32 resolution
     
@@ -78,14 +90,12 @@ def test_relu_batch_norm_conv2d():
         inplace=False
     )
 
-    # Print the shape of the output tensor
-    print(f"Output tensor shape: {output_tensor.shape}")
-    
-    # Check if output tensor has the expected shape
-    expected_shape = (4, 6, 32, 32)  # 4 images, 6 output channels, 32x32 resolution
-    assert output_tensor.shape == expected_shape, f"Expected shape {expected_shape}, but got {output_tensor.shape}"
+    test_results["test_case_1"] = output_tensor.shape
 
-    return output_tensor
+    test_results["test_case_2"] = output_tensor
+
+    return test_results
 
 # Run the test
-output = test_relu_batch_norm_conv2d()
+test_results = test_relu_batch_norm_conv2d()
+print(test_results)

@@ -1,6 +1,10 @@
 import torch
+from typing import Optional, Union
 
-def pow(input_tensor, exponent, out=None):
+def pow(
+        input_tensor: torch.Tensor, 
+        exponent: Union[float, torch.Tensor], 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     This function mimics the behavior of torch.pow, which raises each element of the input tensor to the power of the exponent.
     
@@ -45,3 +49,4 @@ def test_pow():
     return results
 
 test_results = test_pow()
+print(test_results)

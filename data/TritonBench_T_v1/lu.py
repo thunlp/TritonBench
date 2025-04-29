@@ -1,6 +1,10 @@
 import torch
+from typing import Optional
 
-def lu(A, pivot=True, out=None):
+def lu(
+    A: torch.Tensor, 
+    pivot: bool=True, 
+    out: Optional[tuple]=None) -> tuple:
     """
     Computes the LU decomposition of a matrix (or batch of matrices) using torch.linalg.lu.
     
@@ -73,3 +77,4 @@ def test_lu():
     return results
 
 test_results = test_lu()
+print(test_results)

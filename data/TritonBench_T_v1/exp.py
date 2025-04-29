@@ -1,7 +1,6 @@
 import torch
-import math
 
-def exp(input_tensor, out=None):
+def exp(input_tensor: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
     """
     This function calculates the exponential of each element in the input tensor.
 
@@ -12,7 +11,11 @@ def exp(input_tensor, out=None):
     Returns:
     - Tensor: A new tensor with the exponential of the elements of the input tensor.
     """
-    return torch.exp(input_tensor, out=out)
+    exp = torch.exp(input_tensor, out=out)
+    if out is not None:
+        out.copy_(exp)
+        return out
+    return exp
 
 ##################################################################################################################################################
 
@@ -41,3 +44,4 @@ def test_exp():
     return results
 
 test_results = test_exp()
+print(test_results)

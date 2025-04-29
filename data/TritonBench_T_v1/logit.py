@@ -46,3 +46,4 @@ def test_logit():
     return results
 
 test_results = test_logit()
+print(test_results)

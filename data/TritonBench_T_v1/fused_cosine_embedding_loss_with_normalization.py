@@ -1,8 +1,12 @@
 import torch
 import torch.nn.functional as F
-import torch
 
-def fused_cosine_embedding_loss_with_normalization(input1: torch.Tensor, input2: torch.Tensor, target: torch.Tensor, margin: float=0, reduction: str='mean') -> torch.Tensor:
+def fused_cosine_embedding_loss_with_normalization(
+        input1: torch.Tensor, 
+        input2: torch.Tensor, 
+        target: torch.Tensor, 
+        margin: float=0, 
+        reduction: str='mean') -> torch.Tensor:
     """
     Computes cosine embedding loss between two normalized tensors.
     This function first normalizes the inputs using L2 normalization and then calculates the cosine embedding loss.
@@ -45,8 +49,6 @@ def fused_cosine_embedding_loss_with_normalization(input1: torch.Tensor, input2:
 
 
 import torch
-import torch.nn.functional as F
-import torch
 
 def test_fused_cosine_embedding_loss_with_normalization():
     results = {}
@@ -72,3 +74,4 @@ def test_fused_cosine_embedding_loss_with_normalization():
     return results
 
 test_results = test_fused_cosine_embedding_loss_with_normalization()
+print(test_results)

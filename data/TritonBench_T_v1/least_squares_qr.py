@@ -1,6 +1,11 @@
 import torch
+from typing import Optional
 
-def least_squares_qr(A: torch.Tensor, b: torch.Tensor, *, mode: str='reduced', out: torch.Tensor=None) -> torch.Tensor:
+def least_squares_qr(
+        A: torch.Tensor, 
+        b: torch.Tensor, 
+        mode: str='reduced', 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Solves the least squares problem for an overdetermined system of linear equations using QR decomposition.
     
@@ -44,3 +49,4 @@ def test_least_squares_qr():
 
 # Run the test
 test_results = test_least_squares_qr()
+print(test_results)

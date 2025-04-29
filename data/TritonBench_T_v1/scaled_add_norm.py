@@ -51,3 +51,4 @@ def test_scaled_add_norm():
     return results
 
 test_results = test_scaled_add_norm()
+print(test_results)

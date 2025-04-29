@@ -1,25 +1,44 @@
 import torch
 import torch.nn.functional as F
-from torch import nn
+from typing import Optional, Union, Tuple
+def fused_instance_norm_selu_conv2d(
+        input: torch.Tensor,
+        weight: torch.Tensor,
+        bias: Optional[torch.Tensor] = None,
+        stride: Union[int, Tuple[int, int]] = 1,
+        padding: Union[int, Tuple[int, int], str] = 0,
+        dilation: Union[int, Tuple[int, int]] = 1,
+        groups: int = 1,
+        eps: float = 1e-05,
+        momentum: float = 0.1) -> torch.Tensor:
+    """
+    Performs a fused operation consisting of Conv2d, followed by SELU activation,
+    and finally Instance Normalization.
 
-def fused_instance_norm_selu_conv2d(input: torch.Tensor, weight: torch.Tensor, bias=None, stride=1, padding=0, dilation=1, groups=1, num_features=None, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False) -> torch.Tensor:
-    conv_output = torch.nn.functional.conv2d(input, weight, bias, stride, padding, dilation, groups)
-    selu_output = torch.nn.functional.selu(conv_output)
-    normalized_output = torch.nn.functional.instance_norm(selu_output, eps=eps, momentum=momentum)
+    Args:
+        input (torch.Tensor): Input tensor of shape (N, C_in, H, W).
+        weight (torch.Tensor): Convolution filters of shape (C_out, C_in/groups, kH, kW).
+        bias (Optional[torch.Tensor]): Optional bias tensor for conv2d of shape (C_out). Default: None.
+        stride (Union[int, Tuple[int, int]]): Stride for the convolution. Default: 1.
+        padding (Union[int, Tuple[int, int], str]): Padding for the convolution. Default: 0.
+        dilation (Union[int, Tuple[int, int]]): Dilation for the convolution. Default: 1.
+        groups (int): Number of groups for the convolution. Default: 1.
+        eps (float): A value added to the denominator for numerical stability in InstanceNorm. Default: 1e-05.
+        momentum (float): The value used for the running_mean and running_var computation in InstanceNorm.
+                          Has effect only when running stats are provided (not used in this basic F.instance_norm call). Default: 0.1.
+
+    Returns:
+        torch.Tensor: The result of applying Conv2d -> SELU -> InstanceNorm to the input tensor.
+    """
+    conv_output = F.conv2d(input, weight, bias, stride, padding, dilation, groups)
+    selu_output = F.selu(conv_output)
+    normalized_output = F.instance_norm(selu_output, eps=eps, momentum=momentum)
     return normalized_output
 
 ##################################################################################################################################################
 
 
 import torch
-import torch.nn.functional as F
-from torch import nn
-
-def fused_instance_norm_selu_conv2d(input: torch.Tensor, weight: torch.Tensor, bias=None, stride=1, padding=0, dilation=1, groups=1, num_features=None, eps=1e-05, momentum=0.1, affine=False, track_running_stats=False) -> torch.Tensor:
-    conv_output = torch.nn.functional.conv2d(input, weight, bias, stride, padding, dilation, groups)
-    selu_output = torch.nn.functional.selu(conv_output)
-    normalized_output = torch.nn.functional.instance_norm(selu_output, eps=eps, momentum=momentum)
-    return normalized_output
 
 def test_fused_instance_norm_selu_conv2d():
     results = {}
@@ -38,3 +57,4 @@ def test_fused_instance_norm_selu_conv2d():
     return results
 
 test_results = test_fused_instance_norm_selu_conv2d()
+print(test_results)

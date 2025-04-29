@@ -1,7 +1,13 @@
 import torch
 import torch.nn.functional as F
 
-def bitwise_and_binomial(input: torch.Tensor, other: torch.Tensor, total_count: torch.Tensor, probs: torch.Tensor=None, logits: torch.Tensor=None) -> torch.Tensor:
+def bitwise_and_binomial(
+        input: torch.Tensor, 
+        other: torch.Tensor, 
+        total_count: torch.Tensor, 
+        probs: torch.Tensor=None, 
+        logits: torch.Tensor=None
+        ) -> torch.Tensor:
     """
     Computes the bitwise AND operation between two tensors and then applies a Binomial distribution sampling based on the resulting tensor's values.
     
@@ -28,7 +34,6 @@ def bitwise_and_binomial(input: torch.Tensor, other: torch.Tensor, total_count: 
 
 
 import torch
-import torch.nn.functional as F
 
 def test_bitwise_and_binomial():
     results = {}
@@ -54,3 +59,4 @@ def test_bitwise_and_binomial():
     return results
 
 test_results = test_bitwise_and_binomial()
+print(test_results)

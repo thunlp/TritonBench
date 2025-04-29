@@ -1,7 +1,14 @@
 import torch
 import torch.nn.functional as F
 
-def conv2d(input: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor=None, stride: int=1, padding: int=0, dilation: int=1, groups: int=1) -> torch.Tensor:
+def conv2d(
+        input: torch.Tensor, 
+        weight: torch.Tensor, 
+        bias: torch.Tensor=None, 
+        stride: int=1, 
+        padding: int=0, 
+        dilation: int=1, 
+        groups: int=1) -> torch.Tensor:
     """
     Applies a 2D convolution over an input image composed of several input planes.
 
@@ -56,3 +63,4 @@ def test_conv2d():
     return results
 
 test_results = test_conv2d()
+print(test_results)

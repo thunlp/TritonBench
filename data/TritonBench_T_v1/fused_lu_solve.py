@@ -49,3 +49,4 @@ def test_fused_lu_solve():
     return results
 
 test_results = test_fused_lu_solve()
+print(test_results)

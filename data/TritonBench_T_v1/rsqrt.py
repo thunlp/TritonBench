@@ -46,3 +46,4 @@ def test_rsqrt():
     return results
 
 test_results = test_rsqrt()
+print(test_results)

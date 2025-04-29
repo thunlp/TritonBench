@@ -1,7 +1,16 @@
 import torch
 import torch.nn.functional as F
-
-def fused_mul_add_logsoftmax_dropout_bmm(input1, input2, other, mat2, p=0.5, training=True, inplace=False, dim=-1, *, out=None):
+from typing import Optional
+def fused_mul_add_logsoftmax_dropout_bmm(
+        input1: torch.Tensor, 
+        input2: torch.Tensor, 
+        other: torch.Tensor, 
+        mat2: torch.Tensor, 
+        p: float=0.5, 
+        training: bool=True, 
+        inplace: bool=False, 
+        dim: int=-1, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Performs a fused operation combining element-wise multiplication, addition,
     log-softmax activation, dropout, and batch matrix multiplication.
@@ -22,8 +31,8 @@ def fused_mul_add_logsoftmax_dropout_bmm(input1, input2, other, mat2, p=0.5, tra
     """
     Z = torch.mul(input1, input2)
     S = torch.add(Z, other)
-    L = torch.nn.functional.log_softmax(S, dim=dim)
-    D = torch.nn.functional.dropout(L, p=p, training=training, inplace=inplace)
+    L = F.log_softmax(S, dim=dim)
+    D = F.dropout(L, p=p, training=training, inplace=inplace)
     Y = torch.bmm(D, mat2)
     if out is not None:
         out.copy_(Y)
@@ -34,7 +43,6 @@ def fused_mul_add_logsoftmax_dropout_bmm(input1, input2, other, mat2, p=0.5, tra
 
 
 import torch
-import torch.nn.functional as F
 
 def test_fused_mul_add_logsoftmax_dropout_bmm():
     results = {}
@@ -70,3 +78,4 @@ def test_fused_mul_add_logsoftmax_dropout_bmm():
     return results
 
 test_results = test_fused_mul_add_logsoftmax_dropout_bmm()
+print(test_results)

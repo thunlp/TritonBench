@@ -1,15 +1,21 @@
 import torch
 
-def det(A):
+def det(A: torch.Tensor) -> torch.Tensor:
+    """
+    Computes the determinant of a square matrix.
+
+    Args:
+        A (torch.Tensor): The input matrix.
+
+    Returns:
+        torch.Tensor: The determinant of the input matrix.
+    """
     return torch.linalg.det(A)
 
 ##################################################################################################################################################
 
 
 import torch
-
-def det(A):
-    return torch.linalg.det(A)
 
 def test_det():
     results = {}
@@ -33,3 +39,4 @@ def test_det():
     return results
 
 test_results = test_det()
+print(test_results)

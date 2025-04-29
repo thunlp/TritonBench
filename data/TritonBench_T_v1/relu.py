@@ -1,17 +1,27 @@
 import torch
-import torch.nn.functional as F
 
 def relu(input: torch.Tensor, inplace: bool=False) -> torch.Tensor:
-    return F.relu(input, inplace=inplace)
+    """
+    Applies the rectified linear unit (ReLU) function to each element in input.
+
+    Args:
+        input (torch.Tensor): The input tensor.
+        inplace (bool, optional): If True, will perform the operation in-place. Default: False.
+
+    Returns:
+        torch.Tensor: The output tensor with ReLU applied.
+    """
+    max_val = torch.max(input, torch.zeros_like(input))
+    if inplace:
+        input.copy_(max_val)
+        return input
+    else:
+        return max_val
 
 ##################################################################################################################################################
 
 
 import torch
-import torch.nn.functional as F
-
-def relu(input: torch.Tensor, inplace: bool=False) -> torch.Tensor:
-    return F.relu(input, inplace=inplace)
 
 def test_relu():
     results = {}
@@ -35,3 +45,4 @@ def test_relu():
     return results
 
 test_results = test_relu()
+print(test_results)

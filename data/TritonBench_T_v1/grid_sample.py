@@ -2,7 +2,12 @@ import torch
 import torch.nn.functional as F
 
 
-def grid_sample(input, grid, mode='bilinear', padding_mode='zeros', align_corners=False):
+def grid_sample(
+        input: torch.Tensor, 
+        grid: torch.Tensor, 
+        mode: str='bilinear', 
+        padding_mode: str='zeros', 
+        align_corners: bool=False) -> torch.Tensor:
     """
     Performs grid sampling using the specified input and grid.
 
@@ -31,7 +36,6 @@ def grid_sample(input, grid, mode='bilinear', padding_mode='zeros', align_corner
 
 
 import torch
-import torch.nn.functional as F
 
 def test_grid_sample():
     results = {}
@@ -55,3 +59,4 @@ def test_grid_sample():
     return results
 
 test_results = test_grid_sample()
+print(test_results)

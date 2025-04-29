@@ -1,7 +1,11 @@
 import torch
-from torch import Tensor
 
-def matrix_vector_dot(A: Tensor, x: Tensor, y: Tensor, alpha: float, beta: float) -> Tensor:
+def matrix_vector_dot(
+        A: torch.Tensor, 
+        x: torch.Tensor, 
+        y: torch.Tensor, 
+        alpha: float, 
+        beta: float) -> torch.Tensor:
     """
     Computes the matrix-vector product y = alpha * torch.mv(A, x) + beta * y
     and returns the dot product of the updated y and x.
@@ -25,7 +29,6 @@ def matrix_vector_dot(A: Tensor, x: Tensor, y: Tensor, alpha: float, beta: float
 
 
 import torch
-from torch import Tensor
 
 def test_matrix_vector_dot():
     results = {}
@@ -65,3 +68,4 @@ def test_matrix_vector_dot():
     return results
 
 test_results = test_matrix_vector_dot()
+print(test_results)

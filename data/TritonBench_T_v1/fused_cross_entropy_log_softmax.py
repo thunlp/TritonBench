@@ -1,7 +1,14 @@
 import torch
 import torch.nn.functional as F
 
-def fused_cross_entropy_log_softmax(input: torch.Tensor, target: torch.Tensor, dim: int=1, weight: torch.Tensor=None, ignore_index: int=-100, reduction: str='mean', label_smoothing: float=0.0) -> torch.Tensor:
+def fused_cross_entropy_log_softmax(
+        input: torch.Tensor, 
+        target: torch.Tensor, 
+        dim: int=1, 
+        weight: torch.Tensor=None, 
+        ignore_index: int=-100, 
+        reduction: str='mean', 
+        label_smoothing: float=0.0) -> torch.Tensor:
     """
     Computes the cross entropy loss with log softmax applied to the input logits.
     
@@ -54,3 +61,4 @@ def test_fused_cross_entropy_log_softmax():
     return results
 
 test_results = test_fused_cross_entropy_log_softmax()
+print(test_results)

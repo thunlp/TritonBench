@@ -1,7 +1,15 @@
 import torch
 import torch.nn.functional as F
+from typing import Union, Tuple, Optional
 
-def fused_pairwise_distance_adaptive_avg_pool2d(x1: torch.Tensor, x2: torch.Tensor, output_size: int or tuple, p: float=2.0, eps: float=1e-06, keepdim: bool=False) -> torch.Tensor:
+def fused_pairwise_distance_adaptive_avg_pool2d(
+        x1: torch.Tensor, 
+        x2: torch.Tensor, 
+        output_size: Union[Tuple[int,int], int],    
+        p: float=2.0, 
+        eps: float=1e-06, 
+        keepdim: bool=False, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     This function applies adaptive average pooling to the input tensors `x1` and `x2` to resize them
     to the specified `output_size`, and then computes the pairwise distance between the pooled outputs.
@@ -21,20 +29,15 @@ def fused_pairwise_distance_adaptive_avg_pool2d(x1: torch.Tensor, x2: torch.Tens
     pooled_x2 = F.adaptive_avg_pool2d(x2, output_size)
     diff = pooled_x1 - pooled_x2
     dist = torch.norm(diff, p=p, dim=(1, 2, 3), keepdim=keepdim) + eps
+    if out is not None:
+        out.copy_(dist)
+        return out
     return dist
 
 ##################################################################################################################################################
 
 
 import torch
-import torch.nn.functional as F
-
-def fused_pairwise_distance_adaptive_avg_pool2d(x1: torch.Tensor, x2: torch.Tensor, output_size: int or tuple, p: float=2.0, eps: float=1e-06, keepdim: bool=False) -> torch.Tensor:
-    pooled_x1 = F.adaptive_avg_pool2d(x1, output_size)
-    pooled_x2 = F.adaptive_avg_pool2d(x2, output_size)
-    diff = pooled_x1 - pooled_x2
-    dist = torch.norm(diff, p=p, dim=(1, 2, 3), keepdim=keepdim) + eps
-    return dist
 
 def test_fused_pairwise_distance_adaptive_avg_pool2d():
     results = {}
@@ -62,3 +65,4 @@ def test_fused_pairwise_distance_adaptive_avg_pool2d():
     return results
 
 test_results = test_fused_pairwise_distance_adaptive_avg_pool2d()
+print(test_results)

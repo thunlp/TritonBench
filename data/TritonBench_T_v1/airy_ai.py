@@ -41,3 +41,4 @@ def test_airy_ai():
     return results
 
 test_results = test_airy_ai()
+print(test_results)

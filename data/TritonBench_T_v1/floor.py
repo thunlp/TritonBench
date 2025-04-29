@@ -40,3 +40,4 @@ def test_floor():
     return results
 
 test_results = test_floor()
+print(test_results)

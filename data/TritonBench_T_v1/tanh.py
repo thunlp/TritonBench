@@ -1,15 +1,17 @@
+from typing import Optional
 import torch
 
-def tanh(input_tensor, out_tensor=None):
+def tanh(input_tensor: torch.Tensor, 
+        out_tensor: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     This function calculates the hyperbolic tangent of each element of the input tensor.
     
     Args:
-    - input_tensor (torch.Tensor): The input tensor.
-    - out_tensor (torch.Tensor, optional): The output tensor. If provided, the result is stored in this tensor.
+        input_tensor (torch.Tensor): The input tensor.
+        out_tensor (torch.Tensor, optional): The output tensor. If provided, the result is stored in this tensor.
 
     Returns:
-    - torch.Tensor: A tensor containing the element-wise hyperbolic tangent of the input.
+        torch.Tensor: A tensor containing the element-wise hyperbolic tangent of the input.
     """
     return torch.tanh(input_tensor, out=out_tensor)
 
@@ -40,3 +42,4 @@ def test_tanh():
     return results
 
 test_results = test_tanh()
+print(test_results)

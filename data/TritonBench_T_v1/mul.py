@@ -46,3 +46,4 @@ def test_mul():
     return results
 
 test_results = test_mul()
+print(test_results)

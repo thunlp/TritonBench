@@ -1,7 +1,15 @@
 import torch
 import torch.nn.functional as F
+from typing import Optional
 
-def fused_masked_select_add_gelu(input, mask, other, *, alpha=1, approximate='none', out=None):
+def fused_masked_select_add_gelu(
+        input: torch.Tensor, 
+        mask: torch.Tensor, 
+        other: torch.Tensor, 
+        *, 
+        alpha: float=1, 
+        approximate: str='none', 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Perform a fused operation combining masked selection, addition, and GELU activation.
     
@@ -63,3 +71,4 @@ def test_fused_masked_select_add_gelu():
     return results
 
 test_results = test_fused_masked_select_add_gelu()
+print(test_results)

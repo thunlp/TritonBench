@@ -65,3 +65,4 @@ def test_matrix_multiply_symmetric():
     return results
 
 test_results = test_matrix_multiply_symmetric()
+print(test_results)

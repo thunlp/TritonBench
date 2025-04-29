@@ -1,6 +1,12 @@
 import torch
-
-def fused_index_select_eq(input, dim, index, other, *, out=None):
+from typing import Union, Optional
+def fused_index_select_eq(
+        input: torch.Tensor, 
+        dim: int, 
+        index: torch.Tensor, 
+        other: Union[torch.Tensor, Union[int, float]], 
+        *, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Perform a fused operation combining index selection and element-wise equality comparison.
 
@@ -60,3 +66,4 @@ def test_fused_index_select_eq():
     return results
 
 test_results = test_fused_index_select_eq()
+print(test_results)

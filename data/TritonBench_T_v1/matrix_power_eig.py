@@ -54,3 +54,4 @@ def test_matrix_power_eig():
     return results
 
 test_results = test_matrix_power_eig()
+print(test_results)

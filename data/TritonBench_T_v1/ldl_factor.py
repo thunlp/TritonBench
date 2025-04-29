@@ -1,6 +1,10 @@
+from typing import Optional
 import torch
 
-def ldl_factor(A, hermitian=False, out=None):
+def ldl_factor(
+        A: torch.Tensor, 
+        hermitian: bool=False, 
+        out: Optional[tuple]=None) -> tuple:
     """
     Perform the LDL factorization of a symmetric or Hermitian matrix.
 
@@ -44,3 +48,4 @@ def test_ldl_factor():
     return results
 
 test_results = test_ldl_factor()
+print(test_results)

@@ -1,6 +1,12 @@
 import torch
+from typing import Optional
 
-def matrix_multiply_and_row_dot(A: torch.Tensor, B: torch.Tensor, alpha: float, beta: float, C: torch.Tensor) -> torch.Tensor:
+def matrix_multiply_and_row_dot(
+        A: torch.Tensor, 
+        B: torch.Tensor, 
+        alpha: float, 
+        beta: float, 
+        C: torch.Tensor) -> torch.Tensor:
     """
     Perform a scaled matrix-matrix multiplication and then calculate the dot product
     of the first two rows of the resulting matrix.
@@ -62,3 +68,4 @@ def test_matrix_multiply_and_row_dot():
     return results
 
 test_results = test_matrix_multiply_and_row_dot()
+print(test_results)

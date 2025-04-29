@@ -1,6 +1,7 @@
 import torch
 
-def tril_mm_and_scale(A: torch.Tensor, B: torch.Tensor, alpha: float, beta: float) -> torch.Tensor:
+def tril_mm_and_scale(
+        A: torch.Tensor, B: torch.Tensor, alpha: float, beta: float) -> torch.Tensor:
     """
     Perform matrix multiplication of the lower triangular part of matrix A with matrix B,
     scales the result by alpha, and then scales the final output by beta.
@@ -58,3 +59,4 @@ def test_tril_mm_and_scale():
     return results
 
 test_results = test_tril_mm_and_scale()
+print(test_results)

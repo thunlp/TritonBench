@@ -2,11 +2,16 @@ import torch
 import torch.nn.functional as F
 
 
-def elu_linear(input, weight, bias=None, alpha=1.0, inplace=False):
+def elu_linear(
+        input: torch.Tensor, 
+        weight: torch.Tensor, 
+        bias: torch.Tensor = None, 
+        alpha: float = 1.0, 
+        inplace: bool = False) -> torch.Tensor:
     """
     Applies a linear transformation followed by the Exponential Linear Unit (ELU) activation.
 
-    Parameters:
+    Args:
         input (Tensor): The input tensor for the linear layer. 
                          Shape should be (batch_size, in_features).
         weight (Tensor): The weight tensor for the linear transformation.
@@ -27,11 +32,6 @@ def elu_linear(input, weight, bias=None, alpha=1.0, inplace=False):
 
 
 import torch
-import torch.nn.functional as F
-
-def elu_linear(input, weight, bias=None, alpha=1.0, inplace=False):
-    output = F.linear(input, weight, bias)
-    return F.elu(output, alpha=alpha, inplace=inplace)
 
 def test_elu_linear():
     results = {}
@@ -62,3 +62,4 @@ def test_elu_linear():
     return results
 
 test_results = test_elu_linear()
+print(test_results)

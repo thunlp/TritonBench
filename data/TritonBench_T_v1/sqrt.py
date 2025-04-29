@@ -1,15 +1,17 @@
 import torch
-
-def sqrt(input, out=None):
+from typing import Optional
+def sqrt(
+        input: torch.Tensor, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Computes the square root element-wise of the input tensor.
     
     Args:
-        input (Tensor): The input tensor.
-        out (Tensor, optional): The output tensor. Defaults to None.
+        input (torch.Tensor): The input tensor.
+        out (torch.Tensor, optional): The output tensor. Defaults to None.
     
     Returns:
-        Tensor: A new tensor with the square root of the elements.
+        torch.Tensor: A new tensor with the square root of the elements.
     """
     return torch.sqrt(input, out=out)
 
@@ -40,3 +42,4 @@ def test_sqrt():
     return results
 
 test_results = test_sqrt()
+print(test_results)

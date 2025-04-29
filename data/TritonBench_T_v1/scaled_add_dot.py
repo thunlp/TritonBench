@@ -1,7 +1,6 @@
 import torch
-from torch import Tensor
 
-def scaled_add_dot(y: Tensor, x: Tensor, alpha: float) -> Tensor:
+def scaled_add_dot(y: torch.Tensor, x: torch.Tensor, alpha: float) -> torch.Tensor:
     """
     Performs two operations in a single function:
     1. Scales the tensor `x` by the factor `alpha` and adds it to `y`.
@@ -22,7 +21,6 @@ def scaled_add_dot(y: Tensor, x: Tensor, alpha: float) -> Tensor:
 
 
 import torch
-from torch import Tensor
 
 def test_scaled_add_dot():
     results = {}
@@ -54,3 +52,4 @@ def test_scaled_add_dot():
     return results
 
 test_results = test_scaled_add_dot()
+print(test_results)

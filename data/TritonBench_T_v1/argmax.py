@@ -39,3 +39,4 @@ def test_argmax():
     return results
 
 test_results = test_argmax()
+print(test_results)

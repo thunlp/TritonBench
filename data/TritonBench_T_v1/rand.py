@@ -1,13 +1,20 @@
 import torch
-
-def rand(*size, generator=None, out=None, dtype=None, layout=torch.strided, device=None, requires_grad=False, pin_memory=False):
+from typing import Optional
+def rand(*size: int, 
+        generator: Optional[torch.Generator]=None, 
+        out: Optional[torch.Tensor]=None, 
+        dtype: Optional[torch.dtype]=None, 
+        layout: torch.layout=torch.strided, 
+        device: Optional[torch.device]=None, 
+        requires_grad: bool=False, 
+        pin_memory: bool=False) -> torch.Tensor:
     """
     Generates a tensor with random numbers from a uniform distribution on the interval [0, 1).
 
     Args:
         size (int...): A sequence of integers defining the shape of the output tensor.
         generator (torch.Generator, optional): A pseudorandom number generator for sampling.
-        out (Tensor, optional): The output tensor.
+        out (torch.Tensor, optional): The output tensor.
         dtype (torch.dtype, optional): The desired data type of returned tensor.
         layout (torch.layout, optional): The desired layout of returned Tensor.
         device (torch.device, optional): The desired device of returned tensor.
@@ -15,7 +22,7 @@ def rand(*size, generator=None, out=None, dtype=None, layout=torch.strided, devi
         pin_memory (bool, optional): If set, returned tensor would be allocated in the pinned memory (CPU only).
 
     Returns:
-        Tensor: A tensor of shape `size` with random numbers in the interval [0, 1).
+        torch.Tensor: A tensor of shape `size` with random numbers in the interval [0, 1).
     """
     return torch.rand(*size, generator=generator, out=out, dtype=dtype, layout=layout, device=device, requires_grad=requires_grad, pin_memory=pin_memory)
 
@@ -44,3 +51,4 @@ def test_rand():
     return results
 
 test_results = test_rand()
+print(test_results)

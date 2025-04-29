@@ -47,3 +47,4 @@ def test_fused_cholesky_solve():
     return results
 
 test_results = test_fused_cholesky_solve()
+print(test_results)

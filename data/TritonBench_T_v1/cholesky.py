@@ -62,3 +62,4 @@ def test_cholesky():
     return results
 
 test_results = test_cholesky()
+print(test_results)

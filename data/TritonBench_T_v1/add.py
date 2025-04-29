@@ -1,6 +1,10 @@
 import torch
 
-def add(input, other, alpha=1, out=None):
+def add(
+        input: torch.Tensor, 
+        other: torch.Tensor, 
+        alpha: float = 1, 
+        out: torch.Tensor = None) -> torch.Tensor:
     """
     Adds the tensor or number 'other', scaled by 'alpha', to the 'input' tensor.
     
@@ -46,3 +50,4 @@ def test_add():
     return results
 
 test_results = test_add()
+print(test_results)

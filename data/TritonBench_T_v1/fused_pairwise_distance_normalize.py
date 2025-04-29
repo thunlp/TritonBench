@@ -1,6 +1,13 @@
 import torch
-
-def fused_pairwise_distance_normalize(x1: torch.Tensor, x2: torch.Tensor, p_norm: float=2.0, eps_norm: float=1e-12, eps_distance: float=1e-06, keepdim: bool=False) -> torch.Tensor:
+from typing import Optional
+def fused_pairwise_distance_normalize(
+        x1: torch.Tensor, 
+        x2: torch.Tensor, 
+        p_norm: float=2.0, 
+        eps_norm: float=1e-12, 
+        eps_distance: float=1e-06, 
+        keepdim: bool=False, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Computes the pairwise distance between two input tensors `x1` and `x2` 
     after normalizing both tensors. Normalization is performed along the specified 
@@ -28,6 +35,9 @@ def fused_pairwise_distance_normalize(x1: torch.Tensor, x2: torch.Tensor, p_norm
     distance = torch.max(distance, torch.tensor(eps_distance, device=x1.device))
     if keepdim:
         return distance.unsqueeze(-1)
+    if out is not None:
+        out.copy_(distance)
+        return out
     return distance
 
 ##################################################################################################################################################
@@ -61,3 +71,4 @@ def test_fused_pairwise_distance_normalize():
     return results
 
 test_results = test_fused_pairwise_distance_normalize()
+print(test_results)

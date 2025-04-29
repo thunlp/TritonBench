@@ -48,3 +48,4 @@ def test_svd():
     return results
 
 test_results = test_svd()
+print(test_results)

@@ -1,6 +1,17 @@
 import torch
 
-def eig(A):
+def eig(A: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+    """
+    Computes the eigenvalues and eigenvectors of a square matrix.
+
+    Args:
+        A (torch.Tensor): The input matrix.
+
+    Returns:
+        tuple: A tuple containing two tensors:
+            - eigenvalues (torch.Tensor): The eigenvalues of the matrix.
+            - eigenvectors (torch.Tensor): The eigenvectors of the matrix.
+    """
     (eigenvalues, eigenvectors) = torch.linalg.eig(A)
     return (eigenvalues, eigenvectors)
 
@@ -8,10 +19,6 @@ def eig(A):
 
 
 import torch
-
-def eig(A):
-    (eigenvalues, eigenvectors) = torch.linalg.eig(A)
-    return (eigenvalues, eigenvectors)
 
 def test_eig():
     results = {}
@@ -35,3 +42,4 @@ def test_eig():
     return results
 
 test_results = test_eig()
+print(test_results)

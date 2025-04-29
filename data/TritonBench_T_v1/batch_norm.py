@@ -24,26 +24,6 @@ def batch_norm(input, running_mean, running_var, weight=None, bias=None, trainin
 
 
 import torch
-import torch.nn.functional as F
-
-def batch_norm(input, running_mean, running_var, weight=None, bias=None, training=False, momentum=0.1, eps=1e-05):
-    """
-    Applies Batch Normalization to each channel across a batch of data.
-    
-    Parameters:
-        input (Tensor): Input tensor with shape (N, C, H, W) for 4D input (e.g., images).
-        running_mean (Tensor): Running mean for each channel, used in evaluation mode.
-        running_var (Tensor): Running variance for each channel, used in evaluation mode.
-        weight (Tensor, optional): Learnable scaling parameter for each channel.
-        bias (Tensor, optional): Learnable bias for each channel.
-        training (bool): Whether to use the statistics from the current batch or the running statistics.
-        momentum (float): The value used to update running_mean and running_var.
-        eps (float): A small value added to the denominator for numerical stability.
-
-    Returns:
-        Tensor: The normalized output.
-    """
-    return F.batch_norm(input, running_mean, running_var, weight, bias, training, momentum, eps)
 
 def test_batch_norm():
     results = {}
@@ -77,3 +57,4 @@ def test_batch_norm():
     return results
 
 test_results = test_batch_norm()
+print(test_results)

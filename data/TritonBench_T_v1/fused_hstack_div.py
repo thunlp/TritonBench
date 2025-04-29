@@ -1,13 +1,19 @@
 import torch
+from typing import Sequence, Union, Optional
 
-def fused_hstack_div(tensors, divisor, *, rounding_mode=None, out=None):
+def fused_hstack_div(
+        tensors: Sequence[torch.Tensor], 
+        divisor: Union[torch.Tensor, Union[int, float]], 
+        *, 
+        rounding_mode: Optional[str]=None, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Performs a fused operation combining horizontal stacking (hstack) and element-wise division.
 
     Args:
         tensors (sequence of Tensors): Sequence of tensors to be horizontally stacked.
                                         The tensors must have compatible shapes for stacking.
-        divisor (Tensor or Number): The tensor or number to divide the stacked tensor by.
+        divisor (Tensor or number): The tensor or number to divide the stacked tensor by.
                                     Must be broadcastable to the shape of the stacked tensor.
         rounding_mode (str, optional): Type of rounding applied to the result. Options:
                                        'None', 'trunc', 'floor'. Default: None.
@@ -49,3 +55,4 @@ def test_fused_hstack_div():
     return results
 
 test_results = test_fused_hstack_div()
+print(test_results)

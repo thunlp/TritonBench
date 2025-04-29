@@ -42,3 +42,4 @@ def test_permute_copy():
     return results
 
 test_results = test_permute_copy()
+print(test_results)

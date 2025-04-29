@@ -1,7 +1,17 @@
 import torch
-import torch.nn.functional as F
+from typing import Optional
 
-def log_tanh(input, out=None):
+def log_tanh(input: torch.Tensor, out: Optional[torch.Tensor]=None) -> torch.Tensor:
+    """
+    Computes the hyperbolic tangent of the natural logarithm of the input tensor.
+
+    Args:
+        input (torch.Tensor): The input tensor.
+        out (torch.Tensor, optional): The output tensor.
+
+    Returns:
+        torch.Tensor: The hyperbolic tangent of the natural logarithm of the input tensor.
+    """
     if torch.any(input <= 0):
         raise ValueError('All input elements must be positive for the logarithm function to be defined.')
     result = torch.tanh(torch.log(input))
@@ -14,16 +24,6 @@ def log_tanh(input, out=None):
 
 
 import torch
-import torch.nn.functional as F
-
-def log_tanh(input, out=None):
-    if torch.any(input <= 0):
-        raise ValueError('All input elements must be positive for the logarithm function to be defined.')
-    result = torch.tanh(torch.log(input))
-    if out is not None:
-        out.copy_(result)
-        return out
-    return result
 
 def test_log_tanh():
     results = {}
@@ -52,3 +52,4 @@ def test_log_tanh():
     return results
 
 test_results = test_log_tanh()
+print(test_results)

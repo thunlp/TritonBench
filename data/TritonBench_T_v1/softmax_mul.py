@@ -1,8 +1,29 @@
 import torch
 import torch.nn.functional as F
-import torch
+from typing import Optional
 
-def softmax_mul(input, other, dim, dtype=None, out=None):
+def softmax_mul(
+        input: torch.Tensor, 
+        other: torch.Tensor, 
+        dim: int, 
+        dtype: Optional[torch.dtype]=None, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:    
+    """
+    Applies the softmax function to the input tensor along the specified dimension,
+    then multiplies the result with another tensor element-wise.
+
+    Args:
+        input (torch.Tensor): The input tensor.
+        other (torch.Tensor): The tensor to multiply with.
+        dim (int): The dimension along which softmax will be computed.
+        dtype (:class:`torch.dtype`, optional): The desired data type of the returned tensor.
+                                                If specified, the input tensor is cast to :attr:`dtype`
+                                                before the operation is performed. Default: None.
+        out (torch.Tensor, optional): The output tensor.
+
+    Returns:
+        torch.Tensor: The result of applying softmax and multiplication.
+    """
     softmaxed = F.softmax(input, dim=dim, dtype=dtype)
     if isinstance(other, torch.Tensor):
         result = softmaxed * other
@@ -17,18 +38,6 @@ def softmax_mul(input, other, dim, dtype=None, out=None):
 
 
 import torch
-import torch.nn.functional as F
-
-def softmax_mul(input, other, dim, dtype=None, out=None):
-    softmaxed = F.softmax(input, dim=dim, dtype=dtype)
-    if isinstance(other, torch.Tensor):
-        result = softmaxed * other
-    else:
-        result = softmaxed * other
-    if out is not None:
-        out.copy_(result)
-        return out
-    return result
 
 def test_softmax_mul():
     results = {}
@@ -57,3 +66,4 @@ def test_softmax_mul():
     return results
 
 test_results = test_softmax_mul()
+print(test_results)

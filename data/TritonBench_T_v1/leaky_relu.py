@@ -42,3 +42,4 @@ def test_leaky_relu():
     return results
 
 test_results = test_leaky_relu()
+print(test_results)

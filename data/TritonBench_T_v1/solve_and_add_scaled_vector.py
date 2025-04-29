@@ -1,7 +1,23 @@
 import torch
 
 
-def solve_and_add_scaled_vector(A: torch.Tensor, b: torch.Tensor, y: torch.Tensor, alpha: float) -> torch.Tensor:
+def solve_and_add_scaled_vector(
+        A: torch.Tensor, 
+        b: torch.Tensor, 
+        y: torch.Tensor, 
+        alpha: float) -> torch.Tensor:
+    """
+    Solves a triangular system and adds a scaled vector.
+
+    Args:
+        A (torch.Tensor): The upper triangular matrix.
+        b (torch.Tensor): The right-hand side vector.
+        y (torch.Tensor): The vector to be scaled and added.
+        alpha (float): The scaling factor.
+    
+    Returns:
+        torch.Tensor: The solution vector.
+    """
     x = torch.linalg.solve_triangular(A, b, upper=True)
     x += alpha * y
     return x
@@ -23,3 +39,4 @@ def test_solve_and_add_scaled_vector():
     return results
 
 test_results = test_solve_and_add_scaled_vector()
+print(test_results)

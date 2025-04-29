@@ -1,6 +1,11 @@
 import torch
+from typing import Optional
 
-def low_rank_svd_approximation(A, k, *, full_matrices=True, out=None):
+def low_rank_svd_approximation(
+        A: torch.Tensor, 
+        k: int,
+        full_matrices: bool=True, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Computes a rank-k approximation of a matrix using its Singular Value Decomposition (SVD).
 
@@ -55,3 +60,4 @@ def test_low_rank_svd_approximation():
     return results
 
 test_results = test_low_rank_svd_approximation()
+print(test_results)

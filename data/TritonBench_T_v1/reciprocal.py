@@ -1,7 +1,9 @@
 import torch
+from typing import Optional
 
-
-def reciprocal(input, out=None):
+def reciprocal(
+        input: torch.Tensor, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Computes the reciprocal of each element in the input tensor.
     
@@ -49,3 +51,4 @@ def test_reciprocal():
     return results
 
 test_results = test_reciprocal()
+print(test_results)

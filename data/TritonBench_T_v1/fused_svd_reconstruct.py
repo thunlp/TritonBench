@@ -41,3 +41,4 @@ def test_fused_svd_reconstruct():
     return results
 
 test_results = test_fused_svd_reconstruct()
+print(test_results)

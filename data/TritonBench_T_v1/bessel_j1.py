@@ -41,3 +41,4 @@ def test_bessel_j1():
     return results
 
 test_results = test_bessel_j1()
+print(test_results)

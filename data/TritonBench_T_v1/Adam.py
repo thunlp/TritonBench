@@ -1,39 +1,85 @@
 import torch
 
-def Adam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0):
-    return torch.optim.Adam(params, lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
+def simple_adam_step(
+        params: torch.Tensor,
+        grads: torch.Tensor,
+        lr: float = 0.001,
+        eps: float = 1e-08,
+        weight_decay: float = 0
+        ) -> torch.Tensor:
+    """
+    Performs a single simplified step resembling the Adam optimizer update rule.
+    This implementation omits the exponential moving averages (m, v) used in standard Adam,
+    calculating the update based only on the current gradient.
+
+    Args:
+        params: Parameters to optimize.
+        grads: Gradients of the parameters.
+        lr: Learning rate.
+        eps: Term added to the denominator to improve numerical stability.
+        weight_decay: Weight decay (L2 penalty).
+
+    Returns:
+        Tensor: The updated parameters.
+    """
+
+    grad = grads
+
+    if weight_decay != 0:
+        grad = grad.add(params.detach(), alpha=weight_decay)
+
+    m_hat = grad
+    v_hat = grad * grad
+
+    # Denominator term in the Adam update rule
+    denom = torch.sqrt(v_hat).add_(eps)
+
+    update_amount = lr * m_hat / denom
+
+    new_params = params - update_amount
+
+    return new_params
 
 ##################################################################################################################################################
 
-
-import torch
-
-def Adam(params, lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0):
-    return torch.optim.Adam(params, lr=lr, betas=betas, eps=eps, weight_decay=weight_decay)
-
-def test_Adam():
+def test_simple_adam_step():
     results = {}
 
-    # Test Case 1: Default parameters
-    params1 = [torch.randn(2, 2, device='cuda', requires_grad=True)]
-    optimizer1 = Adam(params1)
-    results["test_case_1"] = optimizer1.defaults
+    # Basic test case
+    params = torch.tensor([[1.0, 2.0], [3.0, 4.0]], device='cuda', requires_grad=True)
+    grads = torch.tensor([[0.1, 0.2], [0.3, 0.4]], device='cuda')
+    lr = 0.001
+    eps = 1e-8
 
-    # Test Case 2: Custom learning rate
-    params2 = [torch.randn(2, 2, device='cuda', requires_grad=True)]
-    optimizer2 = Adam(params2, lr=0.01)
-    results["test_case_2"] = optimizer2.defaults
+    updated_params = simple_adam_step(params.clone(), grads, lr=lr, eps=eps, weight_decay=0)
 
-    # Test Case 3: Custom betas
-    params3 = [torch.randn(2, 2, device='cuda', requires_grad=True)]
-    optimizer3 = Adam(params3, betas=(0.85, 0.95))
-    results["test_case_3"] = optimizer3.defaults
+    # Check output shape and type
+    results['basic_shape_match'] = updated_params.shape == params.shape
+    results['basic_dtype_match'] = updated_params.dtype == params.dtype
+    results['basic_device_match'] = updated_params.device == params.device
 
-    # Test Case 4: Custom weight decay
-    params4 = [torch.randn(2, 2, device='cuda', requires_grad=True)]
-    optimizer4 = Adam(params4, weight_decay=0.01)
-    results["test_case_4"] = optimizer4.defaults
+    # Check calculation (simplified for demonstration)
+    expected_update = lr * torch.sign(grads)
+    # Using a loose check for demonstration
+    results['basic_calculation_approx_correct'] = torch.all(torch.abs((params - updated_params) - expected_update) < lr * 0.5).item()
+
+    # Test with weight decay
+    params_wd = torch.tensor([[1.0, 2.0], [3.0, 4.0]], device='cuda', requires_grad=True)
+    grads_wd = torch.tensor([[0.1, 0.2], [0.3, 0.4]], device='cuda')
+    weight_decay = 0.01
+
+    updated_params_wd = simple_adam_step(params_wd.clone(), grads_wd, lr=lr, eps=eps, weight_decay=weight_decay)
+
+    # Check output shape and type for weight decay case
+    results['wd_shape_match'] = updated_params_wd.shape == params_wd.shape
+    results['wd_dtype_match'] = updated_params_wd.dtype == params_wd.dtype
+    results['wd_device_match'] = updated_params_wd.device == params_wd.device
+
+    # Check that weight decay modified the update
+    results['wd_params_different_from_basic'] = not torch.allclose(updated_params_wd, updated_params)
 
     return results
 
-test_results = test_Adam()
+# Run the tests and print the results dictionary
+test_results = test_simple_adam_step()
+print(test_results)

@@ -1,14 +1,25 @@
 import torch
 
-def erf(input_tensor):
+def erf(input_tensor: torch.Tensor) -> torch.Tensor:
     """
-    计算输入张量的误差函数（error function）。
+    Computes the error function (erf) of the input tensor element-wise.
 
-    参数：
-    input_tensor (Tensor): 输入的张量。
+    The error function is a special function of sigmoid shape that occurs in probability, 
+    statistics, and partial differential equations. It is defined as:
+    
+    erf(x) = (2/√π) ∫[0 to x] exp(-t²) dt
 
-    返回：
-    Tensor: 输入张量中每个元素的误差函数值。
+    Args:
+        input_tensor (Tensor): Input tensor to compute error function values for.
+
+    Returns:
+        Tensor: A tensor of the same shape as input containing the error function 
+               values. Output values are in the range [-1, 1].
+
+    Examples:
+        >>> x = torch.tensor([0.0, 0.5, -0.5])
+        >>> erf(x)
+        tensor([0.0000, 0.5205, -0.5205])
     """
     return torch.special.erf(input_tensor)
 
@@ -16,18 +27,6 @@ def erf(input_tensor):
 
 
 import torch
-
-def erf(input_tensor):
-    """
-    计算输入张量的误差函数（error function）。
-
-    参数：
-    input_tensor (Tensor): 输入的张量。
-
-    返回：
-    Tensor: 输入张量中每个元素的误差函数值。
-    """
-    return torch.special.erf(input_tensor)
 
 def test_erf():
     results = {}
@@ -51,3 +50,4 @@ def test_erf():
     return results
 
 test_results = test_erf()
+print(test_results)

@@ -40,3 +40,4 @@ def test_log():
     return results
 
 test_results = test_log()
+print(test_results)

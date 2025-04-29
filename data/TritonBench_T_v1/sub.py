@@ -1,6 +1,7 @@
 import torch
+from typing import Optional
 
-def sub(input: torch.Tensor, other: torch.Tensor, *, alpha: float=1, out: torch.Tensor=None) -> torch.Tensor:
+def sub(input: torch.Tensor, other: torch.Tensor, alpha: float=1, out: torch.Tensor=None) -> torch.Tensor:
     """
     Subtracts the tensor 'other' scaled by 'alpha' from the tensor 'input'.
     
@@ -51,3 +52,4 @@ def test_sub():
     return results
 
 test_results = test_sub()
+print(test_results)

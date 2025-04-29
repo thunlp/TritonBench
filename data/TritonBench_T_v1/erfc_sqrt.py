@@ -1,5 +1,4 @@
 import torch
-import math
 from typing import Tuple
 
 def erfc_sqrt(input: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
@@ -23,25 +22,6 @@ def erfc_sqrt(input: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
 
 
 import torch
-import math
-from typing import Tuple
-
-def erfc_sqrt(input: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
-    """
-    Computes the complementary error function (erfc) and the square root of each element in the input tensor.
-
-    Args:
-        input (torch.Tensor): The input tensor for which the erfc and square root are computed.
-
-    Returns:
-        Tuple[torch.Tensor, torch.Tensor]: A tuple containing:
-            - erfc_result (torch.Tensor): The complementary error function results.
-            - sqrt_result (torch.Tensor): The square root results.
-    """
-    erfc_result = torch.erfc(input)
-    sqrt_result = torch.sqrt(input)
-    sqrt_result[input < 0] = float('nan')
-    return (erfc_result, sqrt_result)
 
 def test_erfc_sqrt():
     results = {}
@@ -65,3 +45,4 @@ def test_erfc_sqrt():
     return results
 
 test_results = test_erfc_sqrt()
+print(test_results)

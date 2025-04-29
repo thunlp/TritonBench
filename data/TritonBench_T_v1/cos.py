@@ -1,14 +1,14 @@
 import torch
 
-def cos(input_tensor):
+def cos(input_tensor: torch.Tensor) -> torch.Tensor:
     """
-    计算输入张量中每个元素的余弦值并返回一个新的张量。
+    Computes the cosine of each element in the input tensor and returns a new tensor.
     
-    参数:
-    input_tensor (torch.Tensor): 输入的张量。
+    Args:
+        input_tensor (torch.Tensor): The input tensor.
     
-    返回:
-    torch.Tensor: 计算每个元素的余弦值后的新张量。
+    Returns:
+        torch.Tensor: A new tensor containing the cosine values of each element.
     """
     return torch.cos(input_tensor)
 
@@ -39,3 +39,4 @@ def test_cos():
     return results
 
 test_results = test_cos()
+print(test_results)

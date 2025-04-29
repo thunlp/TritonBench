@@ -1,6 +1,11 @@
 import torch
+from typing import Optional
 
-def logsumexp(input, dim, keepdim=False, out=None):
+def logsumexp(
+        input: torch.Tensor, 
+        dim: int, 
+        keepdim: bool=False, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Computes the logarithm of the sum of exponentials of input elements along the specified dimension.
 
@@ -42,3 +47,4 @@ def test_logsumexp():
     return results
 
 test_results = test_logsumexp()
+print(test_results)
