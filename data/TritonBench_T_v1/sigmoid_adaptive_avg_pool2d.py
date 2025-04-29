@@ -23,6 +23,7 @@ def sigmoid_adaptive_avg_pool2d(
 
 import torch
 torch.manual_seed(42)
+
 def test_sigmoid_adaptive_avg_pool2d():
     # Initialize a dictionary to store the results of each test case
     results = {}
