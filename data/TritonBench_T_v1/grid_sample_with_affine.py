@@ -58,4 +58,5 @@ def test_grid_sample_with_affine():
 
     return results
 
-test_results = test_grid_sample_with_affine()print(test_results)
+test_results = test_grid_sample_with_affine()
+print(test_results)

@@ -1,4 +1,5 @@
 import torch
+import torch.nn.functional as F
 
 def cos_avg_pool1d(
         input: torch.Tensor, 
