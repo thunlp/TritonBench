@@ -18,7 +18,7 @@ def trunc(input: torch.Tensor, out: Optional[torch.Tensor]=None) -> torch.Tensor
 
 
 import torch
-
+torch.manual_seed(42)
 def test_trunc():
     results = {}
 

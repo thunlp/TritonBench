@@ -22,7 +22,7 @@ def zeta(
 
 
 import torch
-
+torch.manual_seed(42)
 def test_zeta():
     results = {}
 

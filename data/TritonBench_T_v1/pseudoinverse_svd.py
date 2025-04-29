@@ -35,6 +35,7 @@ def pseudoinverse_svd(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_pseudoinverse_svd():
     results = {}

@@ -29,6 +29,7 @@ def fused_fractional_max_pool2d_with_relu(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_fractional_max_pool2d_with_relu():
     results = {}

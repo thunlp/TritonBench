@@ -39,9 +39,12 @@ def conv2d_add(
 
 ##################################################################################################################################################
 
+import torch
+torch.manual_seed(42)
 
 def test_conv2d_add():
     results = {}
+
 
     # Test case 1: Basic convolution with bias, no addition
     input_tensor = torch.randn(1, 3, 5, 5, device='cuda')

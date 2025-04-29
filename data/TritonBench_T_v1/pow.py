@@ -22,6 +22,7 @@ def pow(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_pow():
     results = {}

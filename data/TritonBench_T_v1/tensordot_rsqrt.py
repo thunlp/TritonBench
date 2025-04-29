@@ -23,7 +23,7 @@ def tensordot_rsqrt(a: torch.Tensor, b: torch.Tensor,
 
 
 import torch
-
+torch.manual_seed(42)
 def test_tensordot_rsqrt():
     results = {}
 

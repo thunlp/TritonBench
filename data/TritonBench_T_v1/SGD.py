@@ -14,6 +14,9 @@ def SGD_step(parameters: torch.Tensor, grads: torch.Tensor, lr=0.1):
 
 ##################################################################################################################################################
 
+import torch
+torch.manual_seed(42)
+
 def test_SGD():
     results = {}
 

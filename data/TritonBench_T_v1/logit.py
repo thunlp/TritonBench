@@ -18,8 +18,8 @@ def logit(input: torch.Tensor, eps: float=None, out: torch.Tensor=None) -> torch
 
 ##################################################################################################################################################
 
-
 import torch
+torch.manual_seed(42)
 
 def test_logit():
     results = {}

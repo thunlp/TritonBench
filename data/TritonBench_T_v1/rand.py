@@ -30,6 +30,7 @@ def rand(*size: int,
 
 
 import torch
+torch.manual_seed(42)
 
 def test_rand():
     results = {}

@@ -29,6 +29,7 @@ def matrix_vector_dot(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_matrix_vector_dot():
     results = {}

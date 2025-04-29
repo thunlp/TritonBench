@@ -38,7 +38,7 @@ def softmax_mul(
 
 
 import torch
-
+torch.manual_seed(42)
 def test_softmax_mul():
     results = {}
     

@@ -37,6 +37,7 @@ def fused_mv_logsoftmax_dropout(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_mv_logsoftmax_dropout():
     results = {}

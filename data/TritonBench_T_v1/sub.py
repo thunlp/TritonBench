@@ -24,7 +24,7 @@ def sub(input: torch.Tensor, other: torch.Tensor, alpha: float=1, out: torch.Ten
 
 
 import torch
-
+torch.manual_seed(42)
 def test_sub():
     results = {}
 

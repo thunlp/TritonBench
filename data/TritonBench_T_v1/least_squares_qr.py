@@ -31,6 +31,7 @@ def least_squares_qr(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_least_squares_qr():
     results = {}

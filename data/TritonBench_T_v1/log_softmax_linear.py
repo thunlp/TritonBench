@@ -29,6 +29,7 @@ def log_softmax_linear(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_log_softmax_linear():
     results = {}

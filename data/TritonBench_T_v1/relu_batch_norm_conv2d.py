@@ -49,12 +49,13 @@ def relu_batch_norm_conv2d(
 
 
 import torch
+torch.manual_seed(42)
 
 # Define a simple test function
 def test_relu_batch_norm_conv2d():
     test_results = {}
 
-    torch.manual_seed(42)
+    
 
     # Define input tensor (batch_size, channels, height, width)
     input_tensor = torch.randn(4, 3, 32, 32)  # Example: 4 images, 3 channels, 32x32 resolution

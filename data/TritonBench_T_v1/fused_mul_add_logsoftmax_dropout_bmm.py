@@ -43,6 +43,7 @@ def fused_mul_add_logsoftmax_dropout_bmm(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_mul_add_logsoftmax_dropout_bmm():
     results = {}

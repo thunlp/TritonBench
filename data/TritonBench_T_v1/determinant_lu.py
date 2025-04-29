@@ -35,6 +35,7 @@ def determinant_lu(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_determinant_lu():
     results = {}

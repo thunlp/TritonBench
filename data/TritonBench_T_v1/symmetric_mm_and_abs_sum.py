@@ -20,7 +20,7 @@ def symmetric_mm_and_abs_sum(
 
 
 import torch
-
+torch.manual_seed(42)
 def test_symmetric_mm_and_abs_sum():
     results = {}
 

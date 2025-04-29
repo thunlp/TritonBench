@@ -41,6 +41,7 @@ def fused_bmm_rmsnorm_gelu_dropout_sub(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_bmm_rmsnorm_gelu_dropout_sub():
     results = {}

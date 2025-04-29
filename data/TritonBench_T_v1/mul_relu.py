@@ -30,6 +30,7 @@ def mul_relu(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_mul_relu():
     results = {}

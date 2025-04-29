@@ -35,6 +35,7 @@ def fused_avg_pool2d_cosine_similarity(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_avg_pool2d_cosine_similarity():
     results = {}

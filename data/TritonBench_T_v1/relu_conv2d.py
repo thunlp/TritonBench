@@ -33,11 +33,10 @@ def relu_conv2d(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_relu_conv2d():
     results = {}
-
-    torch.manual_seed(42) # Use manual_seed for reproducibility across devices
     
     # Test case 1: Basic test with default parameters
     input1 = torch.randn(1, 3, 5, 5, device='cuda')

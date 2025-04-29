@@ -23,6 +23,7 @@ def cholesky_solve(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_cholesky_solve():
     results = {}

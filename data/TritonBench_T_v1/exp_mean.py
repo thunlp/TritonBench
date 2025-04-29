@@ -29,6 +29,7 @@ def exp_mean(input: torch.Tensor, dim=None, keepdim=False, dtype=None, out=None)
 
 
 import torch
+torch.manual_seed(42)
 
 def test_exp_mean():
     results = {}

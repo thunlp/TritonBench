@@ -32,6 +32,7 @@ def fused_gather_masked_fill(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_gather_masked_fill():
     results = {}

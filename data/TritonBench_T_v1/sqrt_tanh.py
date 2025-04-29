@@ -25,6 +25,7 @@ def sqrt_tanh(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_sqrt_tanh():
     results = {}

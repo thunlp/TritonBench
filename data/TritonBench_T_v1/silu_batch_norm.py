@@ -34,12 +34,12 @@ def silu_batch_norm(
 
 
 import torch
-import torch.nn.functional as F
+torch.manual_seed(42)
 
 def test_silu_batch_norm():
     results = {}
     
-    torch.manual_seed(42)
+    
     # Test case 1: Basic functionality with training=False
     input_tensor = torch.randn(3, 5, device='cuda')
     running_mean = torch.zeros(5, device='cuda')

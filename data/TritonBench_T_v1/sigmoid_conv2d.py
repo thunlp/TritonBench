@@ -37,11 +37,11 @@ def sigmoid_conv2d(
 
 
 import torch
-
+torch.manual_seed(42)
 def test_sigmoid_conv2d():
     results = {}
 
-    torch.manual_seed(42)
+    
 
     # Test case 1: Basic test with no bias, stride, padding, dilation, or groups
     input1 = torch.randn(1, 3, 5, 5, device='cuda')

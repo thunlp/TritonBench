@@ -40,6 +40,8 @@ def dropout_relu_batch_norm_conv2d(
 
 ##################################################################################################################################################
 
+import torch
+torch.manual_seed(42)
 
 def test_dropout_relu_batch_norm_conv2d():
     # Initialize test results dictionary

@@ -38,6 +38,7 @@ def leaky_relu_conv2d(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_leaky_relu_conv2d():
     results = {}

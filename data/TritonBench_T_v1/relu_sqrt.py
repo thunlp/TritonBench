@@ -40,6 +40,7 @@ def relu_sqrt(input: torch.Tensor, inplace: bool=False, out: torch.Tensor=None) 
 
 
 import torch
+torch.manual_seed(42)
 
 def test_relu_sqrt():
     results = {}

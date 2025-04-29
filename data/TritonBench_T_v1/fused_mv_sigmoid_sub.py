@@ -33,6 +33,7 @@ def fused_mv_sigmoid_sub(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_mv_sigmoid_sub():
     results = {}

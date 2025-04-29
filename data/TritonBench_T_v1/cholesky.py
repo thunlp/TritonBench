@@ -31,10 +31,11 @@ def cholesky(A: torch.Tensor, upper: bool=False, out: torch.Tensor=None) -> torc
 
 
 import torch
+torch.manual_seed(42)
 
 def test_cholesky():
     results = {}
-    
+
     # Test case 1: Real symmetric positive-definite matrix, lower triangular
     A1 = torch.randn(2, 2, device='cuda', dtype=torch.float64)
     A1 = A1 @ A1.T + torch.eye(2, device='cuda', dtype=torch.float64)

@@ -1,17 +1,20 @@
 import torch
+from typing import Optional
 
-def mul(input, other, out=None):
+def mul(input: torch.Tensor, 
+        other: torch.Tensor, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Multiplies the input tensor by another tensor or a number, supporting broadcasting to a common shape,
     type promotion, and integer, float, and complex inputs.
 
     Parameters:
-    - input (Tensor): The input tensor.
-    - other (Tensor or Number): The tensor or number to multiply input by.
-    - out (Tensor, optional): The output tensor.
+    - input (torch.Tensor): The input tensor.
+    - other (torch.Tensor or Number): The tensor or number to multiply input by.
+    - out (torch.Tensor, optional): The output tensor.
 
     Returns:
-    - Tensor: The result of the multiplication.
+    - torch.Tensor: The result of the multiplication.
     """
     return torch.mul(input, other, out=out)
 
@@ -19,6 +22,7 @@ def mul(input, other, out=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_mul():
     results = {}

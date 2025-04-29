@@ -35,11 +35,11 @@ def sigmoid_batch_norm(
 
 
 import torch
-
+torch.manual_seed(42)
 def test_sigmoid_batch_norm():
     results = {}
 
-    torch.manual_seed(42)
+    
 
     # Test case 1: Basic test with default parameters
     input_tensor = torch.randn(10, 5, device='cuda')

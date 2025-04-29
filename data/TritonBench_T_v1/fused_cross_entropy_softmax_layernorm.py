@@ -40,6 +40,7 @@ def fused_cross_entropy_softmax_layernorm(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_cross_entropy_softmax_layernorm():
     results = {}

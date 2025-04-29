@@ -1,46 +1,42 @@
 import torch
 import torch.nn.functional as F
 
-def fused_bmm_rmsnorm_gelu_dropout(
+def fused_bmm_dropout_gelu(
         input1: torch.Tensor, 
         input2: torch.Tensor, 
-        other: torch.Tensor, 
-        normalized_shape: tuple[int], 
-        dropout_p: float = 0.5, 
+        p: float = 0.5, 
         training: bool = True, 
+        inplace: bool = False, 
         approximate: str = 'none', 
-        eps: float = 1e-05, 
-        out: torch.Tensor = None) -> torch.Tensor:
+        *, out: torch.Tensor = None) -> torch.Tensor:
     """
-    Performs a fused operation combining batch matrix multiplication, RMS normalization, GELU activation, dropout, and subtraction.
+    Performs a fused operation combining batch matrix multiplication, dropout, and GELU activation.
 
     Args:
-        input1 (torch.Tensor): The first input tensor.
-        input2 (torch.Tensor): The second input tensor.
-        other (torch.Tensor): The third input tensor to be subtracted from the output.
-        normalized_shape (tuple[int]): The shape of the RMS normalization.
-        dropout_p (float, optional): The dropout probability. Default: 0.5.
-        training (bool, optional): Whether to apply dropout during training. Default: True.
-        approximate (str, optional): The approximate method for GELU. Default: 'none'.
-        eps (float, optional): The epsilon value for RMS normalization. Default: 1e-05.
-        out (torch.Tensor, optional): The output tensor.
+        input1 (Tensor): First input tensor for batch matrix multiplication, of shape (B, N, M).
+        input2 (Tensor): Second input tensor for batch matrix multiplication, of shape (B, M, P).
+        p (float, optional): Probability of an element to be zeroed in the dropout layer. Default: 0.5.
+        training (bool, optional): Apply dropout if True. Default: True.
+        inplace (bool, optional): If True, will perform the dropout operation in-place. Default: False.
+        approximate (str, optional): The approximation to use for GELU. Default: 'none'. Can be 'none' or 'tanh'.
+        out (Tensor, optional): Output tensor to store the result. If None, a new tensor is returned.
 
     Returns:
-        torch.Tensor: The output tensor after performing the fused operation.
+        Tensor: The output tensor after performing batch matrix multiplication, dropout, and GELU activation.
     """
-    z1 = torch.bmm(input1, input2)
-    rms_norm = F.rms_norm(z1, normalized_shape=(normalized_shape,), eps=eps)
-    gelu_out = F.gelu(rms_norm, approximate=approximate)
-    output = F.dropout(gelu_out, p=dropout_p, training=training) - other
+    Z = torch.bmm(input1, input2)
+    D = F.dropout(Z, p=p, training=training, inplace=inplace)
+    O = F.gelu(D, approximate=approximate)
     if out is not None:
-        out.copy_(output)
+        out.copy_(O)
         return out
-    return output
+    return O
 
 ##################################################################################################################################################
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_bmm_dropout_gelu():
     results = {}

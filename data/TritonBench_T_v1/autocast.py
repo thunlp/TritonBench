@@ -23,6 +23,7 @@ def autocast(device_type: torch.device.type) -> torch.Tensor:
 
 
 import torch
+torch.manual_seed(42)
 
 def test_autocast():
     results = {}

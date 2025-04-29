@@ -36,6 +36,7 @@ def grid_sample(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_grid_sample():
     results = {}

@@ -29,6 +29,7 @@ def matrix_multiply_and_row_dot(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_matrix_multiply_and_row_dot():
     results = {}

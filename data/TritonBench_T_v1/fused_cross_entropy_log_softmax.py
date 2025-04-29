@@ -32,7 +32,7 @@ def fused_cross_entropy_log_softmax(
 
 
 import torch
-import torch.nn.functional as F
+torch.manual_seed(42)
 
 def test_fused_cross_entropy_log_softmax():
     results = {}

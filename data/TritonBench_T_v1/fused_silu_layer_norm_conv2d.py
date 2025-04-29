@@ -38,6 +38,7 @@ def fused_silu_layer_norm_conv2d(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_silu_layer_norm_conv2d():
     results = {}

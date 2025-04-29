@@ -31,6 +31,9 @@ def dynamic_custom(
 
 ##################################################################################################################################################
 
+import torch
+torch.manual_seed(42)
+
 def test_quantize_dynamic():
     # Define a simple model
     class SimpleModel(nn.Module):

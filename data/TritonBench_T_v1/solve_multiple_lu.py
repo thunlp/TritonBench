@@ -33,7 +33,7 @@ def solve_multiple_lu(
 
 
 import torch
-
+torch.manual_seed(42)
 def test_solve_multiple_lu():
     results = {}
 

@@ -26,6 +26,7 @@ def symmetric_matrix_vector_norm(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_symmetric_matrix_vector_norm():
     results = {}

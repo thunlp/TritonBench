@@ -34,7 +34,7 @@ def sub_gelu(input: torch.Tensor,
 
 
 import torch
-
+torch.manual_seed(42)
 def test_sub_gelu():
     results = {}
 

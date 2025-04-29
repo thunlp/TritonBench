@@ -32,6 +32,7 @@ def elu_linear(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_elu_linear():
     results = {}

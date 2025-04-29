@@ -38,6 +38,7 @@ def fused_pairwise_distance_adaptive_avg_pool2d(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_pairwise_distance_adaptive_avg_pool2d():
     results = {}

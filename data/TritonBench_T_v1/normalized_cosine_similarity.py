@@ -26,6 +26,7 @@ def normalized_cosine_similarity(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_normalized_cosine_similarity():
     results = {}

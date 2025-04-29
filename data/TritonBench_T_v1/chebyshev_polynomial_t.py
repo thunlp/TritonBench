@@ -22,6 +22,7 @@ def chebyshev_polynomial_t(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_chebyshev_polynomial_t():
     results = {}

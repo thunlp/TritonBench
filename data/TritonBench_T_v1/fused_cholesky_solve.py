@@ -20,6 +20,7 @@ def fused_cholesky_solve(A: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_cholesky_solve():
     results = {}

@@ -28,6 +28,7 @@ def adaptive_avg_pool2d(input: torch.Tensor, output_size: Union[int, Tuple[int, 
 
 
 import torch
+torch.manual_seed(42)
 
 def test_adaptive_avg_pool2d():
     results = {}

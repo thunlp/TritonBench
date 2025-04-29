@@ -26,6 +26,8 @@ def dropout_sigmoid_linear(input: torch.Tensor, weight: torch.Tensor, bias=None,
 
 
 import torch
+torch.manual_seed(42)
+
 
 def test_dropout_sigmoid_linear():
     results = {}

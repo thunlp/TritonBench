@@ -37,8 +37,7 @@ def fused_masked_select_add_gelu(
 
 
 import torch
-import torch.nn.functional as F
-
+torch.manual_seed(42)
 
 def test_fused_masked_select_add_gelu():
     results = {}

@@ -33,6 +33,7 @@ def pixel_shuffle_conv2d(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_pixel_shuffle_conv2d():
     results = {}

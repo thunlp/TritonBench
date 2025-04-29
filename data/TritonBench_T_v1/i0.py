@@ -17,6 +17,7 @@ def i0(input_tensor: torch.Tensor, out: Optional[torch.Tensor]=None) -> torch.Te
 
 
 import torch
+torch.manual_seed(42)
 
 def test_i0():
     results = {}

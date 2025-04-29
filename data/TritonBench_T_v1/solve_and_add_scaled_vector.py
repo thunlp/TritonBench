@@ -26,7 +26,7 @@ def solve_and_add_scaled_vector(
 
 
 import torch
-
+torch.manual_seed(42)
 def test_solve_and_add_scaled_vector():
     results = {}
 

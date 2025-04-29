@@ -33,6 +33,7 @@ def sqrt_exp(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_sqrt_exp():
     results = {}

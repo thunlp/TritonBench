@@ -22,7 +22,7 @@ def sigmoid(input: torch.Tensor, out: Optional[torch.Tensor]=None) -> torch.Tens
 
 
 import torch
-
+torch.manual_seed(42)
 def test_sigmoid():
     results = {}
 

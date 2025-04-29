@@ -5,7 +5,7 @@ def svd(A, full_matrices=True):
     Compute the Singular Value Decomposition (SVD) of a tensor.
     
     Args:
-        A (Tensor): The input tensor of shape (*, m, n), where * represents zero or more batch dimensions.
+        A (torch.Tensor): The input tensor of shape (*, m, n), where * represents zero or more batch dimensions.
         full_matrices (bool, optional): Whether to compute the full or reduced SVD. Default is True.
         
     Returns:
@@ -21,6 +21,7 @@ def svd(A, full_matrices=True):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_svd():
     results = {}

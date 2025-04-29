@@ -28,6 +28,7 @@ def ones_like(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_ones_like():
     results = {}

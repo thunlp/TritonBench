@@ -28,6 +28,8 @@ def cos_avg_pool1d(
 
 
 import torch
+torch.manual_seed(42)
+
 
 def test_cos_avg_pool1d():
     results = {}

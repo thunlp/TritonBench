@@ -33,6 +33,7 @@ def low_rank_svd_approximation(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_low_rank_svd_approximation():
     results = {}

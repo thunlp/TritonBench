@@ -35,6 +35,7 @@ def addmm(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_addmm():
     results = {}

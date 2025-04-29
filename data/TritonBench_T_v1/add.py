@@ -23,6 +23,7 @@ def add(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_add():
     results = {}

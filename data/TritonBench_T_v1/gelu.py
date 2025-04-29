@@ -18,6 +18,7 @@ def gelu(input: torch.Tensor, approximate: str='none') -> torch.Tensor:
 
 
 import torch
+torch.manual_seed(42)
 
 def test_gelu():
     results = {}

@@ -44,6 +44,7 @@ def fused_pairwise_distance_normalize(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_pairwise_distance_normalize():
     results = {}

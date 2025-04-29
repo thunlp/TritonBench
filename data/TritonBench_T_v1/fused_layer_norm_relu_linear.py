@@ -46,6 +46,7 @@ def fused_layer_norm_relu_linear(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_layer_norm_relu_linear():
     results = {}

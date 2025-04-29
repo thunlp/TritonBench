@@ -36,6 +36,7 @@ def normalize_pairwise_distance(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_normalize_pairwise_distance():
     results = {}

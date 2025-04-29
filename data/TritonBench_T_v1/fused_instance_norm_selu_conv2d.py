@@ -39,6 +39,7 @@ def fused_instance_norm_selu_conv2d(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_instance_norm_selu_conv2d():
     results = {}

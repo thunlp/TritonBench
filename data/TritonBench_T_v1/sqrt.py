@@ -19,7 +19,7 @@ def sqrt(
 
 
 import torch
-
+torch.manual_seed(42)
 def test_sqrt():
     results = {}
 

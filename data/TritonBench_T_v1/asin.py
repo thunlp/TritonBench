@@ -18,6 +18,7 @@ def asin(input_tensor: torch.Tensor) -> torch.Tensor:
 
 
 import torch
+torch.manual_seed(42)
 
 def test_asin():
     results = {}

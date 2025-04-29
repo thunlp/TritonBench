@@ -29,6 +29,7 @@ def rad2deg_sqrt(input: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
 
 
 import torch
+torch.manual_seed(42)
 
 def test_rad2deg_sqrt():
     results = {}

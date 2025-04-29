@@ -32,7 +32,7 @@ def tanh_linear(input: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor=No
 
 
 import torch
-
+torch.manual_seed(42)
 def test_tanh_linear():
     results = {}
 

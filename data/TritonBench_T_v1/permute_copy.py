@@ -19,6 +19,7 @@ def permute_copy(input: torch.Tensor, dims: list) -> torch.Tensor:
 
 
 import torch
+torch.manual_seed(42)
 
 def test_permute_copy():
     results = {}

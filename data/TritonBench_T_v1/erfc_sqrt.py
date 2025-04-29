@@ -22,6 +22,7 @@ def erfc_sqrt(input: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
 
 
 import torch
+torch.manual_seed(42)
 
 def test_erfc_sqrt():
     results = {}

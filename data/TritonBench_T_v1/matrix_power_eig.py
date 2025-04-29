@@ -32,6 +32,7 @@ def matrix_power_eig(A: torch.Tensor, k: float, *, out: torch.Tensor=None) -> to
 
 
 import torch
+torch.manual_seed(42)
 
 def test_matrix_power_eig():
     results = {}

@@ -30,6 +30,7 @@ def mul_sub(input: torch.Tensor,
 
 
 import torch
+torch.manual_seed(42)
 
 def test_mul_sub():
     results = {}

@@ -18,6 +18,7 @@ def argmax(input_tensor, dim, keepdim=False):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_argmax():
     results = {}

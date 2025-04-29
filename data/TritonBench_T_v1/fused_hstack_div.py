@@ -33,6 +33,7 @@ def fused_hstack_div(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_hstack_div():
     results = {}

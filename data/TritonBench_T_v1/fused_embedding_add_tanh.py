@@ -40,6 +40,7 @@ def fused_embedding_add_tanh(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_embedding_add_tanh():
     results = {}

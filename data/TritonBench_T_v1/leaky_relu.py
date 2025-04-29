@@ -19,6 +19,7 @@ def leaky_relu(input, negative_slope=0.01, inplace=False):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_leaky_relu():
     results = {}

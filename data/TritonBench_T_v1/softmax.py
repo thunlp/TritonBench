@@ -23,7 +23,7 @@ def softmax(input: torch.Tensor, dim: int, dtype: torch.dtype=None) -> torch.Ten
 
 
 import torch
-
+torch.manual_seed(42)
 def test_softmax():
     results = {}
     

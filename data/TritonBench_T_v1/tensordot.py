@@ -22,7 +22,7 @@ def tensordot(a: torch.Tensor, b: torch.Tensor, dims: Union[int, Tuple[List[int]
 
 
 import torch
-
+torch.manual_seed(42)
 def test_tensordot():
     results = {}
     

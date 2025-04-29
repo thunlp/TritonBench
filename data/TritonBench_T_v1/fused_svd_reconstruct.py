@@ -18,6 +18,7 @@ def fused_svd_reconstruct(A: torch.Tensor) -> torch.Tensor:
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_svd_reconstruct():
     results = {}

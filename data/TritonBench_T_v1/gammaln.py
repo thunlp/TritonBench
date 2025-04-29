@@ -17,6 +17,7 @@ def gammaln(input: torch.Tensor, out: torch.Tensor=None) -> torch.Tensor:
 
 
 import torch
+torch.manual_seed(42)
 
 def test_gammaln():
     results = {}

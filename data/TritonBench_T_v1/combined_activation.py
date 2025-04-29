@@ -37,6 +37,7 @@ def combined_activation(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_combined_activation():
     results = {}

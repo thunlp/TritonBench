@@ -37,6 +37,7 @@ def fused_add_mul_groupnorm(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_add_mul_groupnorm():
     results = {}

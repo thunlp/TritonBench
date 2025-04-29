@@ -30,7 +30,7 @@ def softplus_linear(
 
 
 import torch
-
+torch.manual_seed(42)
 def test_softplus_linear():
     results = {}
 

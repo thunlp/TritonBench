@@ -24,6 +24,7 @@ def log_tanh(input: torch.Tensor, out: Optional[torch.Tensor]=None) -> torch.Ten
 
 
 import torch
+torch.manual_seed(42)
 
 def test_log_tanh():
     results = {}

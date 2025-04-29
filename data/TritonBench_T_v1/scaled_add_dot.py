@@ -21,6 +21,8 @@ def scaled_add_dot(y: torch.Tensor, x: torch.Tensor, alpha: float) -> torch.Tens
 
 
 import torch
+torch.manual_seed(42)
+
 
 def test_scaled_add_dot():
     results = {}

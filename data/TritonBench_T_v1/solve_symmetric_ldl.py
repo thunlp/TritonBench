@@ -48,7 +48,7 @@ def solve_symmetric_ldl(
 
 
 import torch
-
+torch.manual_seed(42)
 def test_solve_symmetric_ldl():
     results = {}
 

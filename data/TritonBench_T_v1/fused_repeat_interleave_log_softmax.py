@@ -33,6 +33,7 @@ def fused_repeat_interleave_log_softmax(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_repeat_interleave_log_softmax():
     results = {}

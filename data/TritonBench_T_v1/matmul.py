@@ -19,6 +19,7 @@ def matmul(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_matmul():
     results = {}

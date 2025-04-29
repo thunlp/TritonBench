@@ -24,6 +24,7 @@ def batch_norm(input, running_mean, running_var, weight=None, bias=None, trainin
 
 
 import torch
+torch.manual_seed(42)
 
 def test_batch_norm():
     results = {}

@@ -27,7 +27,7 @@ def spectral_norm_eig(
 
 
 import torch
-
+torch.manual_seed(42)
 def test_spectral_norm_eig():
     results = {}
 

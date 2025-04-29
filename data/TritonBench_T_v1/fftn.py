@@ -22,6 +22,8 @@ def fftn(input: torch.Tensor, s=None, dim=None, norm=None, out=None) -> torch.Te
 
 
 import torch
+torch.manual_seed(42)
+
 
 def test_fftn():
     results = {}

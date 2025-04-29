@@ -22,6 +22,7 @@ def bitwise_and(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_bitwise_and():
     results = {}

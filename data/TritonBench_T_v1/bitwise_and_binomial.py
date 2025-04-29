@@ -34,6 +34,7 @@ def bitwise_and_binomial(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_bitwise_and_binomial():
     results = {}

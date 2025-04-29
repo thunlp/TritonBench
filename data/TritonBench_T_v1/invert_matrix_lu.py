@@ -34,6 +34,7 @@ def invert_matrix_lu(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_invert_matrix_lu():
     results = {}

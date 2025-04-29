@@ -20,6 +20,7 @@ def scaled_add_norm(y: torch.Tensor, x: torch.Tensor, alpha: float) -> torch.Ten
 
 
 import torch
+torch.manual_seed(42)
 
 def test_scaled_add_norm():
     results = {}

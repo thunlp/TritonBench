@@ -46,11 +46,12 @@ def relu_max_pool2d_conv2d(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_relu_max_pool2d_conv2d():
     results = {}
 
-    torch.manual_seed(42)
+    
     
     # Test case 1: Basic test with default parameters
     input = torch.randn(1, 3, 8, 8, device='cuda')

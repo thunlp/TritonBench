@@ -33,7 +33,7 @@ def signbit_bitwise_and(
 
 
 import torch
-
+torch.manual_seed(42)
 def test_signbit_bitwise_and():
     results = {}
 

@@ -30,6 +30,7 @@ def determinant_via_qr(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_determinant_via_qr():
     results = {}

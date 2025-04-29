@@ -30,6 +30,7 @@ def cos_signbit(input: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
 
 
 import torch
+torch.manual_seed(42)
 
 def test_cos_signbit():
     results = {}

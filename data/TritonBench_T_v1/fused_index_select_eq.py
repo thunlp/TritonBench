@@ -31,6 +31,7 @@ def fused_index_select_eq(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_index_select_eq():
     results = {}

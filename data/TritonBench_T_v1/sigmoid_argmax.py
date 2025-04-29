@@ -21,7 +21,7 @@ def sigmoid_argmax(input: torch.Tensor, dim: Optional[int]=None, keepdim: bool=F
 
 
 import torch
-
+torch.manual_seed(42)
 def test_sigmoid_argmax():
     results = {}
 

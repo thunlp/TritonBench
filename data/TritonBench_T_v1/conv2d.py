@@ -36,6 +36,7 @@ def conv2d(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_conv2d():
     results = {}

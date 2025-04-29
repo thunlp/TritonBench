@@ -28,6 +28,7 @@ def fused_hardshrink_dropout(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_hardshrink_dropout():
     results = {}

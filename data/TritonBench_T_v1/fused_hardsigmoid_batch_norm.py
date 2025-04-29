@@ -37,6 +37,7 @@ def fused_hardsigmoid_batch_norm(
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_hardsigmoid_batch_norm():
     results = {}

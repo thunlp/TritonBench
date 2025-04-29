@@ -21,6 +21,7 @@ def ifftshift(input: torch.Tensor, dim: Optional[int]=None) -> torch.Tensor:
 
 
 import torch
+torch.manual_seed(42)
 
 def test_ifftshift():
     results = {}
