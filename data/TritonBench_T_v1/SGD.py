@@ -1,78 +1,54 @@
 import torch
-import torch.nn as nn
 
-def SGD(model, input, target, loss_fn, lr=0.1, momentum=0.9):
+def SGD_step(parameters: torch.Tensor, grads: torch.Tensor, lr=0.1):
     """
     Performs a single step of SGD optimization.
-
-    Args:
-    - model (torch.nn.Module): The model to optimize.
-    - input (torch.Tensor): The input tensor for the model.
-    - target (torch.Tensor): The target tensor.
-    - loss_fn (callable): The loss function.
-    - lr (float, optional): The learning rate for the optimizer. Default is 0.1.
-    - momentum (float, optional): The momentum for the optimizer. Default is 0.9.
-
-    Returns:
-    - loss (torch.Tensor): The computed loss for the step.
+    Updates parameters in-place.
     """
-    optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum)
-    optimizer.zero_grad()
-    loss = loss_fn(model(input), target)
-    loss.backward()
-    optimizer.step()
-    return loss
+    with torch.no_grad():
+        for param, grad in zip(parameters, grads):
+            if grad is None:
+                continue
+            # Update rule: param = param - lr * grad
+            param.add_(grad, alpha=-lr)
 
 ##################################################################################################################################################
 
-
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-
-class SimpleModel(nn.Module):
-    def __init__(self):
-        super(SimpleModel, self).__init__()
-        self.fc = nn.Linear(10, 1)
-
-    def forward(self, x):
-        return self.fc(x)
+torch.manual_seed(42)
 
 def test_SGD():
     results = {}
-    
+
     # Test case 1: Basic functionality
-    model = SimpleModel().cuda()
-    input = torch.randn(5, 10).cuda()
-    target = torch.randn(5, 1).cuda()
-    loss_fn = nn.MSELoss()
-    loss = SGD(model, input, target, loss_fn)
-    results["test_case_1"] = loss.item()
+    params1 = [torch.ones(2, 2, requires_grad=True, device='cuda'), torch.zeros(3, requires_grad=True, device='cuda')]
+    grads1 = [torch.full_like(params1[0], 2.0), torch.full_like(params1[1], -1.0)]
+    expected_params1 = [params1[0].clone() - 0.1 * grads1[0], params1[1].clone() - 0.1 * grads1[1]]
+    SGD_step(params1, grads1, lr=0.1)
+    results["test_case_1_param0"] = params1[0]
+    results["test_case_1_param1"] = params1[1]
+
 
     # Test case 2: Different learning rate
-    model = SimpleModel().cuda()
-    input = torch.randn(5, 10).cuda()
-    target = torch.randn(5, 1).cuda()
-    loss_fn = nn.MSELoss()
-    loss = SGD(model, input, target, loss_fn, lr=0.01)
-    results["test_case_2"] = loss.item()
+    params2 = [torch.ones(2, 2, requires_grad=True, device='cuda'), torch.zeros(3, requires_grad=True, device='cuda')]
+    grads2 = [torch.full_like(params2[0], 2.0), torch.full_like(params2[1], -1.0)]
+    lr2 = 0.01
+    expected_params2 = [params2[0].clone() - lr2 * grads2[0], params2[1].clone() - lr2 * grads2[1]]
+    SGD_step(params2, grads2, lr=lr2)
+    results["test_case_2_param0"] = params2[0]
+    results["test_case_2_param1"] = params2[1]
 
-    # Test case 3: Different momentum
-    model = SimpleModel().cuda()
-    input = torch.randn(5, 10).cuda()
-    target = torch.randn(5, 1).cuda()
-    loss_fn = nn.MSELoss()
-    loss = SGD(model, input, target, loss_fn, momentum=0.5)
-    results["test_case_3"] = loss.item()
+    # Test case 3: Gradient is None for one parameter
+    params3 = [torch.ones(2, 2, requires_grad=True, device='cuda'), torch.zeros(3, requires_grad=True, device='cuda')]
+    grads3 = [torch.full_like(params3[0], 2.0), None] # Grad for second param is None
+    expected_params3_0 = params3[0].clone() - 0.1 * grads3[0]
+    expected_params3_1 = params3[1].clone() # Should remain unchanged
+    SGD_step(params3, grads3, lr=0.1)
+    results["test_case_3_param0"] = params3[0]
+    results["test_case_3_param1"] = params3[1] # Should be tensor of zeros
 
-    # Test case 4: Different loss function
-    model = SimpleModel().cuda()
-    input = torch.randn(5, 10).cuda()
-    target = torch.randint(0, 2, (5, 1)).float().cuda()
-    loss_fn = nn.BCEWithLogitsLoss()
-    loss = SGD(model, input, target, loss_fn)
-    results["test_case_4"] = loss.item()
 
     return results
 
 test_results = test_SGD()
+print(test_results)

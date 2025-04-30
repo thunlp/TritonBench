@@ -1,6 +1,13 @@
 import torch
 
-def add_mean(input, other, dim=None, alpha=1, keepdim=False, dtype=None, out=None):
+def add_mean(
+        input: torch.Tensor, 
+        other: torch.Tensor, 
+        dim: int = None, 
+        alpha: float = 1, 
+        keepdim: bool = False, 
+        dtype: torch.dtype = None, 
+        out: torch.Tensor = None) -> torch.Tensor:
     """
     Adds the `other` tensor, scaled by `alpha`, to the `input` tensor and computes the mean value
     along the specified dimension(s).
@@ -27,6 +34,7 @@ def add_mean(input, other, dim=None, alpha=1, keepdim=False, dtype=None, out=Non
 
 
 import torch
+torch.manual_seed(42)
 
 def test_add_mean():
     results = {}
@@ -54,3 +62,4 @@ def test_add_mean():
     return results
 
 test_results = test_add_mean()
+print(test_results)

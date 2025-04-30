@@ -1,6 +1,8 @@
 import torch
-
-def spectral_norm_eig(A, *, out=None):
+from typing import Optional
+def spectral_norm_eig(
+        A: torch.Tensor,
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Computes the spectral norm (operator norm induced by the Euclidean vector norm)
     of a square matrix using its eigenvalues.
@@ -25,7 +27,7 @@ def spectral_norm_eig(A, *, out=None):
 
 
 import torch
-
+torch.manual_seed(42)
 def test_spectral_norm_eig():
     results = {}
 
@@ -49,3 +51,4 @@ def test_spectral_norm_eig():
     return results
 
 test_results = test_spectral_norm_eig()
+print(test_results)

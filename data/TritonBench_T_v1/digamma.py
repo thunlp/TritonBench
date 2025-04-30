@@ -1,14 +1,14 @@
 import torch
 
-def digamma(input_tensor):
+def digamma(input_tensor: torch.Tensor) -> torch.Tensor:
     """
     Computes the digamma function (logarithmic derivative of the gamma function) for the input tensor.
 
     Args:
-    - input_tensor (torch.Tensor): The tensor on which to compute the digamma function.
+        input_tensor (torch.Tensor): The tensor on which to compute the digamma function.
 
     Returns:
-    - torch.Tensor: A tensor containing the digamma values.
+        torch.Tensor: A tensor containing the digamma values.
     """
     return torch.special.digamma(input_tensor)
 
@@ -16,18 +16,7 @@ def digamma(input_tensor):
 
 
 import torch
-
-def digamma(input_tensor):
-    """
-    Computes the digamma function (logarithmic derivative of the gamma function) for the input tensor.
-
-    Args:
-    - input_tensor (torch.Tensor): The tensor on which to compute the digamma function.
-
-    Returns:
-    - torch.Tensor: A tensor containing the digamma values.
-    """
-    return torch.special.digamma(input_tensor)
+torch.manual_seed(42)
 
 def test_digamma():
     results = {}
@@ -51,3 +40,4 @@ def test_digamma():
     return results
 
 test_results = test_digamma()
+print(test_results)

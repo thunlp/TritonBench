@@ -1,12 +1,18 @@
 import torch
-
-def ones_like(input, dtype=None, layout=None, device=None, requires_grad=False, memory_format=torch.preserve_format):
+from typing import Optional
+def ones_like(
+        input: torch.Tensor, 
+        dtype: Optional[torch.dtype]=None, 
+        layout: Optional[torch.layout]=None, 
+        device: Optional[torch.device]=None, 
+        requires_grad: bool=False, 
+        memory_format: torch.memory_format=torch.preserve_format) -> torch.Tensor:
     """
     Returns a tensor filled with the scalar value 1, with the same size as the input tensor.
     It mirrors the properties of the input tensor unless specified otherwise.
 
     Args:
-        input (Tensor): The input tensor whose shape determines the output tensor's size.
+        input (torch.Tensor): The input tensor whose shape determines the output tensor's size.
         dtype (torch.dtype, optional): The desired data type of the returned tensor. Default is None.
         layout (torch.layout, optional): The desired layout of the returned tensor. Default is None.
         device (torch.device, optional): The desired device of the returned tensor. Default is None.
@@ -14,14 +20,15 @@ def ones_like(input, dtype=None, layout=None, device=None, requires_grad=False, 
         memory_format (torch.memory_format, optional): The desired memory format of the returned tensor. Default is torch.preserve_format.
 
     Returns:
-        Tensor: A tensor of the same size as the input, filled with ones.
+        torch.Tensor: A tensor of the same size as the input, filled with ones.
     """
-    return torch.ones(input.size())
+    return torch.ones(input.size(), dtype=dtype, layout=layout, device=device, requires_grad=requires_grad, memory_format=memory_format)
 
 ##################################################################################################################################################
 
 
 import torch
+torch.manual_seed(42)
 
 def test_ones_like():
     results = {}
@@ -45,3 +52,4 @@ def test_ones_like():
     return results
 
 test_results = test_ones_like()
+print(test_results)

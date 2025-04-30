@@ -1,6 +1,6 @@
 import torch
 
-def exp_mean(input, dim=None, keepdim=False, dtype=None, out=None):
+def exp_mean(input: torch.Tensor, dim=None, keepdim=False, dtype=None, out=None) -> torch.Tensor:
     """
     Apply the exponential function to each element in the input tensor
     and compute the mean value of the result along the specified dimension
@@ -17,13 +17,19 @@ def exp_mean(input, dim=None, keepdim=False, dtype=None, out=None):
     Returns:
         Tensor: The mean of the exponentiated values.
     """
-    exp_input = torch.exp(input)
-    return exp_input.mean(dim=dim, keepdim=keepdim)
+    if dtype is not None:
+        input = input.to(dtype)
+    return_value = torch.exp(input).mean(dim=dim, keepdim=keepdim)
+    if out is not None:
+        out.copy_(return_value)
+        return out
+    return return_value
 
 ##################################################################################################################################################
 
 
 import torch
+torch.manual_seed(42)
 
 def test_exp_mean():
     results = {}
@@ -46,3 +52,4 @@ def test_exp_mean():
     return results
 
 test_results = test_exp_mean()
+print(test_results)

@@ -1,24 +1,46 @@
 import torch
 import torch.nn.functional as F
-from torch import Tensor
 from typing import Optional, Union, Tuple
-import torch
 
-def gelu_conv2d(input: Tensor, weight: Tensor, bias: Optional[Tensor]=None, stride: Union[int, Tuple[int, int]]=1, padding: Union[int, Tuple[int, int], str]=0, dilation: Union[int, Tuple[int, int]]=1, groups: int=1, approximate: str='none', out: Optional[Tensor]=None) -> Tensor:
+def gelu_conv2d(
+        input: torch.Tensor, 
+        weight: torch.Tensor, 
+        bias: Optional[torch.Tensor]=None, 
+        stride: Union[int, Tuple[int, int]]=1, 
+        padding: Union[int, Tuple[int, int], str]=0, 
+        dilation: Union[int, Tuple[int, int]]=1, 
+        groups: int=1, 
+        approximate: str='none', 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
+    """
+    Applies a 2D convolution followed by a GELU activation function.
+
+    Args:
+        input (torch.Tensor): The input tensor.
+        weight (torch.Tensor): The weight tensor.
+        bias (Optional[torch.Tensor], optional): The bias tensor. Default is None.
+        stride (Union[int, Tuple[int, int]], optional): The stride of the convolution. Default is 1.
+        padding (Union[int, Tuple[int, int], str], optional): The padding of the convolution. Default is 0.
+        dilation (Union[int, Tuple[int, int]], optional): The dilation of the convolution. Default is 1.
+        groups (int, optional): The number of groups in the convolution. Default is 1.
+        approximate (str, optional): The approximation method for GELU. Default is 'none'.
+        out (Optional[torch.Tensor], optional): The output tensor. Default is None.
+
+    Returns:
+        torch.Tensor: The output tensor after the fused operation.
+    """
     conv_result = F.conv2d(input, weight, bias=bias, stride=stride, padding=padding, dilation=dilation, groups=groups)
-    return F.gelu(conv_result, approximate=approximate, out=out)
+    gelu_output = F.gelu(conv_result, approximate=approximate, out=out)
+    if out is not None:
+        out.copy_(gelu_output)
+        return out
+    return gelu_output
 
 ##################################################################################################################################################
 
 
 import torch
-import torch.nn.functional as F
-from torch import Tensor
-from typing import Optional, Union, Tuple
-
-def gelu_conv2d(input: Tensor, weight: Tensor, bias: Optional[Tensor]=None, stride: Union[int, Tuple[int, int]]=1, padding: Union[int, Tuple[int, int], str]=0, dilation: Union[int, Tuple[int, int]]=1, groups: int=1, approximate: str='none', out: Optional[Tensor]=None) -> Tensor:
-    conv_result = F.conv2d(input, weight, bias=bias, stride=stride, padding=padding, dilation=dilation, groups=groups)
-    return F.gelu(conv_result, approximate=approximate, out=out)
+torch.manual_seed(42)
 
 def test_gelu_conv2d():
     results = {}
@@ -47,3 +69,4 @@ def test_gelu_conv2d():
     return results
 
 test_results = test_gelu_conv2d()
+print(test_results)

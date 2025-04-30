@@ -1,13 +1,29 @@
 import torch
 
-def broadcast_tensors(x, y):
+def broadcast_tensors(
+        x: torch.Tensor, 
+        y: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+    """
+    This function broadcasts two tensors to the same shape.
+    Args:
+        x (torch.Tensor): The first tensor.
+        y (torch.Tensor): The second tensor.
+
+    Returns:
+        tuple[torch.Tensor, torch.Tensor]: The broadcasted tensors.
+
+    Example:
+        b_x, b_y = broadcast_tensors(torch.tensor(1.0), torch.tensor([1.0, 5.0]))
+        print(b_x)  # Output: tensor([1., 1.])
+        print(b_y)  # Output: tensor([1., 5.])
+    """
     (a, b) = torch.broadcast_tensors(x, y)
     return (a, b)
 
 ##################################################################################################################################################
 
-
 import torch
+torch.manual_seed(42)
 
 def test_broadcast_tensors():
     results = {}
@@ -35,3 +51,4 @@ def test_broadcast_tensors():
     return results
 
 test_results = test_broadcast_tensors()
+print(test_results)

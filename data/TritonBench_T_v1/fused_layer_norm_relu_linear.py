@@ -1,8 +1,13 @@
 import torch
-import torch.nn as nn
+import torch.nn.functional as F
 
 
-def fused_layer_norm_relu_linear(input: torch.Tensor, weight: torch.Tensor, bias: torch.Tensor=None, normalized_shape: torch.Size=None, eps: float=1e-05, elementwise_affine: bool=True) -> torch.Tensor:
+def fused_layer_norm_relu_linear(
+        input: torch.Tensor, 
+        weight: torch.Tensor, 
+        bias: torch.Tensor=None, 
+        normalized_shape: torch.Size=None, 
+        eps: float=1e-05) -> torch.Tensor:
     """
     Applies a fused operation consisting of a linear transformation followed by ReLU activation 
     and layer normalization on the input tensor.
@@ -13,7 +18,6 @@ def fused_layer_norm_relu_linear(input: torch.Tensor, weight: torch.Tensor, bias
         bias (torch.Tensor, optional): Bias for linear transformation, shape (out_features). Default is None.
         normalized_shape (int or list or torch.Size, optional): Shape of the dimensions to normalize.
         eps (float, optional): A value added to the denominator for numerical stability. Default is 1e-5.
-        elementwise_affine (bool, optional): If True, layer normalization has learnable parameters. Default is True.
 
     Returns:
         torch.Tensor: Result after applying the linear transformation, ReLU, and layer normalization.
@@ -26,15 +30,15 @@ def fused_layer_norm_relu_linear(input: torch.Tensor, weight: torch.Tensor, bias
         >>> output = fused_layer_norm_relu_linear(input, weight, bias, normalized_shape)
         >>> print(output.shape)  # Expected output shape: (4, 3)
     """
-    linear_output = torch.nn.functional.linear(input, weight, bias)
+    linear_output = F.linear(input, weight, bias)
 
-    relu_output = torch.nn.functional.relu(linear_output)
+    relu_output = F.relu(linear_output)
 
     # Ensure normalized_shape is always passed as a tuple
     if isinstance(normalized_shape, int):
         normalized_shape = (normalized_shape,)
 
-    normalized_output = torch.nn.functional.layer_norm(relu_output, normalized_shape, eps=eps)
+    normalized_output = F.layer_norm(relu_output, normalized_shape, eps=eps)
 
     return normalized_output
 
@@ -42,7 +46,7 @@ def fused_layer_norm_relu_linear(input: torch.Tensor, weight: torch.Tensor, bias
 
 
 import torch
-import torch.nn as nn
+torch.manual_seed(42)
 
 def test_fused_layer_norm_relu_linear():
     results = {}
@@ -78,3 +82,4 @@ def test_fused_layer_norm_relu_linear():
     return results
 
 test_results = test_fused_layer_norm_relu_linear()
+print(test_results)

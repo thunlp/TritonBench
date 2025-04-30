@@ -17,19 +17,7 @@ def gammaln(input: torch.Tensor, out: torch.Tensor=None) -> torch.Tensor:
 
 
 import torch
-
-def gammaln(input: torch.Tensor, out: torch.Tensor=None) -> torch.Tensor:
-    """
-    Computes the natural logarithm of the absolute value of the gamma function on the input tensor.
-    
-    Args:
-        input (torch.Tensor): the input tensor.
-        out (torch.Tensor, optional): the output tensor.
-
-    Returns:
-        torch.Tensor: tensor containing the natural log of the gamma function for each element in the input.
-    """
-    return torch.special.gammaln(input, out=out)
+torch.manual_seed(42)
 
 def test_gammaln():
     results = {}
@@ -53,3 +41,4 @@ def test_gammaln():
     return results
 
 test_results = test_gammaln()
+print(test_results)

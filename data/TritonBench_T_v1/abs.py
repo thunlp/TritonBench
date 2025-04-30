@@ -1,6 +1,6 @@
 import torch
 
-def abs(input_tensor, out=None):
+def abs(input_tensor: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
     """
     Computes the absolute value of each element in the input tensor.
 
@@ -17,6 +17,7 @@ def abs(input_tensor, out=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_abs():
     results = {}
@@ -40,3 +41,4 @@ def test_abs():
     return results
 
 test_results = test_abs()
+print(test_results)

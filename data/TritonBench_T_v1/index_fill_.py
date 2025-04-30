@@ -1,6 +1,11 @@
 import torch
+from typing import Union
 
-def index_fill_(dim, x, index, value):
+def index_fill_(
+        dim: int, 
+        x: torch.Tensor, 
+        index: torch.Tensor, 
+        value: Union[int, float]) -> torch.Tensor:
     """
     Fill the tensor `x` at the positions specified by `index` along dimension `dim`
     with the given `value`.
@@ -20,6 +25,7 @@ def index_fill_(dim, x, index, value):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_index_fill_():
     results = {}
@@ -51,3 +57,4 @@ def test_index_fill_():
     return results
 
 test_results = test_index_fill_()
+print(test_results)

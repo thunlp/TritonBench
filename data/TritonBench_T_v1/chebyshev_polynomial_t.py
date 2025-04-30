@@ -1,7 +1,10 @@
 import torch
 
 
-def chebyshev_polynomial_t(input: torch.Tensor, n: int, out: torch.Tensor=None) -> torch.Tensor:
+def chebyshev_polynomial_t(
+    input: torch.Tensor, 
+    n: int, 
+    out: torch.Tensor=None) -> torch.Tensor:
     """
     Computes the Chebyshev polynomial of the first kind T_n(input).
 
@@ -19,6 +22,7 @@ def chebyshev_polynomial_t(input: torch.Tensor, n: int, out: torch.Tensor=None) 
 
 
 import torch
+torch.manual_seed(42)
 
 def test_chebyshev_polynomial_t():
     results = {}
@@ -46,3 +50,4 @@ def test_chebyshev_polynomial_t():
     return results
 
 test_results = test_chebyshev_polynomial_t()
+print(test_results)

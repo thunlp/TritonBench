@@ -1,7 +1,7 @@
 import torch
 import torch.nn.functional as F
-
-def adaptive_avg_pool2d(input, output_size):
+from typing import Union, Tuple
+def adaptive_avg_pool2d(input: torch.Tensor, output_size: Union[int, Tuple[int, int]]) -> torch.Tensor:
     """
     Apply 2D adaptive average pooling over an input signal.
 
@@ -28,7 +28,7 @@ def adaptive_avg_pool2d(input, output_size):
 
 
 import torch
-from adaptive_avg_pool2d import adaptive_avg_pool2d
+torch.manual_seed(42)
 
 def test_adaptive_avg_pool2d():
     results = {}
@@ -56,3 +56,4 @@ def test_adaptive_avg_pool2d():
     return results
 
 test_results = test_adaptive_avg_pool2d()
+print(test_results)

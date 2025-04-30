@@ -2,21 +2,42 @@ import torch
 import torch.nn.functional as F
 import torch
 
-def fused_hardsigmoid_batch_norm(x: torch.Tensor, running_mean: torch.Tensor, running_var: torch.Tensor, weight: torch.Tensor=None, bias: torch.Tensor=None, training: bool=False, momentum: float=0.1, eps: float=1e-05, inplace: bool=False) -> torch.Tensor:
-    normalized_x = torch.nn.functional.batch_norm(x, running_mean, running_var, weight, bias, training, momentum, eps)
-    output = torch.nn.functional.hardsigmoid(normalized_x, inplace=inplace)
+def fused_hardsigmoid_batch_norm(
+        x: torch.Tensor, 
+        running_mean: torch.Tensor, 
+        running_var: torch.Tensor, 
+        weight: torch.Tensor=None, 
+        bias: torch.Tensor=None, 
+        training: bool=False, 
+        momentum: float=0.1, 
+        eps: float=1e-05, 
+        inplace: bool=False) -> torch.Tensor:
+    """
+    Applies batch normalization followed by a hard sigmoid activation function.
+    
+    Args:
+        x (torch.Tensor): The input tensor.
+        running_mean (torch.Tensor): The running mean of the batch normalization.
+        running_var (torch.Tensor): The running variance of the batch normalization.
+        weight (torch.Tensor, optional): The weight tensor.
+        bias (torch.Tensor, optional): The bias tensor.
+        training (bool, optional): Whether to use training mode.
+        momentum (float, optional): The momentum for the running mean and variance.
+        eps (float, optional): The epsilon for the batch normalization.
+        inplace (bool, optional): Whether to perform the operation in place.
+
+    Returns:
+        torch.Tensor: The output tensor after batch normalization and hard sigmoid activation.
+    """
+    normalized_x = F.batch_norm(x, running_mean, running_var, weight, bias, training, momentum, eps)
+    output = F.hardsigmoid(normalized_x, inplace=inplace)
     return output
 
 ##################################################################################################################################################
 
 
 import torch
-import torch.nn.functional as F
-
-def fused_hardsigmoid_batch_norm(x: torch.Tensor, running_mean: torch.Tensor, running_var: torch.Tensor, weight: torch.Tensor=None, bias: torch.Tensor=None, training: bool=False, momentum: float=0.1, eps: float=1e-05, inplace: bool=False) -> torch.Tensor:
-    normalized_x = torch.nn.functional.batch_norm(x, running_mean, running_var, weight, bias, training, momentum, eps)
-    output = torch.nn.functional.hardsigmoid(normalized_x, inplace=inplace)
-    return output
+torch.manual_seed(42)
 
 def test_fused_hardsigmoid_batch_norm():
     results = {}
@@ -41,3 +62,4 @@ def test_fused_hardsigmoid_batch_norm():
     return results
 
 test_results = test_fused_hardsigmoid_batch_norm()
+print(test_results)

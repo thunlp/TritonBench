@@ -1,6 +1,13 @@
 import torch
 
-def addmm(input: torch.Tensor, mat1: torch.Tensor, mat2: torch.Tensor, beta: float=1, alpha: float=1, out: torch.Tensor=None) -> torch.Tensor:
+def addmm(
+        input: torch.Tensor, 
+        mat1: torch.Tensor, 
+        mat2: torch.Tensor, 
+        beta: float=1, 
+        alpha: float=1, 
+        out: torch.Tensor=None
+        ) -> torch.Tensor:
     """
     Performs matrix multiplication of mat1 and mat2, and adds input to the result.
 
@@ -28,6 +35,7 @@ def addmm(input: torch.Tensor, mat1: torch.Tensor, mat2: torch.Tensor, beta: flo
 
 
 import torch
+torch.manual_seed(42)
 
 def test_addmm():
     results = {}
@@ -53,3 +61,4 @@ def test_addmm():
     return results
 
 test_results = test_addmm()
+print(test_results)

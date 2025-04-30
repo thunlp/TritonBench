@@ -1,8 +1,21 @@
 import torch
 import torch.nn.functional as F
+from typing import Optional
 
-
-def relu_max_pool2d_conv2d(input, weight, bias=None, conv_stride=1, conv_padding=0, conv_dilation=1, conv_groups=1, pool_kernel_size=2, pool_stride=None, pool_padding=0, pool_dilation=1, pool_ceil_mode=False, inplace=False):
+def relu_max_pool2d_conv2d(
+        input: torch.Tensor, 
+        weight: torch.Tensor, 
+        bias: Optional[torch.Tensor]=None, 
+        conv_stride: int=1, 
+        conv_padding: int=0, 
+        conv_dilation: int=1, 
+        conv_groups: int=1, 
+        pool_kernel_size: int=2, 
+        pool_stride: Optional[int]=None, 
+        pool_padding: int=0, 
+        pool_dilation: int=1, 
+        pool_ceil_mode: bool=False, 
+        inplace: bool=False) -> torch.Tensor:
     """
     Applies a 2D convolution followed by max pooling and then applies the ReLU activation function element-wise to the pooled result.
 
@@ -33,16 +46,12 @@ def relu_max_pool2d_conv2d(input, weight, bias=None, conv_stride=1, conv_padding
 
 
 import torch
-import torch.nn.functional as F
-
-def relu_max_pool2d_conv2d(input, weight, bias=None, conv_stride=1, conv_padding=0, conv_dilation=1, conv_groups=1, pool_kernel_size=2, pool_stride=None, pool_padding=0, pool_dilation=1, pool_ceil_mode=False, inplace=False):
-    x = F.conv2d(input, weight, bias, stride=conv_stride, padding=conv_padding, dilation=conv_dilation, groups=conv_groups)
-    x = F.max_pool2d(x, kernel_size=pool_kernel_size, stride=pool_stride, padding=pool_padding, dilation=pool_dilation, ceil_mode=pool_ceil_mode)
-    x = F.relu(x, inplace=inplace)
-    return x
+torch.manual_seed(42)
 
 def test_relu_max_pool2d_conv2d():
     results = {}
+
+    
     
     # Test case 1: Basic test with default parameters
     input = torch.randn(1, 3, 8, 8, device='cuda')
@@ -62,3 +71,4 @@ def test_relu_max_pool2d_conv2d():
     return results
 
 test_results = test_relu_max_pool2d_conv2d()
+print(test_results)

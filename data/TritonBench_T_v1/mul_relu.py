@@ -1,7 +1,11 @@
 import torch
 import torch.nn.functional as F
-
-def mul_relu(input, other, inplace=False, out=None):
+from typing import Optional
+def mul_relu(
+        input: torch.Tensor, 
+        other: torch.Tensor, 
+        inplace: bool=False, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     This function performs element-wise multiplication of two inputs, input and other, 
     and then applies the Rectified Linear Unit (ReLU) function to the result, 
@@ -17,17 +21,16 @@ def mul_relu(input, other, inplace=False, out=None):
         Tensor: A tensor with the element-wise multiplication result followed by ReLU activation.
     """
     result = torch.mul(input, other)
-    return F.relu(result, inplace=inplace)
+    out_relu = F.relu(result, inplace=inplace)
+    if out is not None:
+        out.copy_(out_relu)
+    return out_relu
 
 ##################################################################################################################################################
 
 
 import torch
-import torch.nn.functional as F
-
-def mul_relu(input, other, inplace=False, out=None):
-    result = torch.mul(input, other)
-    return F.relu(result, inplace=inplace)
+torch.manual_seed(42)
 
 def test_mul_relu():
     results = {}
@@ -55,3 +58,4 @@ def test_mul_relu():
     return results
 
 test_results = test_mul_relu()
+print(test_results)

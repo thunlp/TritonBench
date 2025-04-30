@@ -1,7 +1,13 @@
 import torch
 import torch.nn.functional as F
+from typing import Tuple, Union
 
-def fused_fractional_max_pool2d_with_relu(input: torch.Tensor, kernel_size, output_size=None, output_ratio=None, return_indices=False) -> torch.Tensor:
+def fused_fractional_max_pool2d_with_relu(
+        input: torch.Tensor, 
+        kernel_size: Union[int, Tuple[int, int]], 
+        output_size: Tuple[int, int]=None, 
+        output_ratio: Tuple[float, float]=None, 
+        return_indices: bool=False) -> torch.Tensor:
     """
     Applies ReLU activation followed by fractional max pooling over an input tensor.
     
@@ -23,12 +29,7 @@ def fused_fractional_max_pool2d_with_relu(input: torch.Tensor, kernel_size, outp
 
 
 import torch
-import torch.nn.functional as F
-
-def fused_fractional_max_pool2d_with_relu(input: torch.Tensor, kernel_size, output_size=None, output_ratio=None, return_indices=False) -> torch.Tensor:
-    relu_output = F.relu(input)
-    pooled_output = F.fractional_max_pool2d(relu_output, kernel_size=kernel_size, output_size=output_size, output_ratio=output_ratio, return_indices=return_indices)
-    return pooled_output
+torch.manual_seed(42)
 
 def test_fused_fractional_max_pool2d_with_relu():
     results = {}
@@ -53,3 +54,4 @@ def test_fused_fractional_max_pool2d_with_relu():
     return results
 
 test_results = test_fused_fractional_max_pool2d_with_relu()
+print(test_results)

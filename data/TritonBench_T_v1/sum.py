@@ -1,6 +1,10 @@
 import torch
+from typing import Optional
 
-def sum(input, dim, keepdim=False, dtype=None):
+def sum(input: torch.Tensor, 
+        dim: Optional[int]=None, 
+        keepdim: bool=False, 
+        dtype: Optional[torch.dtype]=None) -> torch.Tensor:
     """
     Returns the sum of each row of the input tensor in the given dimension dim.
     If dim is a list of dimensions, reduce over all of them.
@@ -8,13 +12,13 @@ def sum(input, dim, keepdim=False, dtype=None):
     Otherwise, dim is squeezed, resulting in the output tensor having 1 (or len(dim)) fewer dimension(s).
     
     Args:
-        input (Tensor): The input tensor.
+        input (torch.Tensor): The input tensor.
         dim (int or tuple of ints): The dimension or dimensions to reduce.
         keepdim (bool, optional): Whether to retain the reduced dimensions with size 1.
         dtype (torch.dtype, optional): The desired data type of returned tensor.
 
     Returns:
-        Tensor: The resulting tensor after applying sum along the specified dimensions.
+        torch.Tensor: The resulting tensor after applying sum along the specified dimensions.
     """
     return torch.sum(input, dim, keepdim=keepdim, dtype=dtype)
 
@@ -22,6 +26,7 @@ def sum(input, dim, keepdim=False, dtype=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_sum():
     results = {}
@@ -44,3 +49,4 @@ def test_sum():
     return results
 
 test_results = test_sum()
+print(test_results)

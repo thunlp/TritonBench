@@ -1,8 +1,25 @@
 import torch
-import torch.nn.functional as F
-import torch
+from typing import Optional, Union, Tuple
+def gelu_min(
+        input: torch.Tensor, 
+        approximate: str='none', 
+        dim: Optional[int]=None, 
+        keepdim: bool=False, 
+        out: Optional[torch.Tensor]=None) -> Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]:
+    """
+    Applies the GELU activation function followed by a minimum operation.
 
-def gelu_min(input, approximate='none', dim=None, keepdim=False, out=None):
+    Args:
+        input (torch.Tensor): The input tensor.
+        approximate (str, optional): The approximation method for GELU. Default is 'none'.
+        dim (int, optional): The dimension to reduce. Default is None.
+        keepdim (bool, optional): Whether to keep the reduced dimension. Default is False.
+        out (torch.Tensor, optional): The output tensor. Default is None.   
+
+    Returns:
+        Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]: The result of the fused operation.
+    """
+    
     if approximate == 'none':
         output = input * torch.erf(input / torch.sqrt(torch.tensor(2.0))) / 2.0
     elif approximate == 'tanh':
@@ -20,6 +37,9 @@ def gelu_min(input, approximate='none', dim=None, keepdim=False, out=None):
 
 ##################################################################################################################################################
 
+
+import torch
+torch.manual_seed(42)
 
 def test_gelu_min():
     results = {}
@@ -43,3 +63,4 @@ def test_gelu_min():
     return results
 
 test_results = test_gelu_min()
+print(test_results)

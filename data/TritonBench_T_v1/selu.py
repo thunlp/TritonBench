@@ -1,15 +1,13 @@
 import torch
-import torch.nn.functional as F
-import math
 
 def selu(input: torch.Tensor, inplace: bool=False) -> torch.Tensor:
     """
     Applies the element-wise SELU (Scaled Exponential Linear Unit) function to the input tensor.
-    
+
     The SELU function is defined as:
     SELU(x) = scale * (max(0, x) + min(0, alpha * (exp(x) - 1)))
     where alpha is approximately 1.673 and scale is approximately 1.051.
-    
+
     Args:
     - input (torch.Tensor): The input tensor.
     - inplace (bool, optional): If set to True, will do the operation in-place. Default is False.
@@ -19,10 +17,24 @@ def selu(input: torch.Tensor, inplace: bool=False) -> torch.Tensor:
     """
     alpha = 1.6732632423543772
     scale = 1.0507009873554805
-    return scale * (torch.maximum(input, torch.zeros_like(input)) + torch.minimum(input, alpha * (torch.exp(input) - 1)))
+    positive_part = torch.maximum(input, torch.zeros_like(input))
+
+    negative_part_calc = alpha * (torch.exp(input) - 1)
+    negative_part = torch.minimum(torch.zeros_like(input), negative_part_calc)
+
+    result = scale * (positive_part + negative_part)
+
+    if inplace:
+        input.copy_(result)
+        return input
+    else:
+        return result
 
 ##################################################################################################################################################
 
+
+import torch
+torch.manual_seed(42)
 
 def test_selu():
     # Initialize a dictionary to store test results
@@ -47,3 +59,4 @@ def test_selu():
     return results
 
 test_results = test_selu()
+print(test_results)

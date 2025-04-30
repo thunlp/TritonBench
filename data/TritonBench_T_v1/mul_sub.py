@@ -1,19 +1,24 @@
 import torch
+from typing import Optional
 
-def mul_sub(input, other_mul, other_sub, alpha=1, out=None):
+def mul_sub(input: torch.Tensor, 
+        other_mul: torch.Tensor, 
+        other_sub: torch.Tensor, 
+        alpha: float=1, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Multiplies the input tensor by another tensor or number, then subtracts another tensor or number from the result,
     scaled by a given alpha. This operation is performed element-wise.
 
     Args:
-        input (Tensor): The input tensor to be multiplied.
-        other_mul (Tensor or Number): The tensor or number to multiply with `input`.
-        other_sub (Tensor or Number): The tensor or number to subtract from the multiplication result.
+        input (torch.Tensor): The input tensor to be multiplied.
+        other_mul (torch.Tensor or Number): The tensor or number to multiply with `input`.
+        other_sub (torch.Tensor or Number): The tensor or number to subtract from the multiplication result.
         alpha (Number, optional): The multiplier for :attr:`other_sub`. Default is 1.
-        out (Tensor, optional): The output tensor.
+        out (torch.Tensor, optional): The output tensor.
 
     Returns:
-        Tensor: The result of the operation.
+        torch.Tensor: The result of the operation.
     """
     result = input * other_mul - alpha * other_sub
     if out is not None:
@@ -25,6 +30,7 @@ def mul_sub(input, other_mul, other_sub, alpha=1, out=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_mul_sub():
     results = {}
@@ -50,3 +56,4 @@ def test_mul_sub():
     return results
 
 test_results = test_mul_sub()
+print(test_results)

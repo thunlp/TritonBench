@@ -1,8 +1,7 @@
 import torch
-from torch import Tensor
 
 
-def relu_sqrt(input: Tensor, inplace: bool=False, out: Tensor=None) -> Tensor:
+def relu_sqrt(input: torch.Tensor, inplace: bool=False, out: torch.Tensor=None) -> torch.Tensor:
     """
     Applies the rectified linear unit (ReLU) function to each element in input,
     and then computes the square root of the result.
@@ -41,20 +40,7 @@ def relu_sqrt(input: Tensor, inplace: bool=False, out: Tensor=None) -> Tensor:
 
 
 import torch
-from torch import Tensor
-
-def relu_sqrt(input: Tensor, inplace: bool=False, out: Tensor=None) -> Tensor:
-    if input.dtype != torch.float32 and input.dtype != torch.float64:
-        input = input.float()
-    if inplace:
-        input.relu_()
-        input.sqrt_()
-        return input
-    elif out is not None:
-        out.copy_(torch.sqrt(torch.relu(input)))
-        return out
-    else:
-        return torch.sqrt(torch.relu(input))
+torch.manual_seed(42)
 
 def test_relu_sqrt():
     results = {}
@@ -79,3 +65,4 @@ def test_relu_sqrt():
     return results
 
 test_results = test_relu_sqrt()
+print(test_results)

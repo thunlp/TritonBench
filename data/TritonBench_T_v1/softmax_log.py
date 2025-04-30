@@ -1,8 +1,11 @@
 import torch
 import torch.nn.functional as F
+from typing import Optional
 
-
-def softmax_log(input, dim=-1, dtype=None):
+def softmax_log(
+        input: torch.Tensor, 
+        dim: int=-1, 
+        dtype: Optional[torch.dtype]=None) -> torch.Tensor:
     """
     Applies the natural logarithm element-wise on the input tensor, 
     followed by applying the softmax function along the specified dimension.
@@ -26,14 +29,7 @@ def softmax_log(input, dim=-1, dtype=None):
 
 
 import torch
-import torch.nn.functional as F
-
-def softmax_log(input, dim=-1, dtype=None):
-    if dtype is not None:
-        input = input.to(dtype)
-    log_input = input.log()
-    return F.softmax(log_input, dim=dim)
-
+torch.manual_seed(42)
 def test_softmax_log():
     results = {}
 
@@ -56,3 +52,4 @@ def test_softmax_log():
     return results
 
 test_results = test_softmax_log()
+print(test_results)

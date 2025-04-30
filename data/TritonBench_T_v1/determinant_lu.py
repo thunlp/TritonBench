@@ -1,6 +1,10 @@
 import torch
 
-def determinant_lu(A, *, pivot=True, out=None):
+def determinant_lu(
+        A: torch.Tensor, 
+        *, 
+        pivot: bool = True, 
+        out: torch.Tensor = None) -> torch.Tensor:
     """
     Compute the determinant of a square matrix using LU decomposition.
 
@@ -31,6 +35,7 @@ def determinant_lu(A, *, pivot=True, out=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_determinant_lu():
     results = {}
@@ -57,3 +62,4 @@ def test_determinant_lu():
     return results
 
 test_results = test_determinant_lu()
+print(test_results)

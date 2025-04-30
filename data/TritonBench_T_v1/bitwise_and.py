@@ -1,6 +1,9 @@
 import torch
 
-def bitwise_and(input, other, out=None):
+def bitwise_and(
+        input: torch.Tensor, 
+        other: torch.Tensor, 
+        out: torch.Tensor = None) -> torch.Tensor:
     """
     Computes the bitwise AND of two tensors. The input tensors must be of integral or boolean types.
     For boolean tensors, it computes the logical AND.
@@ -19,6 +22,7 @@ def bitwise_and(input, other, out=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_bitwise_and():
     results = {}
@@ -46,3 +50,4 @@ def test_bitwise_and():
     return results
 
 test_results = test_bitwise_and()
+print(test_results)

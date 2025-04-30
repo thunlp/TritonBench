@@ -18,6 +18,7 @@ def airy_ai(input: torch.Tensor, out: torch.Tensor=None) -> torch.Tensor:
 
 
 import torch
+torch.manual_seed(42)
 
 def test_airy_ai():
     results = {}
@@ -41,3 +42,4 @@ def test_airy_ai():
     return results
 
 test_results = test_airy_ai()
+print(test_results)

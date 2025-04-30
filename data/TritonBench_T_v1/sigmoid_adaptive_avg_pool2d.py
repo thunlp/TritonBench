@@ -1,18 +1,19 @@
 import torch
 import torch.nn.functional as F
-from torch import Tensor
 from typing import Union, Tuple
 
-def sigmoid_adaptive_avg_pool2d(input: Tensor, output_size: Union[int, Tuple[int, int]]) -> Tensor:
+def sigmoid_adaptive_avg_pool2d(
+        input: torch.Tensor, 
+        output_size: Union[int, Tuple[int, int]]) -> torch.Tensor:
     """
     Applies a 2D adaptive average pooling over an input tensor, followed by the sigmoid activation function applied element-wise.
     
     Args:
-        input (Tensor): The input tensor with shape (batch_size, channels, height, width).
+        input (torch.Tensor): The input tensor with shape (batch_size, channels, height, width).
         output_size (Union[int, Tuple[int, int]]): The target output size of the pooled tensor.
     
     Returns:
-        Tensor: The result tensor after applying adaptive average pooling and sigmoid activation.
+        torch.Tensor: The result tensor after applying adaptive average pooling and sigmoid activation.
     """
     pooled_output = F.adaptive_avg_pool2d(input, output_size)
     output = torch.sigmoid(pooled_output)
@@ -20,10 +21,14 @@ def sigmoid_adaptive_avg_pool2d(input: Tensor, output_size: Union[int, Tuple[int
 
 ##################################################################################################################################################
 
+import torch
+torch.manual_seed(42)
 
 def test_sigmoid_adaptive_avg_pool2d():
     # Initialize a dictionary to store the results of each test case
     results = {}
+
+    
 
     # Test case 1: Basic test with a 4D tensor and output size as an integer
     input_tensor1 = torch.randn(1, 3, 8, 8, device='cuda')  # Batch size 1, 3 channels, 8x8 size
@@ -52,3 +57,4 @@ def test_sigmoid_adaptive_avg_pool2d():
     return results
 
 test_results = test_sigmoid_adaptive_avg_pool2d()
+print(test_results)

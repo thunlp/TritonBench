@@ -1,6 +1,10 @@
+from typing import Optional
 import torch
 
-def invert_matrix_lu(A, *, pivot=True, out=None):
+def invert_matrix_lu(
+        A: torch.Tensor, 
+        pivot: bool=True, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Computes the inverse of a square matrix using LU decomposition.
 
@@ -30,6 +34,7 @@ def invert_matrix_lu(A, *, pivot=True, out=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_invert_matrix_lu():
     results = {}
@@ -53,3 +58,4 @@ def test_invert_matrix_lu():
     return results
 
 test_results = test_invert_matrix_lu()
+print(test_results)

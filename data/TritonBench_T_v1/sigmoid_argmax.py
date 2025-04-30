@@ -1,17 +1,18 @@
 import torch
+from typing import Optional
 
-def sigmoid_argmax(input, dim=None, keepdim=False):
+def sigmoid_argmax(input: torch.Tensor, dim: Optional[int]=None, keepdim: bool=False) -> torch.Tensor:
     """
     Apply sigmoid to each element of the input tensor, then return the indices of the maximum values
     along the specified dimension or over all elements if no dimension is specified.
     
     Parameters:
-    - input (Tensor): The input tensor.
+    - input (torch.Tensor): The input tensor.
     - dim (int, optional): The dimension to reduce. Default is None, which computes the argmax over all elements.
     - keepdim (bool, optional): Whether the output tensor has :attr:`dim` retained or not. Default is False.
     
     Returns:
-    - LongTensor: The indices of the maximum values.
+    - torch.Tensor: The indices of the maximum values.
     """
     sigmoid_output = torch.sigmoid(input)
     return torch.argmax(sigmoid_output, dim=dim, keepdim=keepdim)
@@ -20,7 +21,7 @@ def sigmoid_argmax(input, dim=None, keepdim=False):
 
 
 import torch
-
+torch.manual_seed(42)
 def test_sigmoid_argmax():
     results = {}
 
@@ -43,3 +44,4 @@ def test_sigmoid_argmax():
     return results
 
 test_results = test_sigmoid_argmax()
+print(test_results)

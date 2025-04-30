@@ -1,20 +1,25 @@
 import torch
 
-def fused_gather_masked_fill(input, dim, index, mask, value, *, sparse_grad=False, out=None):
+def fused_gather_masked_fill(
+        input: torch.Tensor, 
+        dim: int, 
+        index: torch.Tensor, 
+        mask: torch.Tensor, 
+        value: float, 
+        *, sparse_grad: bool=False, out: torch.Tensor=None) -> torch.Tensor:
     """
     Combines torch.gather and torch.Tensor.masked_fill into a single operation.
     
-    Arguments:
-    input (Tensor) -- the input tensor X.
-    dim (int) -- the dimension along which to index.
-    index (LongTensor) -- the indices of elements to gather, same dimensionality as `input`.
-    mask (BoolTensor) -- a boolean mask tensor, broadcastable to the shape of the output tensor.
-    value (float) -- the value to fill where `mask` is True.
-    sparse_grad (bool, optional) -- If True, gradient w.r.t. `input` will be sparse. Default: False.
-    out (Tensor, optional) -- output tensor. If None, a new tensor will be returned. Default: None.
+    Args:
+        input (Tensor) -- the input tensor X.
+        dim (int) -- the dimension along which to index.
+        index (LongTensor) -- the indices of elements to gather, same dimensionality as `input`.
+        mask (BoolTensor) -- a boolean mask tensor, broadcastable to the shape of the output tensor.
+        value (float) -- the value to fill where `mask` is True.
+        sparse_grad (bool, optional) -- If True, gradient w.r.t. `input` will be sparse. Default: False.
     
     Returns:
-    Tensor -- the resulting tensor after gather and masked fill operations.
+        torch.Tensor: The resulting tensor after gather and masked fill operations.
     """
     gathered = torch.gather(input, dim, index, sparse_grad=sparse_grad)
     output = gathered.masked_fill(mask, value)
@@ -27,6 +32,7 @@ def fused_gather_masked_fill(input, dim, index, mask, value, *, sparse_grad=Fals
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_gather_masked_fill():
     results = {}
@@ -62,3 +68,4 @@ def test_fused_gather_masked_fill():
     return results
 
 test_results = test_fused_gather_masked_fill()
+print(test_results)

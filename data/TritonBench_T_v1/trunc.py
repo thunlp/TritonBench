@@ -1,6 +1,7 @@
+from typing import Optional
 import torch
 
-def trunc(input: torch.Tensor, out: torch.Tensor=None) -> torch.Tensor:
+def trunc(input: torch.Tensor, out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Truncate the elements of the input tensor to integers.
 
@@ -17,7 +18,7 @@ def trunc(input: torch.Tensor, out: torch.Tensor=None) -> torch.Tensor:
 
 
 import torch
-
+torch.manual_seed(42)
 def test_trunc():
     results = {}
 
@@ -40,3 +41,4 @@ def test_trunc():
     return results
 
 test_results = test_trunc()
+print(test_results)

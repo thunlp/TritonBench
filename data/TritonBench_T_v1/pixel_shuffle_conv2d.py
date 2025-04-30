@@ -1,7 +1,15 @@
 import torch
 import torch.nn.functional as F
+from typing import Optional
 
-def pixel_shuffle_conv2d(input: torch.Tensor, weight: torch.Tensor, bias=None, stride=1, padding=0, dilation=1, groups=1, upscale_factor=2) -> torch.Tensor:
+def pixel_shuffle_conv2d(
+        input: torch.Tensor, 
+        weight: torch.Tensor, 
+        bias: Optional[torch.Tensor]=None, 
+        stride: int=1, 
+        padding: int=0, 
+        dilation: int=1, 
+        groups: int=1, upscale_factor: int=2) -> torch.Tensor:
     """
     Applies a 2D convolution followed by pixel shuffle upscaling to rearrange the spatial dimensions.
 
@@ -25,11 +33,7 @@ def pixel_shuffle_conv2d(input: torch.Tensor, weight: torch.Tensor, bias=None, s
 
 
 import torch
-import torch.nn.functional as F
-
-def pixel_shuffle_conv2d(input: torch.Tensor, weight: torch.Tensor, bias=None, stride=1, padding=0, dilation=1, groups=1, upscale_factor=2) -> torch.Tensor:
-    x = F.conv2d(input, weight, bias, stride=stride, padding=padding, dilation=dilation, groups=groups)
-    return F.pixel_shuffle(x, upscale_factor)
+torch.manual_seed(42)
 
 def test_pixel_shuffle_conv2d():
     results = {}
@@ -58,3 +62,4 @@ def test_pixel_shuffle_conv2d():
     return results
 
 test_results = test_pixel_shuffle_conv2d()
+print(test_results)

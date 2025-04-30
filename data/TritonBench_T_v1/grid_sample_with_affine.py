@@ -1,7 +1,13 @@
 import torch
 import torch.nn.functional as F
 
-def grid_sample_with_affine(input: torch.Tensor, theta: torch.Tensor, size: torch.Size, mode: str='bilinear', padding_mode: str='zeros', align_corners: bool=False) -> torch.Tensor:
+def grid_sample_with_affine(
+        input: torch.Tensor, 
+        theta: torch.Tensor, 
+        size: torch.Size, 
+        mode: str='bilinear', 
+        padding_mode: str='zeros', 
+        align_corners: bool=False) -> torch.Tensor:
     """
     Apply an affine transformation followed by grid sampling to the input tensor.
 
@@ -30,7 +36,7 @@ def grid_sample_with_affine(input: torch.Tensor, theta: torch.Tensor, size: torc
 ##################################################################################################################################################
 
 import torch
-import torch.nn.functional as F
+torch.manual_seed(42)
 
 def test_grid_sample_with_affine():
     results = {}
@@ -53,3 +59,4 @@ def test_grid_sample_with_affine():
     return results
 
 test_results = test_grid_sample_with_affine()
+print(test_results)

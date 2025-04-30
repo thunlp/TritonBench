@@ -1,15 +1,20 @@
 import torch
 
-def solve(A, B):
+def solve(A: torch.Tensor, B: torch.Tensor) -> torch.Tensor:
+    """
+    Solves a system of linear equations.
+
+    Args:
+        A (torch.Tensor): The coefficient matrix.
+        B (torch.Tensor): The right-hand side vector.
+    """
     return torch.linalg.solve(A, B)
 
 ##################################################################################################################################################
 
 
 import torch
-
-def solve(A, B):
-    return torch.linalg.solve(A, B)
+torch.manual_seed(42)
 
 def test_solve():
     results = {}
@@ -43,3 +48,4 @@ def test_solve():
     return results
 
 test_results = test_solve()
+print(test_results)

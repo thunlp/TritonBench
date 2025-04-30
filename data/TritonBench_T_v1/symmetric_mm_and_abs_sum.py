@@ -1,6 +1,7 @@
 import torch
 
-def symmetric_mm_and_abs_sum(A: torch.Tensor, C: torch.Tensor, alpha: float, beta: float) -> torch.Tensor:
+def symmetric_mm_and_abs_sum(
+        A: torch.Tensor, C: torch.Tensor, alpha: float, beta: float) -> torch.Tensor:
     """
     Args:
         A (Tensor): Input matrix of shape `(n, m)` for which the symmetric product with its transpose is calculated.
@@ -19,7 +20,7 @@ def symmetric_mm_and_abs_sum(A: torch.Tensor, C: torch.Tensor, alpha: float, bet
 
 
 import torch
-
+torch.manual_seed(42)
 def test_symmetric_mm_and_abs_sum():
     results = {}
 
@@ -54,3 +55,4 @@ def test_symmetric_mm_and_abs_sum():
     return results
 
 test_results = test_symmetric_mm_and_abs_sum()
+print(test_results)

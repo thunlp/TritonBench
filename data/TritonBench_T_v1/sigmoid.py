@@ -1,8 +1,8 @@
 import torch
 import torch.special
+from typing import Optional
 
-
-def sigmoid(input, out=None):
+def sigmoid(input: torch.Tensor, out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Applies the Sigmoid function element-wise on the input tensor.
     
@@ -10,11 +10,11 @@ def sigmoid(input, out=None):
         sigmoid(x) = 1 / (1 + exp(-x))
     
     Args:
-        input (Tensor): The input tensor.
-        out (Tensor, optional): The output tensor.
+        input (torch.Tensor): The input tensor.
+        out (torch.Tensor, optional): The output tensor.
 
     Returns:
-        Tensor: A tensor with the sigmoid function applied element-wise.
+        torch.Tensor: A tensor with the sigmoid function applied element-wise.
     """
     return torch.special.expit(input, out=out)
 
@@ -22,8 +22,7 @@ def sigmoid(input, out=None):
 
 
 import torch
-import torch.special
-
+torch.manual_seed(42)
 def test_sigmoid():
     results = {}
 
@@ -46,3 +45,4 @@ def test_sigmoid():
     return results
 
 test_results = test_sigmoid()
+print(test_results)

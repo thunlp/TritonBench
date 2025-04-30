@@ -1,12 +1,25 @@
 import torch
 
-def matmul(tensor1, tensor2):
+def matmul(
+        tensor1: torch.Tensor, 
+        tensor2: torch.Tensor) -> torch.Tensor:
+    """
+    Performs a matrix multiplication of two tensors.
+
+    Args:
+        tensor1 (torch.Tensor): The first tensor.
+        tensor2 (torch.Tensor): The second tensor.
+
+    Returns:
+        torch.Tensor: The result of the matrix multiplication.
+    """
     return torch.matmul(tensor1, tensor2)
 
 ##################################################################################################################################################
 
 
 import torch
+torch.manual_seed(42)
 
 def test_matmul():
     results = {}
@@ -34,3 +47,4 @@ def test_matmul():
     return results
 
 test_results = test_matmul()
+print(test_results)

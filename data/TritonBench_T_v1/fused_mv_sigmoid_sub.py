@@ -1,7 +1,13 @@
 import torch
 import torch.nn.functional as F
+from typing import Optional
 
-def fused_mv_sigmoid_sub(input, vec, other, alpha=1, *, out=None):
+def fused_mv_sigmoid_sub(
+        input: torch.Tensor, 
+        vec: torch.Tensor, 
+        other: torch.Tensor, 
+        alpha: float=1,
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Performs a fused operation combining matrix-vector multiplication, sigmoid activation, and subtraction.
 
@@ -27,29 +33,7 @@ def fused_mv_sigmoid_sub(input, vec, other, alpha=1, *, out=None):
 
 
 import torch
-import torch.nn.functional as F
-
-def fused_mv_sigmoid_sub(input, vec, other, alpha=1, *, out=None):
-    """
-    Performs a fused operation combining matrix-vector multiplication, sigmoid activation, and subtraction.
-
-    Args:
-        input (Tensor): Input matrix A of shape (n, m).
-        vec (Tensor): Input vector v of shape (m).
-        other (Tensor or Number): Tensor or scalar b to subtract from the sigmoid output, scaled by alpha.
-        alpha (Number, optional): Scalar multiplier for other. Default: 1.
-        out (Tensor, optional): Output tensor. Ignored if None. Default: None.
-
-    Returns:
-        Tensor: The result of the fused operation.
-    """
-    z = torch.mv(input, vec)
-    s = torch.sigmoid(z)
-    y = torch.sub(s, other, alpha=alpha)
-    if out is not None:
-        out.copy_(y)
-        return out
-    return y
+torch.manual_seed(42)
 
 def test_fused_mv_sigmoid_sub():
     results = {}
@@ -82,3 +66,4 @@ def test_fused_mv_sigmoid_sub():
     return results
 
 test_results = test_fused_mv_sigmoid_sub()
+print(test_results)

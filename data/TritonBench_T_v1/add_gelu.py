@@ -2,7 +2,12 @@ import torch
 import torch.nn.functional as F
 import torch
 
-def add_gelu(input, other, alpha=1, approximate='none', out=None):
+def add_gelu(
+        input: torch.Tensor, 
+        other: torch.Tensor, 
+        alpha: float = 1, 
+        approximate: str = 'none', 
+        out: torch.Tensor = None) -> torch.Tensor:
     """
     Adds the tensor or number `other`, scaled by the multiplier `alpha`, to the input tensor `input`,
     and then applies the Gaussian Error Linear Units (GELU) activation function to the result.
@@ -30,7 +35,7 @@ def add_gelu(input, other, alpha=1, approximate='none', out=None):
 
 
 import torch
-import torch.nn.functional as F
+torch.manual_seed(42)
 
 def test_add_gelu():
     results = {}
@@ -55,3 +60,4 @@ def test_add_gelu():
     return results
 
 test_results = test_add_gelu()
+print(test_results)

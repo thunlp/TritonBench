@@ -30,6 +30,7 @@ def matrix_multiply_symmetric(A: torch.Tensor, B: torch.Tensor, C: torch.Tensor,
 
 
 import torch
+torch.manual_seed(42)
 
 def test_matrix_multiply_symmetric():
     results = {}
@@ -65,3 +66,4 @@ def test_matrix_multiply_symmetric():
     return results
 
 test_results = test_matrix_multiply_symmetric()
+print(test_results)

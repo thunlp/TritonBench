@@ -1,6 +1,7 @@
+from typing import Optional
 import torch
 
-def ifftshift(input, dim=None):
+def ifftshift(input: torch.Tensor, dim: Optional[int]=None) -> torch.Tensor:
     """
     Perform the inverse FFT shift on the input tensor.
 
@@ -20,6 +21,7 @@ def ifftshift(input, dim=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_ifftshift():
     results = {}
@@ -42,3 +44,4 @@ def test_ifftshift():
     return results
 
 test_results = test_ifftshift()
+print(test_results)

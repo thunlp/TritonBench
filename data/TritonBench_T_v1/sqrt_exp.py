@@ -1,7 +1,9 @@
 import torch
+from typing import Optional
 
-
-def sqrt_exp(input, out=None):
+def sqrt_exp(
+        input: torch.Tensor, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Computes the square root of each element in :attr:`input`, 
     and then applies the exponential function to the square-rooted values.
@@ -31,6 +33,7 @@ def sqrt_exp(input, out=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_sqrt_exp():
     results = {}
@@ -55,3 +58,4 @@ def test_sqrt_exp():
     return results
 
 test_results = test_sqrt_exp()
+print(test_results)

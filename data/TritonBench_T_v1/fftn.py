@@ -1,15 +1,29 @@
 import torch
 
-def fftn(input, s=None, dim=None, norm=None, out=None):
-    return torch.fft.fftn(input, s=s, dim=dim, norm=norm)
+def fftn(input: torch.Tensor, s=None, dim=None, norm=None, out=None) -> torch.Tensor:
+    """
+    Computes the N-dimensional discrete Fourier Transform of the input tensor.
+
+    Args:
+        input (torch.Tensor): The input tensor to compute the N-dimensional Fourier Transform on.
+        s (tuple, optional): The size of the output tensor.
+        dim (tuple, optional): The dimensions to transform.
+
+    Returns:
+        torch.Tensor: The N-dimensional discrete Fourier Transform of the input tensor.
+    """
+    fftn = torch.fft.fftn(input, s=s, dim=dim, norm=norm)
+    if out is not None:
+        out.copy_(fftn)
+        return out
+    return fftn
 
 ##################################################################################################################################################
 
 
 import torch
+torch.manual_seed(42)
 
-def fftn(input, s=None, dim=None, norm=None, out=None):
-    return torch.fft.fftn(input, s=s, dim=dim, norm=norm)
 
 def test_fftn():
     results = {}
@@ -36,3 +50,4 @@ def test_fftn():
     return results
 
 test_results = test_fftn()
+print(test_results)

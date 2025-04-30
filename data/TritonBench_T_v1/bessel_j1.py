@@ -18,6 +18,7 @@ def bessel_j1(input: torch.Tensor, out: torch.Tensor=None) -> torch.Tensor:
 
 
 import torch
+torch.manual_seed(42)
 
 def test_bessel_j1():
     results = {}
@@ -41,3 +42,4 @@ def test_bessel_j1():
     return results
 
 test_results = test_bessel_j1()
+print(test_results)

@@ -1,6 +1,10 @@
+from typing import Optional
 import torch
 
-def zeta(input: torch.Tensor, other: torch.Tensor, out: torch.Tensor=None) -> torch.Tensor:
+def zeta(
+        input: torch.Tensor, 
+        other: torch.Tensor, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Computes the Hurwitz zeta function, elementwise, for given input tensors.
 
@@ -18,7 +22,7 @@ def zeta(input: torch.Tensor, other: torch.Tensor, out: torch.Tensor=None) -> to
 
 
 import torch
-
+torch.manual_seed(42)
 def test_zeta():
     results = {}
 
@@ -45,3 +49,4 @@ def test_zeta():
     return results
 
 test_results = test_zeta()
+print(test_results)

@@ -1,7 +1,14 @@
 import torch
 import torch.nn.functional as F
 
-def fused_bmm_dropout_gelu(input1, input2, p=0.5, training=True, inplace=False, approximate='none', *, out=None):
+def fused_bmm_dropout_gelu(
+        input1: torch.Tensor, 
+        input2: torch.Tensor, 
+        p: float = 0.5, 
+        training: bool = True, 
+        inplace: bool = False, 
+        approximate: str = 'none', 
+        *, out: torch.Tensor = None) -> torch.Tensor:
     """
     Performs a fused operation combining batch matrix multiplication, dropout, and GELU activation.
 
@@ -18,8 +25,8 @@ def fused_bmm_dropout_gelu(input1, input2, p=0.5, training=True, inplace=False, 
         Tensor: The output tensor after performing batch matrix multiplication, dropout, and GELU activation.
     """
     Z = torch.bmm(input1, input2)
-    D = torch.nn.functional.dropout(Z, p=p, training=training, inplace=inplace)
-    O = torch.nn.functional.gelu(D, approximate=approximate)
+    D = F.dropout(Z, p=p, training=training, inplace=inplace)
+    O = F.gelu(D, approximate=approximate)
     if out is not None:
         out.copy_(O)
         return out
@@ -29,16 +36,7 @@ def fused_bmm_dropout_gelu(input1, input2, p=0.5, training=True, inplace=False, 
 
 
 import torch
-import torch.nn.functional as F
-
-def fused_bmm_dropout_gelu(input1, input2, p=0.5, training=True, inplace=False, approximate='none', *, out=None):
-    Z = torch.bmm(input1, input2)
-    D = torch.nn.functional.dropout(Z, p=p, training=training, inplace=inplace)
-    O = torch.nn.functional.gelu(D, approximate=approximate)
-    if out is not None:
-        out.copy_(O)
-        return out
-    return O
+torch.manual_seed(42)
 
 def test_fused_bmm_dropout_gelu():
     results = {}
@@ -66,3 +64,4 @@ def test_fused_bmm_dropout_gelu():
     return results
 
 test_results = test_fused_bmm_dropout_gelu()
+print(test_results)

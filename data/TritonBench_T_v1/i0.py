@@ -1,15 +1,15 @@
 import torch
-
-def i0(input_tensor, out=None):
+from typing import Optional
+def i0(input_tensor: torch.Tensor, out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
-    计算输入张量每个元素的零阶改良贝塞尔函数 (I_0)。
+    Computes the zero-order modified Bessel function of the first kind (I_0) for each element in the input tensor.
 
     Args:
-        input_tensor (Tensor): 输入张量
-        out (Tensor, optional): 输出张量，如果提供则保存结果
+        input_tensor (Tensor): The input tensor.
+        out (Tensor, optional): The output tensor. If provided, the result will be saved to this tensor.
     
     Returns:
-        Tensor: 每个元素应用 I_0 函数后的结果
+        Tensor: The result of applying the I_0 function to each element in the input tensor.
     """
     return torch.special.i0(input_tensor, out=out)
 
@@ -17,6 +17,7 @@ def i0(input_tensor, out=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_i0():
     results = {}
@@ -40,3 +41,4 @@ def test_i0():
     return results
 
 test_results = test_i0()
+print(test_results)

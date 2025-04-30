@@ -1,10 +1,14 @@
 import torch
 
-def determinant_via_qr(A, *, mode='reduced', out=None):
+def determinant_via_qr(
+        A: torch.Tensor, 
+        *, 
+        mode: str = 'reduced', 
+        out: torch.Tensor = None) -> torch.Tensor:
     """
     Computes the determinant of a square matrix using QR decomposition.
     
-    Parameters:
+    Args:
         A (Tensor): The input square matrix (n x n).
         mode (str, optional): The mode for QR decomposition ('reduced' or 'complete'). Defaults to 'reduced'.
         out (Tensor, optional): The output tensor to store the result. Defaults to None.
@@ -26,6 +30,7 @@ def determinant_via_qr(A, *, mode='reduced', out=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_determinant_via_qr():
     results = {}
@@ -49,3 +54,4 @@ def test_determinant_via_qr():
     return results
 
 test_results = test_determinant_via_qr()
+print(test_results)

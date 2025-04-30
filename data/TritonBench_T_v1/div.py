@@ -1,12 +1,28 @@
 import torch
 
-def div(input, other, rounding_mode=None, out=None):
+def div(
+        input: torch.Tensor, 
+        other: torch.Tensor, 
+        rounding_mode: str = None, 
+        out: torch.Tensor = None) -> torch.Tensor:
+    """
+    Divides the input tensor by the other tensor element-wise.
+
+    Args:
+        input (torch.Tensor): The dividend tensor.
+        other (torch.Tensor): The divisor tensor.
+        rounding_mode (str, optional): The rounding mode to use.
+        out (torch.Tensor, optional): The output tensor.
+
+    Returns:
+        torch.Tensor: The result of the division.
+    """
     return torch.div(input, other, rounding_mode=rounding_mode, out=out)
 
 ##################################################################################################################################################
 
-
 import torch
+torch.manual_seed(42)
 
 def test_div():
     results = {}
@@ -34,3 +50,4 @@ def test_div():
     return results
 
 test_results = test_div()
+print(test_results)

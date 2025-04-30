@@ -1,7 +1,14 @@
 import torch
 import torch.nn.functional as F
 
-def fused_add_mul_groupnorm(input1, input2, weight, bias, num_groups, eps=1e-05, *, out=None):
+def fused_add_mul_groupnorm(
+        input1: torch.Tensor,
+        input2: torch.Tensor,
+        weight: torch.Tensor,
+        bias: torch.Tensor,
+        num_groups: int,
+        eps: float = 1e-05,
+        *, out: torch.Tensor = None) -> torch.Tensor:
     """
     Fused operation combining element-wise addition, element-wise multiplication,
     and group normalization.
@@ -20,7 +27,7 @@ def fused_add_mul_groupnorm(input1, input2, weight, bias, num_groups, eps=1e-05,
     """
     z = torch.add(input1, input2)
     m = torch.mul(z, input2)
-    o = torch.nn.functional.group_norm(m, num_groups=num_groups, weight=weight, bias=bias, eps=eps)
+    o = F.group_norm(m, num_groups=num_groups, weight=weight, bias=bias, eps=eps)
     if out is not None:
         out.copy_(o)
         return out
@@ -30,7 +37,7 @@ def fused_add_mul_groupnorm(input1, input2, weight, bias, num_groups, eps=1e-05,
 
 
 import torch
-import torch.nn.functional as F
+torch.manual_seed(42)
 
 def test_fused_add_mul_groupnorm():
     results = {}
@@ -68,3 +75,4 @@ def test_fused_add_mul_groupnorm():
     return results
 
 test_results = test_fused_add_mul_groupnorm()
+print(test_results)

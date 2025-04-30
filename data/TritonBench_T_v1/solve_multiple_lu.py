@@ -1,6 +1,22 @@
 import torch
+from typing import Optional
 
-def solve_multiple_lu(A, Bs, *, pivot=True, out=None):
+def solve_multiple_lu(
+        A: torch.Tensor, 
+        Bs: torch.Tensor, 
+        *, 
+        pivot: bool=True, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
+    """
+    Solves a system of linear equations using LU decomposition.
+
+    Args:
+        A (torch.Tensor): The coefficient matrix.
+        Bs (torch.Tensor): The right-hand side matrix or vector.
+    
+    Returns:
+        torch.Tensor: The solution matrix or vector.
+    """
     (P, L, U) = torch.linalg.lu(A, pivot=pivot)
     if pivot:
         Bs_perm = torch.matmul(P.transpose(-2, -1), Bs)
@@ -17,7 +33,7 @@ def solve_multiple_lu(A, Bs, *, pivot=True, out=None):
 
 
 import torch
-
+torch.manual_seed(42)
 def test_solve_multiple_lu():
     results = {}
 
@@ -44,3 +60,4 @@ def test_solve_multiple_lu():
     return results
 
 test_results = test_solve_multiple_lu()
+print(test_results)

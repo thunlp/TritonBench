@@ -1,14 +1,14 @@
 import torch
 
-def asin(input_tensor):
+def asin(input_tensor: torch.Tensor) -> torch.Tensor:
     """
-    计算输入张量的反正弦（arcsine）值。
+    Computes the arcsine of the input tensor.
 
-    参数：
-        input_tensor (torch.Tensor): 输入的张量。
+    Args:
+        input_tensor (torch.Tensor): The input tensor.
         
-    返回：
-        torch.Tensor: 输入张量每个元素的反正弦值。如果输入值超出[-1, 1]范围，返回NaN。
+    Returns:
+        torch.Tensor: The arcsine of each element in the input tensor. Returns NaN for values outside the range [-1, 1].
     """
     if not isinstance(input_tensor, torch.Tensor):
         raise ValueError('The input must be a torch.Tensor.')
@@ -18,6 +18,7 @@ def asin(input_tensor):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_asin():
     results = {}
@@ -41,3 +42,4 @@ def test_asin():
     return results
 
 test_results = test_asin()
+print(test_results)

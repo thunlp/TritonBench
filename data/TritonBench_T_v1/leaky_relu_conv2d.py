@@ -2,7 +2,16 @@ import torch
 import torch.nn.functional as F
 from torch import Tensor
 
-def leaky_relu_conv2d(input: Tensor, weight: Tensor, bias: Tensor=None, stride: int=1, padding: int=0, dilation: int=1, groups: int=1, negative_slope: float=0.01, inplace: bool=False) -> Tensor:
+def leaky_relu_conv2d(
+        input: Tensor, 
+        weight: Tensor, 
+        bias: Tensor=None, 
+        stride: int=1, 
+        padding: int=0, 
+        dilation: int=1, 
+        groups: int=1, 
+        negative_slope: float=0.01, 
+        inplace: bool=False) -> Tensor:
     """
     Applies a 2D convolution over the input tensor, followed by applying the Leaky ReLU
     activation function element-wise to the result.
@@ -29,13 +38,7 @@ def leaky_relu_conv2d(input: Tensor, weight: Tensor, bias: Tensor=None, stride: 
 
 
 import torch
-import torch.nn.functional as F
-from torch import Tensor
-
-def leaky_relu_conv2d(input: Tensor, weight: Tensor, bias: Tensor=None, stride: int=1, padding: int=0, dilation: int=1, groups: int=1, negative_slope: float=0.01, inplace: bool=False) -> Tensor:
-    conv_output = F.conv2d(input, weight, bias, stride, padding, dilation, groups)
-    output = F.leaky_relu(conv_output, negative_slope, inplace)
-    return output
+torch.manual_seed(42)
 
 def test_leaky_relu_conv2d():
     results = {}
@@ -67,3 +70,4 @@ def test_leaky_relu_conv2d():
     return results
 
 test_results = test_leaky_relu_conv2d()
+print(test_results)

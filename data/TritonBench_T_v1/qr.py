@@ -1,6 +1,10 @@
 import torch
+from typing import Optional
 
-def qr(A, mode='reduced', out=None):
+def qr(
+        A: torch.Tensor, 
+        mode: str='reduced', 
+        out: Optional[tuple[torch.Tensor, torch.Tensor]]=None) -> tuple[torch.Tensor, torch.Tensor]:
     """
     Computes the QR decomposition of a matrix (or batch of matrices).
     
@@ -16,12 +20,17 @@ def qr(A, mode='reduced', out=None):
             - R is an upper triangular matrix with real diagonal.
     """
     (Q, R) = torch.linalg.qr(A, mode=mode)
+    if out is not None:
+        out[0].copy_(Q)
+        out[1].copy_(R)
+        return out
     return (Q, R)
 
 ##################################################################################################################################################
 
 
 import torch
+torch.manual_seed(42)
 
 def test_qr():
     results = {}
@@ -49,3 +58,4 @@ def test_qr():
     return results
 
 test_results = test_qr()
+print(test_results)

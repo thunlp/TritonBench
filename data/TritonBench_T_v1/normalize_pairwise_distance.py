@@ -1,14 +1,22 @@
 import torch
 import torch.nn.functional as F
 
-def normalize_pairwise_distance(x1, x2, p_distance=2.0, eps_distance=1e-06, keepdim=False, p_norm=2, dim_norm=1, eps_norm=1e-12):
+def normalize_pairwise_distance(
+        x1: torch.Tensor, 
+        x2: torch.Tensor, 
+        p_distance: float=2.0, 
+        eps_distance: float=1e-06, 
+        keepdim: bool=False, 
+        p_norm: float=2, 
+        dim_norm: int=1, 
+        eps_norm: float=1e-12) -> torch.Tensor:
     """
     Computes the pairwise distance between `x1` and `x2` using the specified norm, 
     then normalizes the resulting distances along the specified dimension.
     
     Args:
-        x1 (Tensor): The first input tensor.
-        x2 (Tensor): The second input tensor, must have the same shape as `x1`.
+        x1 (torch.Tensor): The first input tensor.
+        x2 (torch.Tensor): The second input tensor, must have the same shape as `x1`.
         p_distance (float): The norm degree for computing the pairwise distance. Default: 2.0.
         eps_distance (float): Small value to avoid division by zero in pairwise distance calculation. Default: 1e-6.
         keepdim (bool): Whether to keep the reduced dimensions in the output. Default: False.
@@ -17,7 +25,7 @@ def normalize_pairwise_distance(x1, x2, p_distance=2.0, eps_distance=1e-06, keep
         eps_norm (float): Small value to avoid division by zero in normalization. Default: 1e-12.
 
     Returns:
-        Tensor: The normalized pairwise distance between `x1` and `x2`.
+        torch.Tensor: The normalized pairwise distance between `x1` and `x2`.
     """
     pairwise_distance = torch.norm(x1 - x2, p=p_distance, dim=-1, keepdim=keepdim)
     pairwise_distance = pairwise_distance + eps_distance
@@ -28,13 +36,7 @@ def normalize_pairwise_distance(x1, x2, p_distance=2.0, eps_distance=1e-06, keep
 
 
 import torch
-import torch.nn.functional as F
-
-def normalize_pairwise_distance(x1, x2, p_distance=2.0, eps_distance=1e-06, keepdim=False, p_norm=2, dim_norm=1, eps_norm=1e-12):
-    pairwise_distance = torch.norm(x1 - x2, p=p_distance, dim=-1, keepdim=keepdim)
-    pairwise_distance = pairwise_distance + eps_distance
-    normed_distance = pairwise_distance / torch.norm(pairwise_distance, p=p_norm, dim=dim_norm, keepdim=True).clamp(min=eps_norm)
-    return normed_distance
+torch.manual_seed(42)
 
 def test_normalize_pairwise_distance():
     results = {}
@@ -49,3 +51,4 @@ def test_normalize_pairwise_distance():
     return results
 
 test_results = test_normalize_pairwise_distance()
+print(test_results)

@@ -18,6 +18,7 @@ def log1p(input: torch.Tensor, out: torch.Tensor=None) -> torch.Tensor:
 
 
 import torch
+torch.manual_seed(42)
 
 def test_log1p():
     results = {}
@@ -41,3 +42,4 @@ def test_log1p():
     return results
 
 test_results = test_log1p()
+print(test_results)

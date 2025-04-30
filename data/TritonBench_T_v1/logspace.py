@@ -1,6 +1,14 @@
 import torch
+from typing import Optional, Union, Tuple
 
-def logspace(start, end, steps, base=10.0, dtype=None, layout=torch.strided, device=None, requires_grad=False):
+def logspace(
+        start: Union[float, torch.Tensor], 
+        end: Union[float, torch.Tensor], 
+        steps: int, base: float=10.0,   
+        dtype: Optional[torch.dtype]=None, 
+        layout: torch.layout=torch.strided, 
+        device: Optional[torch.device]=None, 
+        requires_grad: bool=False) -> torch.Tensor:
     """
     Creates a one-dimensional tensor of size 'steps' whose values are evenly spaced on a logarithmic scale
     with the specified base, from base^start to base^end, inclusive.
@@ -24,6 +32,8 @@ def logspace(start, end, steps, base=10.0, dtype=None, layout=torch.strided, dev
 
 
 import torch
+torch.manual_seed(42)
+
 
 def test_logspace():
     results = {}
@@ -58,3 +68,4 @@ def test_logspace():
     return results
 
 test_results = test_logspace()
+print(test_results)

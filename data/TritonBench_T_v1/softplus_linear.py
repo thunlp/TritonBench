@@ -1,8 +1,13 @@
 import torch
 import torch.nn.functional as F
+from typing import Optional
 
-
-def softplus_linear(input, weight, bias=None, beta=1, threshold=20):
+def softplus_linear(
+        input: torch.Tensor, 
+        weight: torch.Tensor, 
+        bias: Optional[torch.Tensor]=None, 
+        beta: float=1, 
+        threshold: float=20) -> torch.Tensor:
     """
     Applies a linear transformation to the input tensor, followed by the Softplus activation function.
     
@@ -25,7 +30,7 @@ def softplus_linear(input, weight, bias=None, beta=1, threshold=20):
 
 
 import torch
-
+torch.manual_seed(42)
 def test_softplus_linear():
     results = {}
 
@@ -55,3 +60,4 @@ def test_softplus_linear():
     return results
 
 test_results = test_softplus_linear()
+print(test_results)

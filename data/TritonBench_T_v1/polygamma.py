@@ -1,6 +1,10 @@
 import torch
-
-def polygamma(n, input, *, out=None):
+from typing import Optional
+def polygamma(
+        n: int, 
+        input: torch.Tensor, 
+        *, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Computes the n-th derivative of the digamma function on input.
     
@@ -35,6 +39,7 @@ def polygamma(n, input, *, out=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_polygamma():
     results = {}
@@ -55,3 +60,4 @@ def test_polygamma():
     return results
 
 test_results = test_polygamma()
+print(test_results)

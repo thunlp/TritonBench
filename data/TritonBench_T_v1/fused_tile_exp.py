@@ -23,6 +23,7 @@ def fused_tile_exp(input, dims, *, out=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_fused_tile_exp():
     results = {}
@@ -51,3 +52,4 @@ def test_fused_tile_exp():
     return results
 
 test_results = test_fused_tile_exp()
+print(test_results)

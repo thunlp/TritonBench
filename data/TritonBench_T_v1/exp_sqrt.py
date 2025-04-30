@@ -1,6 +1,6 @@
 import torch
 
-def exp_sqrt(input, out=None):
+def exp_sqrt(input: torch.Tensor, out: torch.Tensor = None) -> torch.Tensor:
     """
     Computes the exponential of each element in the input tensor,
     followed by calculating the square root of the result.
@@ -24,6 +24,8 @@ def exp_sqrt(input, out=None):
 
 
 import torch
+torch.manual_seed(42)
+
 
 def test_exp_sqrt():
     results = {}
@@ -48,3 +50,4 @@ def test_exp_sqrt():
     return results
 
 test_results = test_exp_sqrt()
+print(test_results)

@@ -1,7 +1,19 @@
 import torch
+from typing import Optional
 
+def sqrt_tanh(
+        input: torch.Tensor, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
+    """
+    Computes the square root of the input tensor, then applies the tanh function element-wise.
 
-def sqrt_tanh(input, out=None):
+    Args:
+        input (torch.Tensor): The input tensor.
+        out (torch.Tensor, optional): The output tensor.
+    
+    Returns:
+        torch.Tensor: The result of applying the square root and tanh functions element-wise.
+    """
     if out is None:
         out = torch.empty_like(input)
     out = torch.sqrt(input)
@@ -13,6 +25,7 @@ def sqrt_tanh(input, out=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_sqrt_tanh():
     results = {}
@@ -36,3 +49,4 @@ def test_sqrt_tanh():
     return results
 
 test_results = test_sqrt_tanh()
+print(test_results)

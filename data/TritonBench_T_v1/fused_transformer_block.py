@@ -1,7 +1,14 @@
 import torch
 import torch.nn.functional as F
-
-def fused_transformer_block(input, weight1, weight2, residual, dropout_p=0.1, eps=1e-05, *, out=None):
+from typing import Optional
+def fused_transformer_block(
+        input: torch.Tensor, 
+        weight1: torch.Tensor, 
+        weight2: torch.Tensor, 
+        residual: torch.Tensor, 
+        dropout_p: float=0.1, 
+        eps: float=1e-05, 
+        *, out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Performs a sequence of operations commonly used in transformer models.
 
@@ -31,7 +38,7 @@ def fused_transformer_block(input, weight1, weight2, residual, dropout_p=0.1, ep
 
 
 import torch
-import torch.nn.functional as F
+torch.manual_seed(42)
 
 def test_fused_transformer_block():
     results = {}
@@ -67,3 +74,4 @@ def test_fused_transformer_block():
     return results
 
 test_results = test_fused_transformer_block()
+print(test_results)

@@ -1,8 +1,15 @@
 import torch
 import torch.nn.functional as F
+from typing import Optional
 
-
-def fused_mv_logsoftmax_dropout(input, vec, p=0.5, training=True, inplace=False, dim=0, *, out=None):
+def fused_mv_logsoftmax_dropout(
+        input: torch.Tensor, 
+        vec: torch.Tensor, 
+        p: float=0.5, 
+        training: bool=True, 
+        inplace: bool=False, 
+        dim: int=0, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
     """
     Performs a fused operation combining matrix-vector multiplication, log-softmax activation, and dropout.
     
@@ -19,8 +26,8 @@ def fused_mv_logsoftmax_dropout(input, vec, p=0.5, training=True, inplace=False,
         Tensor: The result after matrix-vector multiplication, log-softmax, and dropout.
     """
     z = torch.mv(input, vec)
-    s = torch.nn.functional.log_softmax(z, dim=dim)
-    y = torch.nn.functional.dropout(s, p=p, training=training, inplace=inplace)
+    s = F.log_softmax(z, dim=dim)
+    y = F.dropout(s, p=p, training=training, inplace=inplace)
     if out is not None:
         out.copy_(y)
         return out
@@ -30,7 +37,7 @@ def fused_mv_logsoftmax_dropout(input, vec, p=0.5, training=True, inplace=False,
 
 
 import torch
-import torch.nn.functional as F
+torch.manual_seed(42)
 
 def test_fused_mv_logsoftmax_dropout():
     results = {}
@@ -58,3 +65,4 @@ def test_fused_mv_logsoftmax_dropout():
     return results
 
 test_results = test_fused_mv_logsoftmax_dropout()
+print(test_results)

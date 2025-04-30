@@ -1,7 +1,14 @@
 import torch
 import torch.nn.functional as F
-
-def silu_batch_norm(input, running_mean, running_var, weight=None, bias=None, training=False, momentum=0.1, eps=1e-05):
+from typing import Optional
+def silu_batch_norm(
+        input: torch.Tensor, 
+        running_mean: torch.Tensor, 
+        running_var: torch.Tensor, 
+        weight: Optional[torch.Tensor]=None, 
+        bias: Optional[torch.Tensor]=None, 
+        training: bool=False, 
+        momentum: float=0.1, eps: float=1e-05):
     """
     Applies Batch Normalization over an input tensor across channels, followed by
     the SiLU (Sigmoid Linear Unit) activation function element-wise.
@@ -27,11 +34,12 @@ def silu_batch_norm(input, running_mean, running_var, weight=None, bias=None, tr
 
 
 import torch
-import torch.nn.functional as F
+torch.manual_seed(42)
 
 def test_silu_batch_norm():
     results = {}
-
+    
+    
     # Test case 1: Basic functionality with training=False
     input_tensor = torch.randn(3, 5, device='cuda')
     running_mean = torch.zeros(5, device='cuda')
@@ -52,3 +60,4 @@ def test_silu_batch_norm():
     return results
 
 test_results = test_silu_batch_norm()
+print(test_results)

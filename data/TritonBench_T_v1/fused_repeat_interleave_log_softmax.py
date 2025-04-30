@@ -1,25 +1,39 @@
 import torch
 import torch.nn.functional as F
+from typing import Optional
+def fused_repeat_interleave_log_softmax(
+        input: torch.Tensor, 
+        repeats: int, 
+        dim: Optional[int]=None, 
+        dtype: Optional[torch.dtype]=None, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
+    """
+    Repeats the input tensor along a specified dimension and applies log softmax.
 
-def fused_repeat_interleave_log_softmax(input, repeats, dim=None, *, output_size=None, dtype=None, out=None):
+    Args:
+        input (torch.Tensor): The input tensor to repeat and apply log softmax to.
+        repeats (int): The number of times to repeat the input tensor.
+        dim (int, optional): The dimension along which to repeat the input tensor. Default is None.
+        dtype (torch.dtype, optional): The data type of the output tensor. Default is None.
+        out (torch.Tensor, optional): The output tensor. Default is None.
+
+    Returns:
+        torch.Tensor: The output tensor after repeating and applying log softmax.
+    """
     repeated_input = torch.repeat_interleave(input, repeats, dim=dim)
     if dtype is not None:
         repeated_input = repeated_input.to(dtype)
     output = F.log_softmax(repeated_input, dim=dim, dtype=dtype)
+    if out is not None:
+        out.copy_(output)
+        return out
     return output
 
 ##################################################################################################################################################
 
 
 import torch
-import torch.nn.functional as F
-
-def fused_repeat_interleave_log_softmax(input, repeats, dim=None, *, output_size=None, dtype=None, out=None):
-    repeated_input = torch.repeat_interleave(input, repeats, dim=dim)
-    if dtype is not None:
-        repeated_input = repeated_input.to(dtype)
-    output = F.log_softmax(repeated_input, dim=dim, dtype=dtype)
-    return output
+torch.manual_seed(42)
 
 def test_fused_repeat_interleave_log_softmax():
     results = {}
@@ -51,3 +65,4 @@ def test_fused_repeat_interleave_log_softmax():
     return results
 
 test_results = test_fused_repeat_interleave_log_softmax()
+print(test_results)

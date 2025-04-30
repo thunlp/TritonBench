@@ -1,17 +1,21 @@
 import torch
 
-def cholesky_solve(B, L, upper=False, out=None):
+def cholesky_solve(
+        B: torch.Tensor, 
+        L: torch.Tensor, 
+        upper: bool = False, 
+        out: torch.Tensor = None) -> torch.Tensor:
     """
-    计算给定Cholesky分解的对称正定矩阵的线性方程组的解。
+    Computes the solution to the linear system of equations for a symmetric positive-definite matrix given its Cholesky decomposition.
     
-    参数：
-    B (Tensor): 右侧张量，形状为(*, n, k)，其中*是零个或多个批次维度。
-    L (Tensor): 形状为(*, n, n)的张量，表示对称或厄米正定矩阵的Cholesky分解，包含下三角或上三角。
-    upper (bool, optional): 标志，指示L是否是上三角。默认值为False（表示L是下三角）。
-    out (Tensor, optional): 输出张量。如果为None，则返回一个新的张量。
+    Args:
+        B (Tensor): The right-hand side tensor, with shape (*, n, k), where * represents zero or more batch dimensions.
+        L (Tensor): A tensor of shape (*, n, n) representing the Cholesky decomposition of a symmetric or Hermitian positive-definite matrix, containing either the lower or upper triangle.
+        upper (bool, optional): Flag indicating whether L is upper triangular. Defaults to False (meaning L is lower triangular).
+        out (Tensor, optional): The output tensor. If None, a new tensor is returned.
     
-    返回：
-    Tensor: 解矩阵X，形状与B相同。
+    Returns:
+        Tensor: The solution matrix X, with the same shape as B.
     """
     return torch.cholesky_solve(B, L, upper=upper, out=out)
 
@@ -19,6 +23,7 @@ def cholesky_solve(B, L, upper=False, out=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_cholesky_solve():
     results = {}
@@ -46,3 +51,4 @@ def test_cholesky_solve():
     return results
 
 test_results = test_cholesky_solve()
+print(test_results)

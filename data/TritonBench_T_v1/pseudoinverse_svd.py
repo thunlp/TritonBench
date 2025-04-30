@@ -1,6 +1,23 @@
 import torch
+from typing import Optional
 
-def pseudoinverse_svd(A, full_matrices=True, rcond=1e-15, out=None):
+def pseudoinverse_svd(
+        A: torch.Tensor, 
+        full_matrices: bool=True, 
+        rcond: float=1e-15, 
+        out: Optional[torch.Tensor]=None) -> torch.Tensor:
+    """
+    Computes the pseudoinverse of a matrix using its singular value decomposition.
+
+    Args:
+        A (torch.Tensor): The input matrix.
+        full_matrices (bool, optional): Whether to compute full matrices. Default is True.
+        rcond (float, optional): The condition number cutoff for singular values. Default is 1e-15.
+        out (torch.Tensor, optional): The output tensor.
+
+    Returns:
+        torch.Tensor: The pseudoinverse of the input matrix.
+    """
     U, S, Vh = torch.linalg.svd(A, full_matrices=full_matrices)
     # Invert singular values larger than rcond * max(S)
     cutoff = rcond * S.max(dim=-1, keepdim=True).values
@@ -18,6 +35,7 @@ def pseudoinverse_svd(A, full_matrices=True, rcond=1e-15, out=None):
 
 
 import torch
+torch.manual_seed(42)
 
 def test_pseudoinverse_svd():
     results = {}
@@ -33,3 +51,4 @@ def test_pseudoinverse_svd():
     return results
 
 test_results = test_pseudoinverse_svd()
+print(test_results)
