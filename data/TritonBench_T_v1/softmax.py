@@ -25,8 +25,8 @@ def softmax(input: torch.Tensor, dim: int, dtype: torch.dtype=None) -> torch.Ten
 import torch
 import torch.nn.functional as F
 
-def softmax(input: torch.Tensor, dim: int, dtype: torch.dtype=None) -> torch.Tensor:
-    return F.softmax(input, dim=dim, dtype=dtype)
+# def softmax(input: torch.Tensor, dim: int, dtype: torch.dtype=None) -> torch.Tensor:
+#     return F.softmax(input, dim=dim, dtype=dtype)
 
 def test_softmax():
     results = {}

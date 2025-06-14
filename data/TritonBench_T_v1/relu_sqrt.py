@@ -43,18 +43,18 @@ def relu_sqrt(input: Tensor, inplace: bool=False, out: Tensor=None) -> Tensor:
 import torch
 from torch import Tensor
 
-def relu_sqrt(input: Tensor, inplace: bool=False, out: Tensor=None) -> Tensor:
-    if input.dtype != torch.float32 and input.dtype != torch.float64:
-        input = input.float()
-    if inplace:
-        input.relu_()
-        input.sqrt_()
-        return input
-    elif out is not None:
-        out.copy_(torch.sqrt(torch.relu(input)))
-        return out
-    else:
-        return torch.sqrt(torch.relu(input))
+# def relu_sqrt(input: Tensor, inplace: bool=False, out: Tensor=None) -> Tensor:
+#     if input.dtype != torch.float32 and input.dtype != torch.float64:
+#         input = input.float()
+#     if inplace:
+#         input.relu_()
+#         input.sqrt_()
+#         return input
+#     elif out is not None:
+#         out.copy_(torch.sqrt(torch.relu(input)))
+#         return out
+#     else:
+#         return torch.sqrt(torch.relu(input))
 
 def test_relu_sqrt():
     results = {}

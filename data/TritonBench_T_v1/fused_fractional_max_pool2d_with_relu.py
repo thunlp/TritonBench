@@ -25,10 +25,10 @@ def fused_fractional_max_pool2d_with_relu(input: torch.Tensor, kernel_size, outp
 import torch
 import torch.nn.functional as F
 
-def fused_fractional_max_pool2d_with_relu(input: torch.Tensor, kernel_size, output_size=None, output_ratio=None, return_indices=False) -> torch.Tensor:
-    relu_output = F.relu(input)
-    pooled_output = F.fractional_max_pool2d(relu_output, kernel_size=kernel_size, output_size=output_size, output_ratio=output_ratio, return_indices=return_indices)
-    return pooled_output
+# def fused_fractional_max_pool2d_with_relu(input: torch.Tensor, kernel_size, output_size=None, output_ratio=None, return_indices=False) -> torch.Tensor:
+#     relu_output = F.relu(input)
+#     pooled_output = F.fractional_max_pool2d(relu_output, kernel_size=kernel_size, output_size=output_size, output_ratio=output_ratio, return_indices=return_indices)
+#     return pooled_output
 
 def test_fused_fractional_max_pool2d_with_relu():
     results = {}

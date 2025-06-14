@@ -8,8 +8,8 @@ def det(A):
 
 import torch
 
-def det(A):
-    return torch.linalg.det(A)
+# def det(A):
+#     return torch.linalg.det(A)
 
 def test_det():
     results = {}

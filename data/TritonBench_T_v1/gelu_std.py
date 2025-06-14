@@ -11,9 +11,9 @@ def gelu_std(input, dim=None, keepdim=False, correction=1, approximate='none', o
 import torch
 import torch.nn.functional as F
 
-def gelu_std(input, dim=None, keepdim=False, correction=1, approximate='none', out=None):
-    gelu_result = F.gelu(input, approximate=approximate)
-    return torch.std(gelu_result, dim=dim, keepdim=keepdim, correction=correction, out=out)
+# def gelu_std(input, dim=None, keepdim=False, correction=1, approximate='none', out=None):
+#     gelu_result = F.gelu(input, approximate=approximate)
+#     return torch.std(gelu_result, dim=dim, keepdim=keepdim, correction=correction, out=out)
 
 def test_gelu_std():
     results = {}

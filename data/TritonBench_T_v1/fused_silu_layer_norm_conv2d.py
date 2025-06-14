@@ -13,11 +13,11 @@ def fused_silu_layer_norm_conv2d(x: torch.Tensor, weight: torch.Tensor, conv_wei
 import torch
 import torch.nn.functional as F
 
-def fused_silu_layer_norm_conv2d(x: torch.Tensor, weight: torch.Tensor, conv_weight: torch.Tensor, conv_bias: torch.Tensor=None, conv_stride: int=1, conv_padding: int=0, conv_dilation: int=1, conv_groups: int=1, ln_eps: float=1e-05) -> torch.Tensor:
-    conv_out = F.conv2d(x, conv_weight, bias=conv_bias, stride=conv_stride, padding=conv_padding, dilation=conv_dilation, groups=conv_groups)
-    normalized_out = F.layer_norm(conv_out, conv_out.shape[1:], eps=ln_eps)
-    output = F.silu(normalized_out)
-    return output
+# def fused_silu_layer_norm_conv2d(x: torch.Tensor, weight: torch.Tensor, conv_weight: torch.Tensor, conv_bias: torch.Tensor=None, conv_stride: int=1, conv_padding: int=0, conv_dilation: int=1, conv_groups: int=1, ln_eps: float=1e-05) -> torch.Tensor:
+#     conv_out = F.conv2d(x, conv_weight, bias=conv_bias, stride=conv_stride, padding=conv_padding, dilation=conv_dilation, groups=conv_groups)
+#     normalized_out = F.layer_norm(conv_out, conv_out.shape[1:], eps=ln_eps)
+#     output = F.silu(normalized_out)
+#     return output
 
 def test_fused_silu_layer_norm_conv2d():
     results = {}

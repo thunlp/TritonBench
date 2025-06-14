@@ -34,31 +34,31 @@ def combined_activation(input, weight1, weight2, bias, *, out=None):
 import torch
 import torch.nn.functional as F
 
-def combined_activation(input, weight1, weight2, bias, *, out=None):
-    """
-    Perform the combined activation function which includes matrix multiplication,
-    sigmoid, tanh, element-wise multiplication, and addition.
+# def combined_activation(input, weight1, weight2, bias, *, out=None):
+#     """
+#     Perform the combined activation function which includes matrix multiplication,
+#     sigmoid, tanh, element-wise multiplication, and addition.
 
-    Args:
-        input (Tensor): Input tensor of shape (*, N, D_in), where * denotes any batch dimensions.
-        weight1 (Tensor): Weight matrix of shape (D_in, D_out).
-        weight2 (Tensor): Weight tensor for element-wise multiplication, must be broadcastable 
-                          to the shape of the intermediate activation.
-        bias (Tensor): Bias tensor, must be broadcastable to the shape of the output.
-        out (Tensor, optional): Output tensor to store the result, ignored if None.
+#     Args:
+#         input (Tensor): Input tensor of shape (*, N, D_in), where * denotes any batch dimensions.
+#         weight1 (Tensor): Weight matrix of shape (D_in, D_out).
+#         weight2 (Tensor): Weight tensor for element-wise multiplication, must be broadcastable 
+#                           to the shape of the intermediate activation.
+#         bias (Tensor): Bias tensor, must be broadcastable to the shape of the output.
+#         out (Tensor, optional): Output tensor to store the result, ignored if None.
 
-    Returns:
-        Tensor: Output tensor of shape (*, N, D_out).
-    """
-    z = torch.mm(input, weight1)
-    s = torch.sigmoid(z)
-    t = torch.tanh(s)
-    m = t * weight2
-    y = m + bias
-    if out is not None:
-        out.copy_(y)
-        return out
-    return y
+#     Returns:
+#         Tensor: Output tensor of shape (*, N, D_out).
+#     """
+#     z = torch.mm(input, weight1)
+#     s = torch.sigmoid(z)
+#     t = torch.tanh(s)
+#     m = t * weight2
+#     y = m + bias
+#     if out is not None:
+#         out.copy_(y)
+#         return out
+#     return y
 
 def test_combined_activation():
     results = {}

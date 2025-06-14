@@ -27,9 +27,9 @@ def pixel_shuffle_conv2d(input: torch.Tensor, weight: torch.Tensor, bias=None, s
 import torch
 import torch.nn.functional as F
 
-def pixel_shuffle_conv2d(input: torch.Tensor, weight: torch.Tensor, bias=None, stride=1, padding=0, dilation=1, groups=1, upscale_factor=2) -> torch.Tensor:
-    x = F.conv2d(input, weight, bias, stride=stride, padding=padding, dilation=dilation, groups=groups)
-    return F.pixel_shuffle(x, upscale_factor)
+# def pixel_shuffle_conv2d(input: torch.Tensor, weight: torch.Tensor, bias=None, stride=1, padding=0, dilation=1, groups=1, upscale_factor=2) -> torch.Tensor:
+#     x = F.conv2d(input, weight, bias, stride=stride, padding=padding, dilation=dilation, groups=groups)
+#     return F.pixel_shuffle(x, upscale_factor)
 
 def test_pixel_shuffle_conv2d():
     results = {}

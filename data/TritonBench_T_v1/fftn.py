@@ -8,8 +8,8 @@ def fftn(input, s=None, dim=None, norm=None, out=None):
 
 import torch
 
-def fftn(input, s=None, dim=None, norm=None, out=None):
-    return torch.fft.fftn(input, s=s, dim=dim, norm=norm)
+# def fftn(input, s=None, dim=None, norm=None, out=None):
+#     return torch.fft.fftn(input, s=s, dim=dim, norm=norm)
 
 def test_fftn():
     results = {}

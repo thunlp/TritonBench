@@ -9,9 +9,9 @@ def eig(A):
 
 import torch
 
-def eig(A):
-    (eigenvalues, eigenvectors) = torch.linalg.eig(A)
-    return (eigenvalues, eigenvectors)
+# def eig(A):
+#     (eigenvalues, eigenvectors) = torch.linalg.eig(A)
+#     return (eigenvalues, eigenvectors)
 
 def test_eig():
     results = {}

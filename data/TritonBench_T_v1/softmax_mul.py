@@ -19,16 +19,16 @@ def softmax_mul(input, other, dim, dtype=None, out=None):
 import torch
 import torch.nn.functional as F
 
-def softmax_mul(input, other, dim, dtype=None, out=None):
-    softmaxed = F.softmax(input, dim=dim, dtype=dtype)
-    if isinstance(other, torch.Tensor):
-        result = softmaxed * other
-    else:
-        result = softmaxed * other
-    if out is not None:
-        out.copy_(result)
-        return out
-    return result
+# def softmax_mul(input, other, dim, dtype=None, out=None):
+#     softmaxed = F.softmax(input, dim=dim, dtype=dtype)
+#     if isinstance(other, torch.Tensor):
+#         result = softmaxed * other
+#     else:
+#         result = softmaxed * other
+#     if out is not None:
+#         out.copy_(result)
+#         return out
+#     return result
 
 def test_softmax_mul():
     results = {}

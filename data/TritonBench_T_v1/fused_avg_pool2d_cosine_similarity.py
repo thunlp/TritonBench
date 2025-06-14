@@ -30,13 +30,13 @@ def fused_avg_pool2d_cosine_similarity(x1: torch.Tensor, x2: torch.Tensor, kerne
 import torch
 import torch.nn.functional as F
 
-def fused_avg_pool2d_cosine_similarity(x1: torch.Tensor, x2: torch.Tensor, kernel_size: int, stride: int=None, padding: int=0, eps: float=1e-08) -> torch.Tensor:
-    cosine_sim = F.cosine_similarity(x1, x2, dim=1, eps=eps)
-    cosine_sim = cosine_sim.unsqueeze(1)
-    if stride is None:
-        stride = kernel_size
-    pooled_result = F.avg_pool2d(cosine_sim, kernel_size=kernel_size, stride=stride, padding=padding)
-    return pooled_result
+# def fused_avg_pool2d_cosine_similarity(x1: torch.Tensor, x2: torch.Tensor, kernel_size: int, stride: int=None, padding: int=0, eps: float=1e-08) -> torch.Tensor:
+#     cosine_sim = F.cosine_similarity(x1, x2, dim=1, eps=eps)
+#     cosine_sim = cosine_sim.unsqueeze(1)
+#     if stride is None:
+#         stride = kernel_size
+#     pooled_result = F.avg_pool2d(cosine_sim, kernel_size=kernel_size, stride=stride, padding=padding)
+#     return pooled_result
 
 def test_fused_avg_pool2d_cosine_similarity():
     results = {}

@@ -33,10 +33,10 @@ def signbit_bitwise_and(input: torch.Tensor, other: torch.Tensor) -> Tuple[torch
 import torch
 from typing import Tuple
 
-def signbit_bitwise_and(input: torch.Tensor, other: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
-    signbit_result = torch.signbit(input)
-    bitwise_and_result = input.to(torch.int8) & other.to(torch.int8)
-    return (signbit_result, bitwise_and_result)
+# def signbit_bitwise_and(input: torch.Tensor, other: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+#     signbit_result = torch.signbit(input)
+#     bitwise_and_result = input.to(torch.int8) & other.to(torch.int8)
+#     return (signbit_result, bitwise_and_result)
 
 def test_signbit_bitwise_and():
     results = {}
