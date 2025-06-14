@@ -28,11 +28,11 @@ def softmax_log(input, dim=-1, dtype=None):
 import torch
 import torch.nn.functional as F
 
-def softmax_log(input, dim=-1, dtype=None):
-    if dtype is not None:
-        input = input.to(dtype)
-    log_input = input.log()
-    return F.softmax(log_input, dim=dim)
+# def softmax_log(input, dim=-1, dtype=None):
+#     if dtype is not None:
+#         input = input.to(dtype)
+#     log_input = input.log()
+#     return F.softmax(log_input, dim=dim)
 
 def test_softmax_log():
     results = {}

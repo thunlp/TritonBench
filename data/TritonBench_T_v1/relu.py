@@ -10,8 +10,8 @@ def relu(input: torch.Tensor, inplace: bool=False) -> torch.Tensor:
 import torch
 import torch.nn.functional as F
 
-def relu(input: torch.Tensor, inplace: bool=False) -> torch.Tensor:
-    return F.relu(input, inplace=inplace)
+# def relu(input: torch.Tensor, inplace: bool=False) -> torch.Tensor:
+#     return F.relu(input, inplace=inplace)
 
 def test_relu():
     results = {}

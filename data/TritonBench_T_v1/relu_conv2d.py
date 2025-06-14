@@ -27,25 +27,25 @@ def relu_conv2d(input, weight, bias=None, stride=1, padding=0, dilation=1, group
 import torch
 import torch.nn.functional as F
 
-def relu_conv2d(input, weight, bias=None, stride=1, padding=0, dilation=1, groups=1, inplace=False):
-    """
-    Applies a 2D convolution followed by a ReLU activation function.
+# def relu_conv2d(input, weight, bias=None, stride=1, padding=0, dilation=1, groups=1, inplace=False):
+#     """
+#     Applies a 2D convolution followed by a ReLU activation function.
 
-    Args:
-        input (Tensor): The input tensor of shape (minibatch, in_channels, iH, iW).
-        weight (Tensor): The convolution filters of shape (out_channels, in_channels / groups, kH, kW).
-        bias (Tensor, optional): Optional bias tensor of shape (out_channels). Default: None.
-        stride (int or tuple, optional): The stride of the convolution kernel. Default: 1.
-        padding (int, tuple, or string, optional): Padding added to all sides of the input. Default: 0.
-        dilation (int or tuple, optional): The spacing between kernel elements. Default: 1.
-        groups (int, optional): Number of blocked connections from input channels to output channels. Default: 1.
-        inplace (bool, optional): If True, will perform ReLU operation in-place. Default: False.
+#     Args:
+#         input (Tensor): The input tensor of shape (minibatch, in_channels, iH, iW).
+#         weight (Tensor): The convolution filters of shape (out_channels, in_channels / groups, kH, kW).
+#         bias (Tensor, optional): Optional bias tensor of shape (out_channels). Default: None.
+#         stride (int or tuple, optional): The stride of the convolution kernel. Default: 1.
+#         padding (int, tuple, or string, optional): Padding added to all sides of the input. Default: 0.
+#         dilation (int or tuple, optional): The spacing between kernel elements. Default: 1.
+#         groups (int, optional): Number of blocked connections from input channels to output channels. Default: 1.
+#         inplace (bool, optional): If True, will perform ReLU operation in-place. Default: False.
 
-    Returns:
-        Tensor: A tensor resulting from the 2D convolution followed by ReLU activation.
-    """
-    conv_out = F.conv2d(input, weight, bias=bias, stride=stride, padding=padding, dilation=dilation, groups=groups)
-    return F.relu(conv_out, inplace=inplace)
+#     Returns:
+#         Tensor: A tensor resulting from the 2D convolution followed by ReLU activation.
+#     """
+#     conv_out = F.conv2d(input, weight, bias=bias, stride=stride, padding=padding, dilation=dilation, groups=groups)
+#     return F.relu(conv_out, inplace=inplace)
 
 def test_relu_conv2d():
     results = {}

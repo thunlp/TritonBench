@@ -31,10 +31,10 @@ def rad2deg_sqrt(input: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
 import torch
 from typing import Tuple
 
-def rad2deg_sqrt(input: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
-    deg_result = torch.rad2deg(input)
-    sqrt_result = torch.sqrt(input)
-    return (deg_result, sqrt_result)
+# def rad2deg_sqrt(input: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+#     deg_result = torch.rad2deg(input)
+#     sqrt_result = torch.sqrt(input)
+#     return (deg_result, sqrt_result)
 
 def test_rad2deg_sqrt():
     results = {}

@@ -15,13 +15,13 @@ def fused_embedding_add_tanh(input_indices, weight, other, *, padding_idx=None, 
 import torch
 import torch.nn.functional as F
 
-def fused_embedding_add_tanh(input_indices, weight, other, *, padding_idx=None, max_norm=None, norm_type=2.0, scale_grad_by_freq=False, sparse=False, out=None):
-    embeddings = F.embedding(input_indices, weight, padding_idx, max_norm, norm_type, scale_grad_by_freq, sparse)
-    sum_embeddings = embeddings + other
-    result = torch.tanh(sum_embeddings)
-    if out is not None:
-        out.copy_(result)
-    return result
+# def fused_embedding_add_tanh(input_indices, weight, other, *, padding_idx=None, max_norm=None, norm_type=2.0, scale_grad_by_freq=False, sparse=False, out=None):
+#     embeddings = F.embedding(input_indices, weight, padding_idx, max_norm, norm_type, scale_grad_by_freq, sparse)
+#     sum_embeddings = embeddings + other
+#     result = torch.tanh(sum_embeddings)
+#     if out is not None:
+#         out.copy_(result)
+#     return result
 
 def test_fused_embedding_add_tanh():
     results = {}

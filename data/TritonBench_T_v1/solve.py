@@ -8,8 +8,8 @@ def solve(A, B):
 
 import torch
 
-def solve(A, B):
-    return torch.linalg.solve(A, B)
+# def solve(A, B):
+#     return torch.linalg.solve(A, B)
 
 def test_solve():
     results = {}

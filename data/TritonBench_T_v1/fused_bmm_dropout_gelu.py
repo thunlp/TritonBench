@@ -31,14 +31,14 @@ def fused_bmm_dropout_gelu(input1, input2, p=0.5, training=True, inplace=False, 
 import torch
 import torch.nn.functional as F
 
-def fused_bmm_dropout_gelu(input1, input2, p=0.5, training=True, inplace=False, approximate='none', *, out=None):
-    Z = torch.bmm(input1, input2)
-    D = torch.nn.functional.dropout(Z, p=p, training=training, inplace=inplace)
-    O = torch.nn.functional.gelu(D, approximate=approximate)
-    if out is not None:
-        out.copy_(O)
-        return out
-    return O
+# def fused_bmm_dropout_gelu(input1, input2, p=0.5, training=True, inplace=False, approximate='none', *, out=None):
+#     Z = torch.bmm(input1, input2)
+#     D = torch.nn.functional.dropout(Z, p=p, training=training, inplace=inplace)
+#     O = torch.nn.functional.gelu(D, approximate=approximate)
+#     if out is not None:
+#         out.copy_(O)
+#         return out
+#     return O
 
 def test_fused_bmm_dropout_gelu():
     results = {}

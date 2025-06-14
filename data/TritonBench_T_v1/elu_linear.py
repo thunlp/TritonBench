@@ -29,9 +29,9 @@ def elu_linear(input, weight, bias=None, alpha=1.0, inplace=False):
 import torch
 import torch.nn.functional as F
 
-def elu_linear(input, weight, bias=None, alpha=1.0, inplace=False):
-    output = F.linear(input, weight, bias)
-    return F.elu(output, alpha=alpha, inplace=inplace)
+# def elu_linear(input, weight, bias=None, alpha=1.0, inplace=False):
+#     output = F.linear(input, weight, bias)
+#     return F.elu(output, alpha=alpha, inplace=inplace)
 
 def test_elu_linear():
     results = {}

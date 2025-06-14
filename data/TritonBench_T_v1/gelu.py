@@ -10,8 +10,8 @@ def gelu(input: torch.Tensor, approximate: str='none') -> torch.Tensor:
 import torch
 import torch.nn.functional as F
 
-def gelu(input: torch.Tensor, approximate: str='none') -> torch.Tensor:
-    return F.gelu(input, approximate=approximate)
+# def gelu(input: torch.Tensor, approximate: str='none') -> torch.Tensor:
+#     return F.gelu(input, approximate=approximate)
 
 def test_gelu():
     results = {}

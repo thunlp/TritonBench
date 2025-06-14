@@ -17,17 +17,17 @@ def erf(input_tensor):
 
 import torch
 
-def erf(input_tensor):
-    """
-    计算输入张量的误差函数（error function）。
+# def erf(input_tensor):
+#     """
+#     计算输入张量的误差函数（error function）。
 
-    参数：
-    input_tensor (Tensor): 输入的张量。
+#     参数：
+#     input_tensor (Tensor): 输入的张量。
 
-    返回：
-    Tensor: 输入张量中每个元素的误差函数值。
-    """
-    return torch.special.erf(input_tensor)
+#     返回：
+#     Tensor: 输入张量中每个元素的误差函数值。
+#     """
+#     return torch.special.erf(input_tensor)
 
 def test_erf():
     results = {}

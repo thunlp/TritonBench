@@ -13,10 +13,10 @@ def fused_hardsigmoid_batch_norm(x: torch.Tensor, running_mean: torch.Tensor, ru
 import torch
 import torch.nn.functional as F
 
-def fused_hardsigmoid_batch_norm(x: torch.Tensor, running_mean: torch.Tensor, running_var: torch.Tensor, weight: torch.Tensor=None, bias: torch.Tensor=None, training: bool=False, momentum: float=0.1, eps: float=1e-05, inplace: bool=False) -> torch.Tensor:
-    normalized_x = torch.nn.functional.batch_norm(x, running_mean, running_var, weight, bias, training, momentum, eps)
-    output = torch.nn.functional.hardsigmoid(normalized_x, inplace=inplace)
-    return output
+# def fused_hardsigmoid_batch_norm(x: torch.Tensor, running_mean: torch.Tensor, running_var: torch.Tensor, weight: torch.Tensor=None, bias: torch.Tensor=None, training: bool=False, momentum: float=0.1, eps: float=1e-05, inplace: bool=False) -> torch.Tensor:
+#     normalized_x = torch.nn.functional.batch_norm(x, running_mean, running_var, weight, bias, training, momentum, eps)
+#     output = torch.nn.functional.hardsigmoid(normalized_x, inplace=inplace)
+#     return output
 
 def test_fused_hardsigmoid_batch_norm():
     results = {}

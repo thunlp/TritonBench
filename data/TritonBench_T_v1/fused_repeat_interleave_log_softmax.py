@@ -14,12 +14,12 @@ def fused_repeat_interleave_log_softmax(input, repeats, dim=None, *, output_size
 import torch
 import torch.nn.functional as F
 
-def fused_repeat_interleave_log_softmax(input, repeats, dim=None, *, output_size=None, dtype=None, out=None):
-    repeated_input = torch.repeat_interleave(input, repeats, dim=dim)
-    if dtype is not None:
-        repeated_input = repeated_input.to(dtype)
-    output = F.log_softmax(repeated_input, dim=dim, dtype=dtype)
-    return output
+# def fused_repeat_interleave_log_softmax(input, repeats, dim=None, *, output_size=None, dtype=None, out=None):
+#     repeated_input = torch.repeat_interleave(input, repeats, dim=dim)
+#     if dtype is not None:
+#         repeated_input = repeated_input.to(dtype)
+#     output = F.log_softmax(repeated_input, dim=dim, dtype=dtype)
+#     return output
 
 def test_fused_repeat_interleave_log_softmax():
     results = {}

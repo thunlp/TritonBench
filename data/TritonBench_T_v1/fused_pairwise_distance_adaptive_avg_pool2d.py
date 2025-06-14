@@ -29,12 +29,12 @@ def fused_pairwise_distance_adaptive_avg_pool2d(x1: torch.Tensor, x2: torch.Tens
 import torch
 import torch.nn.functional as F
 
-def fused_pairwise_distance_adaptive_avg_pool2d(x1: torch.Tensor, x2: torch.Tensor, output_size: int or tuple, p: float=2.0, eps: float=1e-06, keepdim: bool=False) -> torch.Tensor:
-    pooled_x1 = F.adaptive_avg_pool2d(x1, output_size)
-    pooled_x2 = F.adaptive_avg_pool2d(x2, output_size)
-    diff = pooled_x1 - pooled_x2
-    dist = torch.norm(diff, p=p, dim=(1, 2, 3), keepdim=keepdim) + eps
-    return dist
+# def fused_pairwise_distance_adaptive_avg_pool2d(x1: torch.Tensor, x2: torch.Tensor, output_size: int or tuple, p: float=2.0, eps: float=1e-06, keepdim: bool=False) -> torch.Tensor:
+#     pooled_x1 = F.adaptive_avg_pool2d(x1, output_size)
+#     pooled_x2 = F.adaptive_avg_pool2d(x2, output_size)
+#     diff = pooled_x1 - pooled_x2
+#     dist = torch.norm(diff, p=p, dim=(1, 2, 3), keepdim=keepdim) + eps
+#     return dist
 
 def test_fused_pairwise_distance_adaptive_avg_pool2d():
     results = {}

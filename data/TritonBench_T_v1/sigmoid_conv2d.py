@@ -28,10 +28,10 @@ def sigmoid_conv2d(input, weight, bias=None, stride=1, padding=0, dilation=1, gr
 import torch
 import torch.nn.functional as F
 
-def sigmoid_conv2d(input, weight, bias=None, stride=1, padding=0, dilation=1, groups=1, out=None):
-    conv_result = F.conv2d(input, weight, bias, stride, padding, dilation, groups)
-    result = torch.sigmoid(conv_result)
-    return result
+# def sigmoid_conv2d(input, weight, bias=None, stride=1, padding=0, dilation=1, groups=1, out=None):
+#     conv_result = F.conv2d(input, weight, bias, stride, padding, dilation, groups)
+#     result = torch.sigmoid(conv_result)
+#     return result
 
 def test_sigmoid_conv2d():
     results = {}

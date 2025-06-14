@@ -17,15 +17,15 @@ def fused_bmm_rmsnorm_gelu_dropout(input1, input2, normalized_shape, dropout_p=0
 import torch
 import torch.nn.functional as F
 
-def fused_bmm_rmsnorm_gelu_dropout(input1, input2, normalized_shape, dropout_p=0.1, eps=1e-05, training=True, approximate='none', *, out=None):
-    z1 = torch.bmm(input1, input2)
-    rms_norm = F.rms_norm(z1, normalized_shape=(normalized_shape,), eps=eps)
-    gelu_out = F.gelu(rms_norm, approximate=approximate)
-    output = F.dropout(gelu_out, p=dropout_p, training=training)
-    if out is not None:
-        out.copy_(output)
-        return out
-    return output
+# def fused_bmm_rmsnorm_gelu_dropout(input1, input2, normalized_shape, dropout_p=0.1, eps=1e-05, training=True, approximate='none', *, out=None):
+#     z1 = torch.bmm(input1, input2)
+#     rms_norm = F.rms_norm(z1, normalized_shape=(normalized_shape,), eps=eps)
+#     gelu_out = F.gelu(rms_norm, approximate=approximate)
+#     output = F.dropout(gelu_out, p=dropout_p, training=training)
+#     if out is not None:
+#         out.copy_(output)
+#         return out
+#     return output
 
 def test_fused_bmm_rmsnorm_gelu_dropout():
     results = {}
